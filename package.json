@@ -9,17 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@types/node": "20.1.4",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
-    "autoprefixer": "10.4.14",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
+    "image-size": "^1.0.2",
     "next": "13.4.2",
-    "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "react-grid-gallery": "^1.0.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-photo-album": "^2.2.2",
+    "react-virtualized": "^9.22.5",
+    "react-visual-grid": "^0.9.3",
+    "react-window": "^1.8.9",
+    "sharp": "^0.32.1",
+    "typescript": "5.0.4",
+    "yet-another-react-lightbox": "^3.11.3"
+  },
+  "devDependencies": {
+    "@types/react-virtualized": "^9.21.21",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2"
   }
 }
