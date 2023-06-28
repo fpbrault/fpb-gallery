@@ -32,7 +32,7 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className={`${raleway.variable}`}>{children}</body>
+      <body className={`${raleway.variable} dark`}>{children}</body>
     </html>
   )
 }
