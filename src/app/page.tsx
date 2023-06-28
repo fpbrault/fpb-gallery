@@ -7,9 +7,7 @@ export const runtime = 'nodejs' // 'nodejs' (default) | 'edge'
 
 export default async function Home() {
 
-
   const images = await getImages();
-
 
   return (
     <main className="w-full h-full p-4">

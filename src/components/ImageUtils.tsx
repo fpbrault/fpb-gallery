@@ -61,10 +61,6 @@ export default async function getImages() {
         images = images.filter(Boolean); // Remove any null or undefined values
 
         // Shuffle the array of images randomly
-        for (let i = images.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [images[i], images[j]] = [images[j], images[i]];
-        }
 
         return images;
     }
