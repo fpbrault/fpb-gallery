@@ -1,44 +1,73 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import sizeOf from 'image-size'
+import { S3 } from "@aws-sdk/client-s3";
+
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables from .env file
+
+// Configure AWS SDK with the environment variables
+
+const s3 = new S3({
+    region: process.env.AWS_REGION, credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "fallback",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "fallback",
+    }
+});
+
+
+export const runtime = 'nodejs';
 
 export default async function getImages() {
-    function getNumberFromFilename(filename: string) {
-        const matches = filename.match(/(\d+)/);
-        return matches ? parseInt(matches[0], 10) : 0;
-    }
-    const imageDirectory = path.join(process.cwd(), '/public/images');
-    const imageFilenames = await fs.readdir(imageDirectory);
-
-    // Filter image filenames to include only JPG files
-    const jpgFilenames = imageFilenames.filter((filename) =>
-        filename.toLowerCase().endsWith('.jpg')
-    );
-    const sortedFilenames = jpgFilenames.sort((a, b) => {
-        const aNumber = getNumberFromFilename(a);
-        const bNumber = getNumberFromFilename(b);
-        return aNumber - bNumber;
-    });
-
-    const imagePromises = sortedFilenames.map(async (image) => {
-        const imagePath = path.join(imageDirectory, image);
-        const dimensions = sizeOf(imagePath);
-
-        if (dimensions && dimensions.width && dimensions.height) {
-            return {
-                src: "/images/" + image,
-                original: "/images/" + image,
-                width: dimensions.width || 600,
-                height: dimensions.height || 400,
-            };
+    function extractDimensionsFromFilename(filename: string) {
+        const matches = filename.match(/(\d+)x(\d+)/);
+        if (matches && matches.length === 3) {
+            const width = parseInt(matches[1], 10);
+            const height = parseInt(matches[2], 10);
+            return { width, height };
         }
         return null;
+    }
 
-    });
+    const bucketName = process.env.AWS_BUCKET_NAME || "fpb-gallery";
+    const imageFolder = 'images';
 
-    const images: CustomImage[] = (await Promise.all(imagePromises)).filter(
-        (image): image is CustomImage => image !== null
-    );
+    const params = {
+        Bucket: bucketName,
+        Prefix: imageFolder,
+    };
 
-    return images
+    const data = await s3.listObjectsV2(params);
+    if (data.Contents) {
+        const imageKeys = data.Contents.map((object) => object.Key);
+
+        const imagePromises = imageKeys.map(async (key) => {
+            if (key) {
+                const dimensions = extractDimensionsFromFilename(key);
+
+                if (dimensions && dimensions.width && dimensions.height) {
+                    return {
+                        src: `https://${bucketName}.s3.amazonaws.com/${key}`,
+                        original: `https://${bucketName}.s3.amazonaws.com/${key}`,
+                        width: dimensions.width || 600,
+                        height: dimensions.height || 400,
+                    };
+                }
+            }
+            return null
+        });
+        let images = (await Promise.all(imagePromises)).filter(
+            (image) => image !== null
+        );
+
+        images = images.filter(Boolean); // Remove any null or undefined values
+
+        // Shuffle the array of images randomly
+        for (let i = images.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [images[i], images[j]] = [images[j], images[i]];
+        }
+
+        return images;
+    }
+    else { return null }
+
 }

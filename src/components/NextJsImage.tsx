@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import {
     isImageFitCover,
@@ -81,7 +82,7 @@ export function NextJsImage({ slide, rect }: NextJsImageProps) {
                 draggable={false}
                 placeholder={slide.blurDataURL ? "blur" : undefined}
                 style={{ objectFit: cover ? "cover" : "contain" }}
-                sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
+                sizes={`${Math.ceil((width / window.innerWidth) * 50)}vw`}
                 quality={100}
             />
 
