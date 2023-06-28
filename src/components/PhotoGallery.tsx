@@ -4,6 +4,7 @@ import * as React from 'react';
 import PhotoAlbum from 'react-photo-album';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import { NextJsImage, NextJsImageAlbum } from './NextJsImage';
 
 type Props = {
@@ -55,6 +56,7 @@ function PhotoGallery({ images }: Props) {
                 <Lightbox
                     index={index}
                     slides={shuffledImages}
+                    plugins={[Fullscreen]}
                     render={{ slide: NextJsImage }}
                     open={index >= 0}
                     close={() => setIndex(-1)}
