@@ -24,9 +24,22 @@ function PhotoGallery({ images }: Props) {
 
         // Disable lightbox on mobile devices
         setIsLightboxEnabled(!window.matchMedia('(max-width: 768px)').matches);
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleWindowResize);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
     }, [images]);
 
     const [index, setIndex] = React.useState(-1);
+
+    const handleWindowResize = React.useCallback(() => {
+        setIsLightboxEnabled(!window.matchMedia('(max-width: 768px)').matches);
+    }, []);
+
     return (
         <>
             <PhotoAlbum
@@ -35,7 +48,7 @@ function PhotoGallery({ images }: Props) {
                 targetRowHeight={500}
                 renderPhoto={NextJsImageAlbum}
                 sizes={{ size: '800px' }}
-                onClick={({ index: current }) => setIndex(current)}
+                onClick={({ index: current }) => isLightboxEnabled && setIndex(current)}
             />
 
             {isLightboxEnabled && (
