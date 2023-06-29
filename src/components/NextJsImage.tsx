@@ -19,8 +19,9 @@ export function NextJsImageAlbum({
                 fill
                 src={photo}
                 placeholder={"blurDataURL" in photo ? "blur" : undefined}
-                 quality={90}
-                {...{ alt, title, sizes, className, onClick }}
+                sizes={`30vw`}
+                quality={85}
+                {...{ alt, title, className, onClick }}
             />
         </div>
     );
@@ -74,13 +75,12 @@ export function NextJsImage({ slide, rect }: NextJsImageProps) {
         : rect.height;
     return (
         <div style={{ position: "relative", width, height }}>
-            {/* <div className='absolute bottom-[-35px] left-0 right-0 z-50 p-2 font-sans text-xs text-center text-whit'>Copyright {new Date().getFullYear()} Felix Perron-Brault. Tout Droits Reservés</div> */}
             <Image
                 fill
                 alt=""
                 src={slide.src}
                 loading="eager"
-                draggable={false}
+                draggable={true}
                 placeholder={slide.blurDataURL ? "blur" : undefined}
                 style={{ objectFit: cover ? "cover" : "contain" }}
                 sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}

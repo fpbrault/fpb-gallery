@@ -4,27 +4,36 @@ import * as React from 'react';
 import PhotoAlbum from 'react-photo-album';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
+//import "yet-another-react-lightbox/plugins/captions.css";
+import Captions from "yet-another-react-lightbox/plugins/captions";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import { NextJsImage, NextJsImageAlbum } from './NextJsImage';
 
 type Props = {
     images: CustomImage[];
+    shuffle: boolean;
 };
 
-function PhotoGallery({ images }: Props) {
+function PhotoGallery({ images, shuffle }: Props) {
     const [shuffledImages, setShuffledImages] = React.useState<CustomImage[]>([]);
     const [isLightboxEnabled, setIsLightboxEnabled] = React.useState(true);
 
+    const handleWindowResize = React.useCallback(() => {
+        setIsLightboxEnabled(!window.matchMedia('(max-width: 68px)').matches);
+    }, []);
+
     React.useEffect(() => {
         const shuffled = [...images]; // Create a new array to avoid mutating the original array
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        if (shuffle) {
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
         }
         setShuffledImages(shuffled);
 
         // Disable lightbox on mobile devices
-        setIsLightboxEnabled(!window.matchMedia('(max-width: 768px)').matches);
+        setIsLightboxEnabled(!window.matchMedia('(max-width: 68px)').matches);
 
         // Add event listener for window resize
         window.addEventListener('resize', handleWindowResize);
@@ -33,20 +42,18 @@ function PhotoGallery({ images }: Props) {
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         };
-    }, [images]);
+    }, [handleWindowResize, images]);
 
     const [index, setIndex] = React.useState(-1);
 
-    const handleWindowResize = React.useCallback(() => {
-        setIsLightboxEnabled(!window.matchMedia('(max-width: 768px)').matches);
-    }, []);
+
 
     return (
         <>
             <PhotoAlbum
                 layout="rows"
                 photos={shuffledImages}
-                targetRowHeight={500}
+                targetRowHeight={400}
                 renderPhoto={NextJsImageAlbum}
                 sizes={{ size: '800px' }}
                 onClick={({ index: current }) => isLightboxEnabled && setIndex(current)}
@@ -56,7 +63,8 @@ function PhotoGallery({ images }: Props) {
                 <Lightbox
                     index={index}
                     slides={shuffledImages}
-                    plugins={[Fullscreen]}
+                    plugins={[Fullscreen, Captions]}
+                    captions={{ showToggle: true, descriptionTextAlign: 'start', descriptionMaxLines: 3 }}
                     render={{ slide: NextJsImage }}
                     open={index >= 0}
                     close={() => setIndex(-1)}
