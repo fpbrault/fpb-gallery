@@ -5,6 +5,8 @@ import path from 'path';
 import sharp from 'sharp';
 import { imageData } from '../../../app/image-data.js';
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
     const source = process.env.IMAGE_SOURCE || 'local';
     console.log(source);
