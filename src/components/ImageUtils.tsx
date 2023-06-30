@@ -1,22 +1,12 @@
 import { S3 } from "@aws-sdk/client-s3";
-import dotenv from 'dotenv';
 import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
 import { imageData } from '../app/image-data.js';
-
-dotenv.config(); // Load environment variables from .env file
-
-// Configure AWS SDK with the environment variables
-const s3 = new S3({
-    region: process.env.AWS_REGION,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "fallback",
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "fallback",
-    }
-});
 
 export const runtime = 'nodejs';
 
-export default async function getImages() {
+export default async function getImages(source = 'local') {
     function extractDimensionsFromFilename(filename: string) {
         const matches = filename.match(/(\d+)x(\d+)/);
         if (matches && matches.length === 3) {
@@ -27,42 +17,96 @@ export default async function getImages() {
         return null;
     }
 
-    const bucketName = process.env.AWS_BUCKET_NAME || "fpb-gallery";
-    const imageFolder = 'images';
-    const metadataFilePath = 'image-data.json';
+    if (source === 's3') {
+        const s3 = new S3({
+            region: process.env.AWS_REGION,
+            credentials: {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID || "fallback",
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "fallback",
+            }
+        });
 
-    const params = {
-        Bucket: bucketName,
-        Prefix: imageFolder,
-    };
+        const bucketName = process.env.AWS_BUCKET_NAME || "fpb-gallery";
+        const imageFolder = 'images';
 
-    const data = await s3.listObjectsV2(params);
-    if (data.Contents) {
-        const imageKeys = data.Contents.map((object) => object.Key);
+        const params = {
+            Bucket: bucketName,
+            Prefix: imageFolder,
+        };
 
-        const imagePromises = imageKeys.map(async (key) => {
-            if (key) {
-                const dimensions = extractDimensionsFromFilename(key);
+        const data = await s3.listObjectsV2(params);
+        if (data.Contents) {
+            const imageKeys = data.Contents.map((object) => object.Key);
+
+            const imagePromises = imageKeys.map(async (key) => {
+                if (key) {
+                    const dimensions = extractDimensionsFromFilename(key);
+
+                    if (dimensions && dimensions.width && dimensions.height) {
+                        // Read the image metadata from image-data.json
+                        const metadata = imageData;
+
+                        const imageMetadata = metadata.find((item) => {
+                            const filenameWithoutPrefixAndSize = key.split("images/")[1].split("_")[0].replace(/\.[^/.]+$/, "");
+                            return item.filename === filenameWithoutPrefixAndSize;
+                        });
+
+                        return {
+                            src: `https://${bucketName}.s3.amazonaws.com/${key}`,
+                            original: `https://${bucketName}.s3.amazonaws.com/${key}`,
+                            width: dimensions.width || 600,
+                            height: dimensions.height || 400,
+                            title: imageMetadata?.title || null, // Set title to null if not available
+                            description: imageMetadata?.description || null, // Set description to null if not available
+                        };
+                    }
+                }
+                return null;
+            });
+
+            let images = (await Promise.all(imagePromises)).filter((image) => image !== null);
+            images = images.filter(Boolean); // Remove any null or undefined values
+
+            // Sort the images by filename numerically
+            images.sort((a, b) => {
+                const filenameA = a?.src.split("/").pop() || "";
+                const filenameB = b?.src.split("/").pop() || "";
+                const numberA = parseInt(filenameA.match(/\d+/)?.[0] || "0", 10);
+                const numberB = parseInt(filenameB.match(/\d+/)?.[0] || "0", 10);
+                return numberA - numberB;
+            });
+
+            return images;
+        }
+    } else if (source === 'local') {
+        const imageFolder = 'public/images';
+
+        const filenames = fs.readdirSync(imageFolder);
+        const imagePromises = filenames.map(async (filename) => {
+            const imagePath = path.join(imageFolder, filename);
+
+            try {
+                const dimensions = await sharp(imagePath).metadata();
 
                 if (dimensions && dimensions.width && dimensions.height) {
-                    // Read the image metadata from image-data.json
-                    const metadata = imageData;
-
-                    const imageMetadata = metadata.find((item: any) => {
-                        const filenameWithoutPrefixAndSize = key.split("images/")[1].split("_")[0].replace(/\.[^/.]+$/, "");
-                        return item.filename === filenameWithoutPrefixAndSize;
+                    const imageMetadata = imageData.find((item) => {
+                        const filenameWithoutExtension = filename.split(".")[0];
+                        return item.filename === filenameWithoutExtension;
                     });
 
                     return {
-                        src: `https://${bucketName}.s3.amazonaws.com/${key}`,
-                        original: `https://${bucketName}.s3.amazonaws.com/${key}`,
+                        src: `/images/${filename}`,
+                        original: `/images/${filename}`,
                         width: dimensions.width || 600,
                         height: dimensions.height || 400,
                         title: imageMetadata?.title || null, // Set title to null if not available
                         description: imageMetadata?.description || null, // Set description to null if not available
                     };
                 }
+            } catch (error) {
+                console.error(`Failed to extract dimensions for image: ${filename}`, error);
             }
+
             return null;
         });
 
@@ -71,15 +115,13 @@ export default async function getImages() {
 
         // Sort the images by filename numerically
         images.sort((a, b) => {
-            const filenameA = a?.src.split("/").pop() || "";
-            const filenameB = b?.src.split("/").pop() || "";
-            const numberA = parseInt(filenameA.match(/\d+/)?.[0] || "0", 10);
-            const numberB = parseInt(filenameB.match(/\d+/)?.[0] || "0", 10);
+            const numberA = parseInt(a?.src.split("-")[1]?.split(".")[0] || "0", 10);
+            const numberB = parseInt(b?.src.split("-")[1]?.split(".")[0] || "0", 10);
             return numberA - numberB;
         });
 
         return images;
-    } else {
-        return null;
     }
+
+    return null;
 }

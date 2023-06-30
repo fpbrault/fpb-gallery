@@ -5,7 +5,7 @@ import PhotoGallery from '@/components/PhotoGallery';
 
 export default async function Home() {
 
-  const images = await getImages();
+  const images = await getImages('s3');
 
   return (
     <main className="w-full h-full p-4">
