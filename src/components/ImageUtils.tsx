@@ -7,77 +7,19 @@ import { imageData } from '../app/image-data.js';
 export const runtime = 'nodejs';
 
 export default async function getImages(source = 'local') {
-    function extractDimensionsFromFilename(filename: string) {
-        const matches = filename.match(/(\d+)x(\d+)/);
-        if (matches && matches.length === 3) {
-            const width = parseInt(matches[1], 10);
-            const height = parseInt(matches[2], 10);
-            return { width, height };
-        }
-        return null;
-    }
 
     if (source === 's3') {
-        const s3 = new S3({
-            region: process.env.AWS_REGION,
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID || "fallback",
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "fallback",
-            }
-        });
+        const res = await fetch('http://localhost:3000/api/data')
+        // The return value is *not* serialized
+        // You can return Date, Map, Set, etc.
 
-        const bucketName = process.env.AWS_BUCKET_NAME || "fpb-gallery";
-        const imageFolder = 'images';
-
-        const params = {
-            Bucket: bucketName,
-            Prefix: imageFolder,
-        };
-
-        const data = await s3.listObjectsV2(params);
-        if (data.Contents) {
-            const imageKeys = data.Contents.map((object) => object.Key);
-
-            const imagePromises = imageKeys.map(async (key) => {
-                if (key) {
-                    const dimensions = extractDimensionsFromFilename(key);
-
-                    if (dimensions && dimensions.width && dimensions.height) {
-                        // Read the image metadata from image-data.json
-                        const metadata = imageData;
-
-                        const imageMetadata = metadata.find((item) => {
-                            const filenameWithoutPrefixAndSize = key.split("images/")[1].split("_")[0].replace(/\.[^/.]+$/, "");
-                            return item.filename === filenameWithoutPrefixAndSize;
-                        });
-
-                        return {
-                            src: `https://${bucketName}.s3.amazonaws.com/${key}`,
-                            original: `https://${bucketName}.s3.amazonaws.com/${key}`,
-                            width: dimensions.width || 600,
-                            height: dimensions.height || 400,
-                            title: imageMetadata?.title || null, // Set title to null if not available
-                            description: imageMetadata?.description || null, // Set description to null if not available
-                        };
-                    }
-                }
-                return null;
-            });
-
-            let images = (await Promise.all(imagePromises)).filter((image) => image !== null);
-            images = images.filter(Boolean); // Remove any null or undefined values
-
-            // Sort the images by filename numerically
-            images.sort((a, b) => {
-                const filenameA = a?.src.split("/").pop() || "";
-                const filenameB = b?.src.split("/").pop() || "";
-                const numberA = parseInt(filenameA.match(/\d+/)?.[0] || "0", 10);
-                const numberB = parseInt(filenameB.match(/\d+/)?.[0] || "0", 10);
-                return numberA - numberB;
-            });
-
-            return images;
+        // Recommendation: handle errors
+        if (!res.ok) {
+            // This will activate the closest `error.js` Error Boundary
+            throw new Error('Failed to fetch data')
         }
+        return res.json()
+
     } else if (source === 'local') {
         const imageFolder = 'public/images';
 

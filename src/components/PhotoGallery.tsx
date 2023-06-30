@@ -14,6 +14,7 @@ type Props = {
     shuffle: boolean;
 };
 
+
 function PhotoGallery({ images, shuffle }: Props) {
     const [shuffledImages, setShuffledImages] = React.useState<CustomImage[]>([]);
     const [isLightboxEnabled, setIsLightboxEnabled] = React.useState(true);

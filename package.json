@@ -22,6 +22,7 @@
     "react-dom": "18.2.0",
     "react-photo-album": "^2.2.2",
     "sharp": "^0.32.1",
+    "swr": "^2.2.0",
     "typescript": "^5.1.5",
     "yet-another-react-lightbox": "^3.11.3"
   },
