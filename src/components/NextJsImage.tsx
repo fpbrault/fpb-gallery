@@ -13,14 +13,17 @@ export function NextJsImageAlbum({
     imageProps: { alt, title, sizes, className, onClick },
     wrapperStyle,
 }: RenderPhotoProps) {
+
+
     return (
         <div style={{ ...wrapperStyle, position: "relative" }}>
             <Image
                 fill
                 src={photo}
+                loading="lazy"
                 placeholder={"blurDataURL" in photo ? "blur" : undefined}
-                sizes={`30vw`}
-                quality={85}
+                sizes={sizes}
+                quality={80}
                 {...{ alt, title, className, onClick }}
             />
         </div>

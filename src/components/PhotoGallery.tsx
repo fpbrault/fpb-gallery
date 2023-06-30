@@ -42,7 +42,7 @@ function PhotoGallery({ images, shuffle }: Props) {
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         };
-    }, [handleWindowResize, images]);
+    }, [handleWindowResize, images, shuffle]);
 
     const [index, setIndex] = React.useState(-1);
 
@@ -53,9 +53,10 @@ function PhotoGallery({ images, shuffle }: Props) {
             <PhotoAlbum
                 layout="rows"
                 photos={shuffledImages}
-                targetRowHeight={400}
+                targetRowHeight={500}
+                spacing={20}
                 renderPhoto={NextJsImageAlbum}
-                sizes={{ size: '800px' }}
+                sizes={{ size: "calc(100vw - 240px)", sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }] }}
                 onClick={({ index: current }) => isLightboxEnabled && setIndex(current)}
             />
 
