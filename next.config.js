@@ -2,11 +2,15 @@
 const nextConfig = {
     images: {
         formats: ['image/webp'],
-        domains: ['fpb-gallery.s3.amazonaws.com'],
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'picsum.photos',
+                hostname: 'placehold.co',
+                port: '',
+            },
+            {
+                protocol: 'https',
+                hostname: 'cdn.sanity.io',
                 port: '',
             },
         ],

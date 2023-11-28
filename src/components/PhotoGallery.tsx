@@ -1,77 +1,129 @@
-'use client';
+;
 import * as React from 'react';
 
 import PhotoAlbum from 'react-photo-album';
-import Lightbox from 'yet-another-react-lightbox';
+import Lightbox, { ControllerRef, Portal } from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
-//import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/counter.css";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
-import { NextJsImage, NextJsImageAlbum } from './NextJsImage';
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Counter from "yet-another-react-lightbox/plugins/counter";
+import { NextJsImage, NextJsImageElement } from './NextJsImage';
+import { useRouter } from 'next/router';
 
 type Props = {
-    images: CustomImage[];
-    shuffle: boolean;
+    images: any[];
+    mode: "rows" | "columns" | "masonry";
+    albumId: string;
+    columns: number | undefined;
 };
 
 
-function PhotoGallery({ images, shuffle }: Props) {
-    const [shuffledImages, setShuffledImages] = React.useState<CustomImage[]>([]);
-    const [isLightboxEnabled, setIsLightboxEnabled] = React.useState(true);
+function PhotoGallery({ images, mode, albumId, columns }: Props) {
+    const router = useRouter();
+    const imageId = router.query.imageId;
+    const [index, setIndex] = React.useState(-1);
+    const lightboxRef = React.useRef<ControllerRef | null>(null);
+    const [isMobile, setIsMobile] = React.useState(false);
 
-    const handleWindowResize = React.useCallback(() => {
-        setIsLightboxEnabled(!window.matchMedia('(max-width: 68px)').matches);
+    const [theimages] = React.useState(images.map((image) => ({
+        ...image,
+        title: <><div className='mt-6'>{image.title}</div></>,
+        description: <><div className='prose-sm prose lg:prose-lg' dangerouslySetInnerHTML={{ __html: image.descqription }}></div></>,
+        type: "image",
+    })))
+    // Update the state on component mount
+    React.useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
+        };
+
+        // Set initial mobile state
+        handleResize();
+
+        // Add resize event listener
+        window.addEventListener('resize', handleResize);
+
+        // Remove event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
+    const handleImageClick = ({ index: current }: { index: any }) => {
+
+        setIndex(current);
+
+        // Extract the image id from the src URL
+        const selectedImageId = images[current]._key;
+
+        // Update the URL with the selected image id in the query parameter
+        router.push(`${albumId}?imageId=${selectedImageId}`, undefined, { shallow: true });
+    };
+
+
     React.useEffect(() => {
-        const shuffled = [...images]; // Create a new array to avoid mutating the original array
-        if (shuffle) {
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        if (imageId) {
+            // Find the index of the image with the specified id
+            const selectedIndex = images.findIndex((image) => image._key === imageId);
+            // If the image is found, open the lightbox
+            if (selectedIndex !== -1) {
+                setIndex(selectedIndex);
             }
+        } else if (lightboxRef.current && typeof imageId == 'undefined') {
+            setIndex(-1)
+            lightboxRef.current.close();
         }
-        setShuffledImages(shuffled);
-
-        // Disable lightbox on mobile devices
-        setIsLightboxEnabled(!window.matchMedia('(max-width: 68px)').matches);
-
-        // Add event listener for window resize
-        window.addEventListener('resize', handleWindowResize);
-
-        // Clean up the event listener on component unmount
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    }, [handleWindowResize, images, shuffle]);
-
-    const [index, setIndex] = React.useState(-1);
-
-
+    }, [imageId, images, router]);
 
     return (
         <>
             <PhotoAlbum
-                layout="rows"
-                photos={shuffledImages}
+                layout={mode ?? "rows"}
+                photos={theimages}
                 targetRowHeight={500}
                 spacing={20}
-                renderPhoto={NextJsImageAlbum}
+                columns={isMobile ? 1 : columns ?? 3}
+                renderPhoto={(photo) => NextJsImageElement({ limitHeight: images.length < 3 ? true : false, ...photo })}
                 sizes={{ size: "calc(100vw - 240px)", sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }] }}
-                onClick={({ index: current }) => isLightboxEnabled && setIndex(current)}
+                onClick={handleImageClick}
             />
 
-            {isLightboxEnabled && (
-                <Lightbox
-                    index={index}
-                    slides={shuffledImages}
-                    plugins={[Fullscreen, Captions]}
-                    captions={{ showToggle: true, descriptionTextAlign: 'start', descriptionMaxLines: 3 }}
-                    render={{ slide: NextJsImage }}
-                    open={index >= 0}
-                    close={() => setIndex(-1)}
-                />
-            )}
+
+            <Lightbox
+                controller={{ ref: lightboxRef }}
+                index={index}
+                slides={theimages}
+                plugins={[Fullscreen, Captions, Zoom, Counter, ({ remove }) => remove("no-scroll")]}
+                captions={{ showToggle: true, descriptionTextAlign: 'start', descriptionMaxLines: 50 }}
+                render={{
+                    buttonPrev: images.length <= 1 ? () => null : undefined,
+                    buttonZoom: isMobile ? () => null : undefined,
+                    buttonNext: images.length <= 1 ? () => null : undefined,
+                    slide: NextJsImage,
+
+                }}
+                open={index > -1}
+                close={() => {
+                    setIndex(-1);
+
+                    // Check if the current URL contains the imageId parameter
+                    const currentUrl = window.location.href;
+                    if (currentUrl.includes('imageId')) {
+                        // Update the URL without the imageId parameter
+                        router.push("/album/" + albumId, undefined, { shallow: true });
+                    }
+                }}
+                on={{
+                    view: ({ index: currentIndex }) => {
+                        // Extract the image id from the src URL
+                        const selectedImageId = images[currentIndex]._key;
+                        // Update the URL with the selected image id in the query parameter
+                        router.push(`${albumId}?imageId=${selectedImageId}`, undefined, { shallow: true });
+                    }
+                }}
+            />
         </>
     );
 }
