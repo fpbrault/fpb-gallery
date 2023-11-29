@@ -1,11 +1,9 @@
 /**
  * This configuration is used to for the Sanity Studio that’s mounted on the `/pages/studio/[[...index]].tsx` route
  */
-import {draftMode} from 'next/headers'
 import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
 import { deskTool } from 'sanity/desk'
-import { markdownSchema } from "sanity-plugin-markdown/next";
 import { media } from 'sanity-plugin-media'
 
 
@@ -19,7 +17,6 @@ export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
-  // Add and edit the content schema in the './sanity/schema' folder
   schema: schemaTypes,
   plugins: [
     colorInput(),

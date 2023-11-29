@@ -12,10 +12,10 @@ const icon = (<svg className='inline mr-1 fill-primary ' xmlns="http://www.w3.or
 
 export default function Header({ title, contactUrl, contactText }: Props) {
     return (
-        <header>
-            <h1 className='my-4 font-sans text-2xl font-light text-center sm:text-5xl'><Link className='link link-hover' href="/">{title}</Link></h1>
+        <header className="sticky top-0 z-50 py-2 sm:py-3 lg:py-4 bg-base-200/50 backdrop-blur-xl">
+            <h1 className='py-1 font-sans text-2xl font-light text-center sm:text-4xl lg:text-5xl'><Link className='link link-hover' href="/">{title}</Link></h1>
 
-            <nav className='py-2 font-bold uppercase sm:text-xl'>
+            <nav className='py-1 font-bold uppercase sm:text-xl'>
                 <ul className='flex justify-center'>
                     <li><Link className='px-3 mx-auto link link-hover link-primary' href={"/"}>Home</Link></li>
                     <li><Link className='px-3 mx-auto link link-hover link-primary' href={"/blog"}>Blog</Link></li>

@@ -15,34 +15,41 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
 
   const router = useRouter();
 
-  const handleImageClick = ({ index: current }: {index: any}) => {
+ /*  const handleImageClick = ({ index: current }: {index: any}) => {
+    console.log(albums[current].albums[0].slug.current)
     let url = "/404"
     if (categories && albums[current].albums.length == 1) {
-      url = `/album/${albums[current].albums[0].albumId}`
+      url = `/album/${albums[current].albums[0].slug.current}`
     } else {
-      url = categories ? `/category/${albums[current].categoryName}` : `/album/${albums[current].albumId}`
+      url = categories ? `/category/${albums[current].slug.current}` : `/album/${albums[current].slug.current}`
     }
+    console.log(url)
 
     router.push(url);
-  };
+  }; */
 
   const photos = !categories ? albums.map((album: any) => {
     const { imageUrl, imageWidth, imageHeight,
-    } = getResizedImage(album.images[0],75,800)
+    } = getResizedImage(album.images[0],75,600)
     return ({
+     href: "/album/" + album.slug.current,
     src: imageUrl,
     width: imageWidth,
     height: imageHeight,
     blurDataURL: album.images[0].placeholders.metadata.lqip,
     title: album.albumName,
     description: album.albumDescription,
-  })}) : albums.map((category: { coverImage: any; coverImageWidth: any; coverImageHeight: any; categoryName: any; blurDataURL: any; }) => ({
-    src: category.coverImage,
-    width: category.coverImageWidth,
-    height: category.coverImageHeight,
+  })}) : albums.map((category: any) => {
+    const { imageUrl, imageWidth, imageHeight,
+    } = getResizedImage(category.albums[0].cover,75,800)
+    return ({
+    href: "/category/" + category.slug.current,
+    src: imageUrl,
+    width: imageWidth,
+    height: imageHeight,
     title: category.categoryName,
-    blurDataURL: category.blurDataURL
-  }))
+    blurDataURL: category.albums[0].cover.placeholders.metadata.lqip
+  })})
 
 
   return (
@@ -52,9 +59,9 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
         photos={photos}
         targetRowHeight={500}
         spacing={20}
-        renderPhoto={(photo) => NextJsImageAlbum({ limitHeight: photos.length < 3 ? true : false, ...photo })}
+        renderPhoto={(photo) => NextJsImageAlbum({ limitHeight: photos.length < 2 ? true : false, ...photo })}
         sizes={{ size: "calc(100vw - 240px)", sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }] }}
-        onClick={handleImageClick}
+        //onClick={handleImageClick}
       />
 
     </div>

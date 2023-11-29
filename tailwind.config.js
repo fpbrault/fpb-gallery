@@ -14,8 +14,8 @@ module.exports = {
   },
 daisyui: {
     themes: [
-      'light',
-      'sunset',
+      'garden',
+      'dim',
       {
         mytheme: {
           "primary": "#22c55e",
@@ -23,7 +23,7 @@ daisyui: {
           "accent": "#fbbf24",
           "neutral": "#222222",
           "base-100": "#020202",
-          "base-200": "#222222",
+          "base-200": "#111111",
           "base-300": "#333333",
           "info": "#67e8f9",
           "success": "#a3e635",

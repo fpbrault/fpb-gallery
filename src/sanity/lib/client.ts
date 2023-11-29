@@ -83,6 +83,7 @@ export function getResizedImage(image: Image, quality?: number, height?: number,
   }
 }
 
+
 export async function getCategories() {
   const query = '*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]{...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}';
 

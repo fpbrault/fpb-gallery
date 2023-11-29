@@ -1,12 +1,9 @@
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
+
 import Breadcrumbs from '@/components/BreadCrumbs';
-import Link from 'next/link';
-import Image from "next/image";
 import dynamic from 'next/dynamic';
 import { SanityDocument, groq } from 'next-sanity';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { client, getClient } from '@/sanity/lib/client';
+import { GetStaticProps } from 'next';
+import { getClient } from '@/sanity/lib/client';
 import PostList from '@/components/PostList';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import PreviewPostList from '@/components/studio/PreviewPostList';
@@ -23,7 +20,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const client = getClient(previewToken);
 
     const data = await client.fetch(postListQuery, context.params);
-    return { props: { data, preview, previewToken } };
+    return { props: { data, preview, previewToken }, revalidate: 10 };
 };
 
 
@@ -36,20 +33,18 @@ export default function BlogPage({
     preview: boolean;
     previewToken?: string;
 }) {
-    if (preview && previewToken) {
-        return (
-            <PreviewProvider previewToken={previewToken}>
-                <Breadcrumbs items={[{ "name": "blog", "url": "/blog" }]
-                }></Breadcrumbs>
-                <PreviewPostList posts={data} />
-                <PreviewBar></PreviewBar>
-            </PreviewProvider>
-        );
-
-
-    }
-    if (data) {
-        return <PostList posts={data} />;
-    }
-    return null;
+    return (
+        <div>
+            <Breadcrumbs items={[{ "name": "blog", "url": "/blog" }]} />
+            {preview && previewToken ? (
+                <PreviewProvider previewToken={previewToken}>
+                    <PreviewPostList posts={data} />
+                    <PreviewBar />
+                </PreviewProvider>
+            ) : (
+                data && <PostList posts={data} />
+            )}
+        </div>
+    );
 }
+

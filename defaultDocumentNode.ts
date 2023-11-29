@@ -22,11 +22,35 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType}
           .component(Iframe)
           .options({
             url: (doc: any) => doc?.slug?.current 
-            ? `http://localhost:3000/api/preview/?slug=${doc.slug.current}`
-            : `http://localhost:3000/api/preview `,
+            ? `${window.location.origin}/api/preview/?slug=${doc.slug.current}`
+            : `${window.location.origin}/api/preview `,
           })
           .title('Preview'),
       ])
+      case `album`:
+        return S.document().views([
+          S.view.form(),
+          S.view
+            .component(Iframe)
+            .options({
+              url: (doc: any) => doc?.albumId
+              ? `${window.location.origin}/api/preview/?albumId=${doc.albumId}`
+              : `${window.location.origin}/api/preview `,
+            })
+            .title('Preview'),
+        ])
+        case `category`:
+          return S.document().views([
+            S.view.form(),
+            S.view
+              .component(Iframe)
+              .options({
+                url: (doc: any) => doc?.categoryName
+                ? `http://localhost:3000/api/preview/?categoryName=${doc.categoryName}`
+                : `http://localhost:3000/api/preview `,
+              })
+              .title('Preview'),
+          ])
     default:
       return S.document().views([S.view.form()])
   }

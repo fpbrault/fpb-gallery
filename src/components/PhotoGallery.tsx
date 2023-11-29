@@ -1,8 +1,7 @@
 ;
 import * as React from 'react';
 
-import PhotoAlbum from 'react-photo-album';
-import Lightbox, { ControllerRef, Portal } from 'yet-another-react-lightbox';
+import Lightbox, { ControllerRef } from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import "yet-another-react-lightbox/plugins/counter.css";
 import Captions from "yet-another-react-lightbox/plugins/captions";
@@ -11,6 +10,10 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
 import { NextJsImage, NextJsImageElement } from './NextJsImage';
 import { useRouter } from 'next/router';
+import { getResizedImage } from '@/sanity/lib/client';
+import PhotoAlbum from 'react-photo-album';
+import { PortableText } from '@portabletext/react';
+import { myPortableTextComponents } from '@/pages/blog/[slug]';
 
 type Props = {
     images: any[];
@@ -20,6 +23,7 @@ type Props = {
 };
 
 
+
 function PhotoGallery({ images, mode, albumId, columns }: Props) {
     const router = useRouter();
     const imageId = router.query.imageId;
@@ -27,12 +31,19 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
     const lightboxRef = React.useRef<ControllerRef | null>(null);
     const [isMobile, setIsMobile] = React.useState(false);
 
-    const [theimages] = React.useState(images.map((image) => ({
-        ...image,
-        title: <><div className='mt-6'>{image.title}</div></>,
-        description: <><div className='prose-sm prose lg:prose-lg' dangerouslySetInnerHTML={{ __html: image.descqription }}></div></>,
-        type: "image",
-    })))
+    const [theImages] = React.useState(images ? images.map((image) => {
+        const { imageUrl, imageWidth, imageHeight  } = getResizedImage(image, 80, 2048)
+        return ({
+            ...image,
+            src: imageUrl,
+            height: imageHeight,
+            width: imageWidth,
+            title: <><div className='mt-6'>{image.title}</div></>,
+            description: <><div className='max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg'> <PortableText components={myPortableTextComponents} value={image.description}/></div></>,
+            type: "image",
+        })
+    }) : []);
+
     // Update the state on component mount
     React.useEffect(() => {
         const handleResize = () => {
@@ -77,55 +88,58 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
         }
     }, [imageId, images, router]);
 
-    return (
-        <>
-            <PhotoAlbum
-                layout={mode ?? "rows"}
-                photos={theimages}
-                targetRowHeight={500}
-                spacing={20}
-                columns={isMobile ? 1 : columns ?? 3}
-                renderPhoto={(photo) => NextJsImageElement({ limitHeight: images.length < 3 ? true : false, ...photo })}
-                sizes={{ size: "calc(100vw - 240px)", sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }] }}
-                onClick={handleImageClick}
-            />
+    if (!images) {
+        return "nothing"
+    }
+
+    return (<>
+        <PhotoAlbum
+            layout={mode ?? "rows"}
+            photos={theImages}
+            targetRowHeight={500}
+            spacing={20}
+            columns={isMobile ? 1 : columns ?? 3}
+            renderPhoto={(photo) => NextJsImageElement({ limitHeight: images.length < 3 ? true : false, ...photo })}
+            sizes={{ size: "calc(100vw - 240px)", sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }] }}
+            onClick={handleImageClick}
+        />
 
 
-            <Lightbox
-                controller={{ ref: lightboxRef }}
-                index={index}
-                slides={theimages}
-                plugins={[Fullscreen, Captions, Zoom, Counter, ({ remove }) => remove("no-scroll")]}
-                captions={{ showToggle: true, descriptionTextAlign: 'start', descriptionMaxLines: 50 }}
-                render={{
-                    buttonPrev: images.length <= 1 ? () => null : undefined,
-                    buttonZoom: isMobile ? () => null : undefined,
-                    buttonNext: images.length <= 1 ? () => null : undefined,
-                    slide: NextJsImage,
+        <Lightbox
+            controller={{ ref: lightboxRef }}
+            index={index}
+            slides={theImages}
+            plugins={[Fullscreen, Captions, Zoom, Counter, ({ remove }) => remove("no-scroll")]}
+            captions={{ showToggle: true, descriptionTextAlign: 'start', descriptionMaxLines: 50 }}
+            styles={{captionsDescription: {backgroundColor: "rgba(0,0,0,0"}}}
+            render={{
+                buttonPrev: images.length <= 1 ? () => null : undefined,
+                buttonZoom: isMobile ? () => null : undefined,
+                buttonNext: images.length <= 1 ? () => null : undefined,
+                slide: NextJsImage,
 
-                }}
-                open={index > -1}
-                close={() => {
-                    setIndex(-1);
+            }}
+            open={index > -1}
+            close={() => {
+                setIndex(-1);
 
-                    // Check if the current URL contains the imageId parameter
-                    const currentUrl = window.location.href;
-                    if (currentUrl.includes('imageId')) {
-                        // Update the URL without the imageId parameter
-                        router.push("/album/" + albumId, undefined, { shallow: true });
-                    }
-                }}
-                on={{
-                    view: ({ index: currentIndex }) => {
-                        // Extract the image id from the src URL
-                        const selectedImageId = images[currentIndex]._key;
-                        // Update the URL with the selected image id in the query parameter
-                        router.push(`${albumId}?imageId=${selectedImageId}`, undefined, { shallow: true });
-                    }
-                }}
-            />
-        </>
-    );
+                // Check if the current URL contains the imageId parameter
+                const currentUrl = window.location.href;
+                if (currentUrl.includes('imageId')) {
+                    // Update the URL without the imageId parameter
+                    router.push("/album/" + albumId, undefined, { shallow: true });
+                }
+            }}
+            on={{
+                view: ({ index: currentIndex }) => {
+                    // Extract the image id from the src URL
+                    const selectedImageId = images[currentIndex]._key;
+                    // Update the URL with the selected image id in the query parameter
+                    router.push(`${albumId}?imageId=${selectedImageId}`, undefined, { shallow: true });
+                }
+            }}
+        />
+    </>)
 }
 
 export default PhotoGallery;

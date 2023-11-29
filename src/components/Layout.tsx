@@ -34,14 +34,14 @@ const Layout: React.FC<Props> = (props) => {
         <meta name="theme-color" content="#ffffff" />
 
       </Head>
-      <div className={`bg-base min-h-screen text-base-content w-full h-full p-4 font-sans transition text-sans ${raleway.variable}`}>
+      <div className={`bg-base-200 min-h-screen text-base-content w-full h-full font-sans transition text-sans ${raleway.variable}`}>
         <Header title="Felix Perron-Brault | Photographe" contactText="fpbrault" contactUrl="https://www.instagram.com/fpbrault/" />
-        <main className="w-full h-full mx-auto max-w-7xl ">
+        <main className="w-full h-full px-4 py-2 mx-auto sm:py-4 max-w-7xl ">
           {props.children}
         </main>
         <ScrollToTopButton></ScrollToTopButton>
         <footer>
-          <div className='my-4 font-sans text-sm text-center'>Copyright {new Date().getFullYear()} Felix Perron-Brault. Tout Droits Reservés</div>
+          <div className='py-4 font-sans text-sm text-center'>Copyright {new Date().getFullYear()} Felix Perron-Brault. Tout Droits Reservés</div>
         </footer>
       </div>
     </>

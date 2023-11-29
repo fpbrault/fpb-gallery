@@ -9,6 +9,8 @@ import dynamic from 'next/dynamic';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { client, getClient } from '@/sanity/lib/client';
 import { PreviewBar } from '@/components/studio/PreviewBar';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{...,content[]{...,_type == "album" =>{...}->{albumName,albumId,images[]{...,asset->}}},"blurDataURL": coverImage.asset->.metadata.lqip}`;
@@ -19,8 +21,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       "params": { "slug": slug.current }
     }`
   );
-  console.log(paths)
-  return { paths, fallback: false };
+  return { paths, fallback:  'blocking' };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -28,8 +29,31 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
   const client = getClient(previewToken);
 
-  const data = await client.fetch(postQuery, context.params);
-  return { props: { data, preview, previewToken } };
+  try {
+    const data = await client.fetch(postQuery, context.params);
+
+    if (!data) {
+      return {
+        redirect: {
+          destination: '/blog',
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: { data, preview, previewToken }, revalidate: 10,
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return {
+      redirect: {
+        destination: '/blog',
+        permanent: false,
+      },
+    };
+  }
 };
 
 export const myPortableTextComponents = {
@@ -62,19 +86,30 @@ export default function Page({
   preview: boolean;
   previewToken?: string;
 }) {
-  if (preview && previewToken) {
-    return (
-      <PreviewProvider previewToken={previewToken}>
-          <Breadcrumbs items={[{ "name": "blog", "url": "/blog" }, { "name": data.title }]
-      }></Breadcrumbs>
-        <PreviewPost post={data} />
-        <PreviewBar></PreviewBar>
-      </PreviewProvider>
-    );
+  const router = useRouter()
 
-  
+  if (router.isFallback) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="loading loading-infinity loading-lg"></span>
+      </div>
+    );
+    
   }
-  if (data){
-  return <Post post={data} />;}
-  return null;
+
+  return (
+    <div>
+       <Breadcrumbs items={[{ "name": "blog", "url": "/blog" }, { "name": data.title }]
+}></Breadcrumbs>
+        {preview && previewToken ? (
+            <PreviewProvider previewToken={previewToken}>
+                <PreviewPost post={data} />
+                <PreviewBar />
+            </PreviewProvider>
+        ) : (
+            data && <Post post={data} />
+        )}
+    </div>
+);
 }
+
