@@ -2,64 +2,81 @@ import Breadcrumbs from '@/components/BreadCrumbs';
 import Link from 'next/link';
 import Image from 'next/image';
 import { urlForImage } from '@/sanity/lib/image';
-import Post from '../../components/Post';
-import PreviewPost from '../../components/studio/PreviewPost';
 import { SanityDocument, groq } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { client, getClient, getResizedImage } from '@/sanity/lib/client';
+import { client, getClient } from '@/sanity/lib/client';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { PostNavigation } from '../../components/PostNavigation';
+import PreviewPage from '@/components/studio/PreviewPage';
+import Page from '@/components/Page';
 import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
+
+
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const postQuery = groq`*[_type == "post" && slug.current == $slug]{"current": { 
-  ...,content[]
+export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")][0]{  
+  ...{"_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{
+    slug,
+    title,
+    language
+  }},content[]
   {...,_type == "album" =>{...}->{albumName,albumId,images[]{...,asset->}}},
     "blurDataURL": coverImage.asset->.metadata.lqip
-}
-,"previous": *[_type == "post" && ^.publishDate > publishDate]|order(publishDate desc)[0]{ 
-"slug": slug.current, title, publishDate, tags[], coverImage
-},"next": *[_type == "post" && ^.publishDate < publishDate]|order(publishDate asc)[0]{ 
-"slug": slug.current, title, publishDate, tags[], coverImage
-}
-}|order(publishDate)[0]`;
+}`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await client.fetch(
-    groq`*[_type == "post" && defined(slug.current)][]{
-      "params": { "slug": slug.current }
+    groq`*[_type == "page" && defined(slug.current)][]{
+      "params": {  "slug": slug.current , "locale": language, "name": name }, "locale": language,
     }`
   );
   return { paths, fallback: 'blocking' };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
- 
 
+
+
+export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    const {data, preview, previewToken, siteMetadata, headerData} = await getBasePageProps(context, postQuery);
-    
+    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, pageQuery);
+
     if (!data) {
       return {
         redirect: {
-          destination: '/blog',
+          destination: '/',
           permanent: false,
         },
       };
     }
+    const otherLocale = data._translations.find((translation: { language: string; }) => translation.language != context.locale) ?? null;
+    const currentLocale = data._translations.find((translation: { language: string; }) => translation.language == context.locale) 
+
+    try {
+      if (currentLocale?.slug?.current && (currentLocale?.slug?.current != context?.params?.slug)) {
+        return {
+          redirect: {
+            destination: '/' + (context.locale != 'en' ? (context.locale + '/') : null) + currentLocale?.slug?.current,
+            permanent: false,
+          },
+        };
+      }
+    }
+    catch (error) {
+      console.error(error)
+    }
+    const contextWithOtherLocale = { ...context, otherLocale };
 
     return {
-      props: { data, preview, previewToken, siteMetadata, headerData, context }, revalidate: 10,
+      props: { data, preview, previewToken, siteMetadata, headerData, context: contextWithOtherLocale }, revalidate: 10,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
 
     return {
       redirect: {
-        destination: '/blog',
+        destination: '/',
         permanent: false,
       },
     };
@@ -86,10 +103,10 @@ export const myPortableTextComponents = {
   }
 };
 
-export default function Page({
+export default function CustomPage({
   data,
   preview,
-  previewToken,
+  previewToken
 }: {
   data: SanityDocument;
   preview: boolean;
@@ -106,21 +123,17 @@ export default function Page({
 
   }
 
- 
+
   return (
     <div>
-      <Breadcrumbs items={[{ "name": "blog", "url": "/blog" }, { "name": data.current.title }]
-      }></Breadcrumbs>
       {preview && previewToken ? (
         <PreviewProvider previewToken={previewToken}>
-          <PreviewPost post={data.current} />
-          <PostNavigation data={data}></PostNavigation>
+          <PreviewPage page={data} />
           <PreviewBar />
         </PreviewProvider>
       ) : (
         data && <>
-          <Post post={data.current} />
-          <PostNavigation data={data}></PostNavigation>
+          <Page page={data} />
         </>
       )}
     </div>

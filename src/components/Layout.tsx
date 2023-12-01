@@ -3,6 +3,9 @@ import Head from "next/head";
 import { Raleway } from 'next/font/google'
 import Header from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
+import { Footer } from "./Footer";
+import { Layout } from "@/types/layout"
+import { getSocialIcon } from "./lib/getSocialIcon";
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -12,15 +15,22 @@ const raleway = Raleway({
 
 type Props = {
   children: ReactNode;
+  headerData?: any
+  siteMetadata?: any
+  context?: any;
 };
 
-export const metadata = {
-  title: 'Felix Perron-Brault Photographe',
-  description: 'Portfolio',
-}
 
 const Layout: React.FC<Props> = (props) => {
+  const metadata: Layout.LayoutMetadata = {
+    title: props.siteMetadata?.siteTitle ?? "My Site",
+    author: props.siteMetadata?.author ?? "Unknown Author",
+    description: props.siteMetadata?.description ?? "Description",
+    socialLinks: props.siteMetadata?.socialLinks ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => { return { "name": socialLink.name, "url": socialLink.url, type: socialLink.type } }) : {
+    },
 
+
+  }
   return (
     <>
       <Head>
@@ -34,15 +44,16 @@ const Layout: React.FC<Props> = (props) => {
         <meta name="theme-color" content="#ffffff" />
 
       </Head>
-      <div className={`bg-base-200 min-h-screen text-base-content w-full h-full font-sans transition text-sans ${raleway.variable}`}>
-        <Header title="Felix Perron-Brault | Photographe" contactText="fpbrault" contactUrl="https://www.instagram.com/fpbrault/" />
-        <main className="w-full h-full px-4 py-2 mx-auto sm:py-4 max-w-7xl ">
+     
+      <div className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}>
+        
+        <Header title={metadata.title} contactText={metadata?.socialLinks[0]?.name ?? ""} contactType={metadata?.socialLinks[0]?.type ?? ""} contactUrl={metadata?.socialLinks[0]?.url ?? ""} headerData={props.headerData} context={props.context} />
+        <main className="flex-grow w-full h-full px-4 py-4 mx-auto sm:py-4 max-w-7xl">
           {props.children}
         </main>
         <ScrollToTopButton></ScrollToTopButton>
-        <footer>
-          <div className='py-4 font-sans text-sm text-center'>Copyright {new Date().getFullYear()} Felix Perron-Brault. Tout Droits Reservés</div>
-        </footer>
+
+        <Footer metadata={metadata}></Footer>
       </div>
     </>
   );

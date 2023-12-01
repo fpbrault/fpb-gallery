@@ -12,6 +12,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { client, getClient, getResizedImage } from '@/sanity/lib/client';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import PreviewPhotoGallery from '@/components/studio/PreviewPhotoGallery';
+import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
@@ -27,12 +28,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const preview = context.draftMode || false;
-  const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
-  const client = getClient(previewToken);
 
   try {
-    const data = await client.fetch(albumQuery, context.params);
+    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, albumQuery);
+
     if (!data) {
       return {
         redirect: {
@@ -43,7 +42,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
 
     return {
-      props: { data, preview, previewToken },  
+      props: { data, preview, previewToken, siteMetadata, headerData, context },  
       revalidate: 10,
     };
   } catch (error) {
@@ -63,7 +62,7 @@ const myPortableTextComponents = {
     image: ({ value }: any) => {
       const src = urlForImage(value).url();
       return (
-        <Image width={200} height={200} alt="" quality={75} {...value} src={src} />
+        <Image unoptimized width={200} height={200} alt="" quality={75} {...value} src={src} />
       );
     },
   },

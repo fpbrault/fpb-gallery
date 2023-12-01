@@ -10,7 +10,7 @@ export default function Post({ post }: { post: SanityDocument }) {
   return (<div className='max-w-4xl mx-auto font-sans text-center text-base-content'>
     <article key={post?.slug}>
     {image ?
-      <Image className='max-w-3xl mx-auto' blurDataURL={post?.blurDataURL} placeholder='blur' height={image?.imageHeight} width={image?.imageWidth} alt="alt" src={image?.imageUrl}></Image> : null}
+      <Image unoptimized className='max-w-3xl mx-auto' blurDataURL={post?.blurDataURL} placeholder='blur' height={image?.imageHeight} width={image?.imageWidth} alt="alt" src={image?.imageUrl}></Image> : null}
 
       <h2 className='p-4 text-4xl font-bold text-primary'>{post?.title}</h2>
       <div className='text-sm ont-mono '>

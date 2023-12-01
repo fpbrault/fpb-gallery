@@ -1,15 +1,16 @@
-import { defineField, defineType } from 'sanity'
+import { PreviewValue } from 'sanity';
+import { defineArrayMember, defineField, defineType } from "sanity"
 
-export const album = defineType({
+export const post = defineType({
   name: 'post',
   type: 'document',
   title: 'Post',
   fields: [
-    {
+    defineField({
       name: 'title', type: 'string',
       title: 'Post Title',
-    },
-    {
+    }),
+    defineField({
       name: 'slug', type: 'slug',
       title: 'Post slug',
       options: {
@@ -19,7 +20,7 @@ export const album = defineType({
           return input.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "")
         },
       },
-    },
+    }),
     defineField({
       name: 'author',
       type: 'author',
@@ -37,7 +38,7 @@ export const album = defineType({
         }
       }
     }),
-    {
+    defineField({
       name: 'coverImage', type: 'image',
       options: {
         hotspot: true,
@@ -50,70 +51,70 @@ export const album = defineType({
         },
       ],
       title: 'Cover Image',
-    },
-    {
+    }),
+    defineField({
       name: 'tags',
       type: 'array',
       title: 'Tags',
-      of: [{
+      of: [defineArrayMember({
         name: 'tag',
         type: 'string',
         title: 'Tag',
-      }],
+      })],
       options: {
         layout: 'tags',
       },
-    },
-    {
+    }),
+    defineField({
       name: 'publishDate',
       type: 'datetime',
       initialValue: (new Date()).toISOString(),
       title: 'Publish Date',
       options: {
-        dateFormat: 'YYYY-MM-DD',
-        calendarTodayLabel: 'Today'
+        dateFormat: 'YYYY-MM-DD'
       }
-    },
-    {
+    }),
+    defineField({
       name: 'excerpt',
       title: 'Custom Excerpt',
       description: "This will override the default excerpt",
       type: 'string',
-    },
-    {
+    }),
+    defineField({
       title: 'Content',
       name: 'content',
       type: 'array',
       of: [
-        { type: 'block',
-        marks: {
-          annotations: [
-            {
-              name: 'internalLink',
-              type: 'object',
-              title: 'Internal link',
-              fields: [
-                {
-                  name: 'reference',
-                  type: 'reference',
-                  title: 'Reference',
-                  to: [
-                    { type: 'post' },
-                    { type: 'album' },
-                    { type: 'category' },
-                    // other types you may want to link to
-                  ]
-                }
-              ]
-            }
-          ]
-        }},
-         { type: 'image' }, 
-         { type: 'reference', name: 'Post', to: { type: 'post' } }, 
-         { type: 'reference', name: 'album', to: { type: 'album' } },
-         
-        ]
-    }
+        defineArrayMember({
+          type: 'block',
+          marks: {
+            annotations: [
+              {
+                name: 'internalLink',
+                type: 'object',
+                title: 'Internal link',
+                fields: [
+                  {
+                    name: 'reference',
+                    type: 'reference',
+                    title: 'Reference',
+                    to: [
+                      { type: 'post' as const },
+                      { type: 'album' as const },
+                      { type: 'category' as const },
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }),
+        defineArrayMember({ type: 'image' }),
+        { type: 'reference', name: 'Post', to: { type: 'post' as const } },
+        { type: 'reference', name: 'album', to: { type: 'album' as const } }
+
+      ]
+    })
   ],
   preview: {
     select: {
@@ -121,14 +122,13 @@ export const album = defineType({
       author: 'author',
       media: 'coverImage',
     },
-    prepare(selection: { author: any }) {
-      const { author } = selection
+    prepare(value: Record<string, any>, viewOptions?: any): PreviewValue {
+      const { author } = value
       return {
-        ...
-        selection, subtitle: author && `by ${author.name}`
+        title: value.title,
+        subtitle: author && `by ${author.name}`,
+        media: value.coverImage
       }
     },
   }
 })
-
-export default album;

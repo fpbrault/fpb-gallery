@@ -26,7 +26,7 @@ const ScrollToTopButton = () => {
             aria-label='scroll to top'
             onClick={scrollToTop}
             className={`${shown ? 'scale-100' : 'scale-0'
-                } w-12 h-12 transition-transform duration-200 flex fixed right-10 bottom-10 rounded-full bg-primary shadow-lg shadow-gray-900 justify-center items-center`}
+                } w-12 h-12 transition-transform duration-200 flex fixed right-10 bottom-20 rounded-full bg-primary/50 backdrop-blur-lg shadow-lg shadow-gray-900 justify-center items-center`}
         ><svg className='fill-black' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
         </button>
     );

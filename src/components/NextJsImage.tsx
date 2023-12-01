@@ -22,31 +22,31 @@ export function NextJsImageAlbum({
     imageProps: { alt, title, sizes, className, onClick },
     wrapperStyle,
 }: CustomRenderPhotoProps) {
-    
+
     const limitHeightStyle = limitHeight ? {
-        width: photo.width, 
+        width: photo.width,
         height: photo.height,
     } : {}
     return (
-       
-        <div className={"mx-auto rounded" + (limitHeight ? " max-h-[600px] " : "") + " cover group"} style={{ ...wrapperStyle, ...limitHeightStyle,position: "relative" }}>
+
+        <div className={"mx-auto rounded" + (limitHeight ? " max-h-[600px] " : "") + " cover group"} style={{ ...wrapperStyle, ...limitHeightStyle, position: "relative" }}>
             <Link href={photo.href ?? '/'}>
-            <div className="absolute bottom-0 left-0 right-0 z-20 flex transition duration-300 ">
-                <span className="px-3 mx-auto mb-5 transition duration-300 rounded shadow bg-primary drop-shadow-xl backdrop-blur group-hover:bg-primary-content">
-                    <span className="z-20 px-2 text-3xl text-center uppercase align-middle transition duration-300 text-primary-content drop-shadow group-hover:text-primary">{photo.title}</span></span>
-            </div>
-            <Image
-                fill draggable={false}
-                className="object-contain transition-all duration-300 rounded border-primary group-hover:brightness-90 group-hover:border-4"
-                src={photo.src}
-                loading="eager"
-                blurDataURL={photo.blurDataURL}
-                placeholder={"blur"}
-                sizes={sizes}
-                unoptimized
-                {...{ alt, title, onClick }}
-            />
-</Link>
+                <div className="absolute bottom-0 left-0 right-0 z-20 flex transition duration-300 ">
+                    <span className="px-3 mx-auto mb-5 transition duration-300 rounded shadow bg-primary drop-shadow-xl backdrop-blur group-hover:bg-primary-content">
+                        <span className="z-20 px-2 text-3xl text-center uppercase align-middle transition duration-300 text-primary-content drop-shadow group-hover:text-primary">{photo.title}</span></span>
+                </div>
+                <Image
+                    fill draggable={false}
+                    className="object-contain transition-all duration-300 rounded border-primary group-hover:brightness-90 group-hover:border-4"
+                    src={photo.src}
+                    loading="eager"
+                    blurDataURL={photo.blurDataURL}
+                    placeholder={"blur"}
+                    sizes={sizes}
+                    unoptimized
+                    {...{ alt, title, onClick }}
+                />
+            </Link>
         </div>
     );
 }
@@ -62,6 +62,7 @@ export function NextJsImageElement({
     return (
         <div className={"rounded" + (limitHeight ? " max-h-[800px] " : "") + " cover group"} style={{ ...wrapperStyle, position: "relative" }}>
             <Image
+                unoptimized
                 height={imageHeight}
                 width={imageWidth}
                 draggable={false}
@@ -130,6 +131,7 @@ export function NextJsImage({ slide, rect }: NextJsImageProps) {
     return (
         <div style={{ position: "relative", width, height }}>
             <Image
+                unoptimized
                 fill
                 alt={slide.alt ?? ""}
                 title={slide.alt}

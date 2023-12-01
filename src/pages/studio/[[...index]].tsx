@@ -3,6 +3,7 @@ import { NextStudio } from 'next-sanity/studio'
 import { metadata } from 'next-sanity/studio/metadata'
 import config from '../../../sanity.config'
 import { NextPage } from 'next'
+import { Config } from 'sanity'
 
 export default function StudioPage() {
   return (
@@ -12,7 +13,7 @@ export default function StudioPage() {
           <meta key={key} name={key} content={value} />
         ))}
       </Head>
-      <NextStudio config={config} />
+      <NextStudio config={config as Config} />
     </>
   )
 }

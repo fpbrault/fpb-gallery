@@ -4,39 +4,35 @@ import "styles/globals.css";
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { NextPage } from "next";
-import { client } from "@/sanity/lib/client";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
+  Component: NextPageWithLayout;
+};
 
-function App({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
 
- /*  useEffect(() => {
+/*   useEffect(() => {
     const fetchSettings = async () => {
       try {
+        console.log(document.documentElement.style.getPropertyValue("--p"))
         // Check if color is already in local storage
-        const storedPrimaryColor = localStorage.getItem('primaryColor');
-        document.documentElement.style.setProperty('--color-primary', storedPrimaryColor);
-
+        
         // Fetch data from Sanity using your client
         const siteColors = await client.fetch('*[_type == "siteSettings"][0]{siteColors->}.siteColors');
 
+        console.log(siteColors)
+
         // Assuming your data structure is something like siteSettings.primaryColor
         const fetchedPrimaryColor = siteColors.primary.rgb.r + ' ' + siteColors.primary.rgb.g + ' ' + siteColors.primary.rgb.b;
+       
+          document.documentElement.style.setProperty('--p', fetchedPrimaryColor);
+          console.log(document.documentElement.style.getPropertyValue('--p'))
 
-        if (!storedPrimaryColor || fetchedPrimaryColor !== storedPrimaryColor) {
-          // Dynamically set the CSS variable
-          document.documentElement.style.setProperty('--color-primary', fetchedPrimaryColor);
+ 
 
-          // Save the fetched color to local storage
-          localStorage.setItem('primaryColor', fetchedPrimaryColor);
-        }
 
       } catch (error) {
         console.error('Error fetching data from Sanity:', error);
@@ -46,12 +42,14 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     fetchSettings();
   }, []); */
 
+function App({ Component, pageProps }: AppPropsWithLayout) {
+const siteMetadata = pageProps.siteMetadata;
 
-  return (
-    getLayout(
-      <Component {...pageProps} />
-    )
-  )
+  const getLayout = Component.getLayout || ((page) => <Layout siteMetadata={siteMetadata} headerData={pageProps.headerData} context={pageProps.context}>{page}</Layout>);
+
+
+  return getLayout(<Component {...pageProps} />);
 }
+
 
 export default App;

@@ -17,6 +17,13 @@ daisyui: {
       'garden',
       'dim',
       {
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          primary: "mediumseagreen",
+          secondary: "darkslategrey",
+        },
+      },
+      {
         mytheme: {
           "primary": "#22c55e",
           "secondary": "#22d3ee",

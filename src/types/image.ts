@@ -1,6 +1,4 @@
-import { metadata } from 'next-sanity/studio/metadata';
-
-type CustomImage = {
+export type CustomImage = {
     src: string;
     width: number;
     height: number;

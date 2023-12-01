@@ -25,12 +25,10 @@ export function createAsyncPublishAction(originalAction : any, context: any) {
         ...originalResult,
         onHandle: async () => {
             try {
-                console.log(props.draft.slug.current)
               const rev = await fetch(`/api/revalidate?slug=${props.draft.slug.current}`);
-      console.log(rev, "test")
+
               setStatus("success");
             } catch (err) {
-                console.log(err)
               setStatus("error");
             } finally {
               // Signal that the action is completed
@@ -66,7 +64,6 @@ export function PostUpdate(props: { type: string; onComplete: () => void; }) {
       onHandle: async () => {
         // this gets called when the button is clicked
         try {
-            console.log(props)
           //await revalidatePath(`/blog/${props.published.slug.current}`);
   
           setStatus("success");

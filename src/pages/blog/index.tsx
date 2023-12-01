@@ -7,6 +7,7 @@ import { getClient } from '@/sanity/lib/client';
 import PostList from '@/components/PostList';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import PreviewPostList from '@/components/studio/PreviewPostList';
+import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
@@ -15,12 +16,8 @@ export const postListQuery = groq`*[_type == "post" && defined(slug.current)]{..
 
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const preview = context.draftMode || false;
-    const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
-    const client = getClient(previewToken);
-
-    const data = await client.fetch(postListQuery, context.params);
-    return { props: { data, preview, previewToken }, revalidate: 10 };
+    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, postListQuery); 
+    return { props: { data, preview, previewToken, siteMetadata, headerData, context}, revalidate: 10 };
 };
 
 

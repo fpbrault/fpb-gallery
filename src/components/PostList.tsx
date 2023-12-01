@@ -1,14 +1,11 @@
-import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
-import { myPortableTextComponents } from '../pages/blog/[slug]';
 import { SanityDocument } from 'next-sanity';
 import { urlForImage } from '@/sanity/lib/image';
-import { getResizedImage } from '@/sanity/lib/client';
 import Link from 'next/link';
 
 export default function Post({ posts }: { posts: SanityDocument }) {
   const width = 1000;
-  const height = 750;
+  const height = 600;
 
   return (
     <div className='text-center text-base-content text-sans'>
@@ -21,7 +18,8 @@ export default function Post({ posts }: { posts: SanityDocument }) {
             <article className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side">
               <Link href={"/blog/" + post.slug.current}>
                 <Image
-                  className='rounded shadow-lg '
+                  unoptimized
+                  className='max-w-lg mx-auto rounded shadow-lg lg:max-w-lg sm:max-w-md '
                   blurDataURL={post.blurDataURL}
                   placeholder={post.blurDataURL ? 'blur' : "empty"}
                   width={width}
@@ -30,7 +28,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                   alt="cover image placeholder"
                 />
               </Link>
-              <div className="items-center card-body">
+              <div className="items-center max-w-lg mx-auto card-body">
                 <h2 className="card-title">
                   <Link className='text-2xl font-bold text-center link link-hover link-primary' href={"/blog/" + post.slug.current}>
                     {post.title ?? "Untitled"}
@@ -45,12 +43,12 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                   ))}
                 </div>
                 <p className='w-full max-w-sm pt-8 leading-relaxed text-left'>{post.excerpt ?? "No excerpt"}</p>
-          
+
               </div>
             </article>
             {index < posts.length - 1 && <div className="flex flex-col w-full pt-4 pb-8">
-  <div className="divider divider-primary"></div>
-</div>}
+              <div className="divider divider-primary"></div>
+            </div>}
           </div>
         );
       })}

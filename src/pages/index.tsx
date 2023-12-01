@@ -1,26 +1,31 @@
 
 import AlbumGallery from '@/components/AlbumGallery';
 import { PreviewBar } from '@/components/studio/PreviewBar';
-import { getClient } from '@/sanity/lib/client';
+import { client } from '@/sanity/lib/client';
+import { InferType, makeSafeQueryRunner } from 'groqd';
 import { GetStaticProps } from 'next';
 import { SanityDocument, groq } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
+import { getBasePageProps } from '../components/lib/getBasePageProps';
 
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const indexQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]{...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}`;
 
+export const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
 
 
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const preview = context.draftMode || false;
-  const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
-  const client = getClient(previewToken);
+  const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, indexQuery);
 
-  const data = await client.fetch(indexQuery, context.params);
-  return { props: { data, preview, previewToken } };
+  const otherLocale = data?._translations?.find((translation: { language: string; }) => translation.language != context.locale ) ?? null;
+
+  const contextWithOtherLocale = {...context, otherLocale};
+
+  
+  return { props: { data, preview, previewToken, siteMetadata, context: contextWithOtherLocale, headerData }, revalidate: 10, };
 };
 
 

@@ -1,8 +1,4 @@
-/**
- * This configuration is used to for the Sanity Studio that’s mounted on the `/pages/studio/[[...index]].tsx` route
- */
 import { visionTool } from '@sanity/vision'
-import { defineConfig } from 'sanity'
 import { deskTool } from 'sanity/desk'
 import { media } from 'sanity-plugin-media'
 
@@ -12,15 +8,17 @@ import { apiVersion, dataset, projectId } from '@/sanity/env'
 import { schemaTypes } from '@/sanity/schemas'
 import { defaultDocumentNode } from './defaultDocumentNode';
 import { colorInput } from '@sanity/color-input';
+import { documentInternationalization } from '@sanity/document-internationalization'
+import { dashboardTool } from "@sanity/dashboard";
+import { vercelWidget } from "sanity-plugin-dashboard-widget-vercel";
+import { defineConfig } from 'sanity'
 
-export default defineConfig({
+export const config = defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
   schema: schemaTypes,
   plugins: [
-    colorInput(),
-    media(),
     deskTool({
       defaultDocumentNode,
       structure: (S) =>
@@ -53,7 +51,7 @@ export default defineConfig({
               ),
             // The rest of this document is from the original manual grouping in this series of articles
             ...S.documentTypeListItems().filter(
-              (listItem) => !['siteSettings', 'navigation','colors'].includes(listItem.getId() ?? "")
+              (listItem) => !['siteSettings', 'navigation'].includes(listItem.getId() ?? "")
             ),
             S.listItem()
               .title('Settings')
@@ -62,21 +60,44 @@ export default defineConfig({
                   .title('Settings Documents')
                   .items([
                     S.listItem()
+                    .title('Main Navigation')
+                    .child(S.document().schemaType('pageList').documentId('pageList')),
+                    S.listItem()
                       .title('Metadata')
                       .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
                     S.listItem()
-                      .title('Site Colors')
-                      .child(S.document().schemaType('colors').documentId('colors')),
-                    S.listItem()
-                      .title('Main Navigation')
-                      .child(S.document().schemaType('navigation').documentId('navigation')),
+                      .title('Colors Palettes')
+                      .child(
+                        S.documentTypeList('colors')
+                          .title('Color Palettes')
+                      ),
                   ])
               ),
           ])
 
     }),
+      dashboardTool({
+             widgets: [
+               vercelWidget(),
+             ],
+         }
+     ),
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
+    documentInternationalization({
+      // Required configuration
+      supportedLanguages: [
+        {id: 'fr', title: 'French'},
+        {id: 'en', title: 'English'}
+      ],
+      schemaTypes: ['post','page'],
+    }),
+    colorInput(),
+    media(),
   ],
 })
+
+export default config
+
+

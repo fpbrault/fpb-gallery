@@ -27,6 +27,18 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType}
           })
           .title('Preview'),
       ])
+      case `page`:
+        return S.document().views([
+          S.view.form(),
+          S.view
+            .component(Iframe)
+            .options({
+              url: (doc: any) => doc?.slug?.current 
+              ? `${window.location.origin}/api/preview/?pageSlug=${doc.slug.current}`
+              : `${window.location.origin}/api/preview `,
+            })
+            .title('Preview'),
+        ])
       case `album`:
         return S.document().views([
           S.view.form(),

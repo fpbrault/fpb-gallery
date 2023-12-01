@@ -42,8 +42,9 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
   })}) : albums.map((category: any) => {
     const { imageUrl, imageWidth, imageHeight,
     } = getResizedImage(category.albums[0].cover,75,800)
+
     return ({
-    href: "/category/" + category.slug.current,
+    href: category.albums.length > 1 ? "/category/" + category.slug.current : "/album/" + category.albums[0].slug.current,
     src: imageUrl,
     width: imageWidth,
     height: imageHeight,

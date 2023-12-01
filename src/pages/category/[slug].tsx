@@ -9,6 +9,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { client, getClient } from '@/sanity/lib/client';
 import PreviewAlbumGallery from '@/components/studio/PreviewAlbumGallery';
 import { PreviewBar } from '@/components/studio/PreviewBar';
+import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
 
 const fetcher = (url: RequestInfo | URL) => fetch(url).then(r => r.json())
@@ -28,12 +29,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const preview = context.draftMode || false;
-  const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
-  const client = getClient(previewToken);
+
   
   try {
-    const data = await client.fetch(categoryQuery, context.params);
+    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, categoryQuery);
     // If the category data is not found, redirect to the home page
     if (!data || !data.length) {
       return {
@@ -44,7 +43,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       };
     }
 
-    return { props: { data, preview, previewToken },  revalidate: 10, };
+    return { props: { data, preview, previewToken, siteMetadata, headerData, context },  revalidate: 10, };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {

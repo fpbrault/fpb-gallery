@@ -6,8 +6,8 @@ export default function Document() {
         <Html data-theme="mytheme">
             <Head>
             </Head>
-                <Main />
-                <NextScript />
+            <Main />
+            <NextScript />
         </Html>
     )
 }

@@ -32,8 +32,6 @@ export const client = createClient({
   perspective: 'published',
 })
 
-
-
 export function getImageDimensions(id: string): UseNextSanityImageDimensions {
   const dimensions = id.split('-')[2];
 
@@ -63,6 +61,36 @@ export function getResizedImage(image: Image, quality?: number, height?: number,
       let imageWidth = calculateNewWidth(dimensions.width, dimensions.height, imageHeight);
 
       imageBuilder = imageBuilder.height(height ? height : imageHeight).width(imageWidth)
+
+      if (quality) {
+        imageBuilder = imageBuilder.quality(quality);
+      } else {
+        imageBuilder = imageBuilder.quality(75);
+      }
+      if (blur) {
+        imageBuilder = imageBuilder.blur(100);
+      }
+      const imageUrl = imageBuilder.url()
+      return { imageUrl, imageHeight, imageWidth };
+    } else {
+      throw new Error("No Asset for Image")
+    }
+  }
+  catch (error) {
+    throw error
+  }
+}
+
+export function getResizedImageSquare(image: Image,  size: number, quality?: number, blur?: boolean) {
+  try {
+    if (image.asset) {
+
+      let imageBuilder = urlForImage(image)
+
+      let imageHeight = size;
+      let imageWidth = size;
+      
+      imageBuilder = imageBuilder.height(size).width(size)
 
       if (quality) {
         imageBuilder = imageBuilder.quality(quality);

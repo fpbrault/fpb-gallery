@@ -1,17 +1,23 @@
 
 import album from './album'
-import siteSettings, { colors } from './siteSettings'
-import category from './category'
-import post from './post'
 import author from './author'
+import category from './category'
+import { page } from './page'
+import pageList from './pageList'
+import {post} from './post'
+import { colors, siteSettings, socialLink } from './siteSettings'
 
 export const schemaTypes = {
     types: [
         album,
         category,
         siteSettings,
+        socialLink,
         post,
         author,
-        colors
+        colors,
+        page,
+        pageList
     ]
 }
+export default schemaTypes
