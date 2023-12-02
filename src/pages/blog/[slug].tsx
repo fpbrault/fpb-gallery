@@ -35,7 +35,7 @@ export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slu
     $locale == 'fr' => coalesce(slug_fr, slug)
   ), "title": title[_key == $locale][0].value, publishDate, tags[], coverImage
 }
-}|order(publishDate)[0]`;
+} [0]`;
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
   const paths = await client.fetch(
