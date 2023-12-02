@@ -11,7 +11,8 @@ import { getBasePageProps } from '../components/lib/getBasePageProps';
 
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const indexQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]{...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}`;
+export const indexQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
+order(coalesce(publishDate, -1) desc){...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}`;
 
 export const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
 
