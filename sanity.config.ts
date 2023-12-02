@@ -2,7 +2,7 @@ import { visionTool } from '@sanity/vision'
 import { deskTool } from 'sanity/desk'
 import { media } from 'sanity-plugin-media'
 
-import { FaCircleInfo, FaPalette, FaHouse, FaGear, FaFolder, FaFile, FaImages, FaUser, FaUsers } from "react-icons/fa6";
+import { FaCircleInfo, FaPalette, FaHouse, FaGear, FaFile, FaImages, FaUsers } from "react-icons/fa6";
 
 import { apiVersion, dataset, projectId } from '@/sanity/env'
 import { schemaTypes } from '@/sanity/schemas'

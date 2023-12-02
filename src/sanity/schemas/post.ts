@@ -12,10 +12,7 @@ export const post = defineType({
       name: 'title', type: 'internationalizedArrayString',
       title: 'Post Title',
     }),
-    defineField({
-      name: 'postContent',
-      type: 'internationalizedArrayBlockContent',
-    }),
+
     defineField({
       name: 'slug', type: 'slug',
       title: 'Post slug',
@@ -95,47 +92,16 @@ export const post = defineType({
         dateFormat: 'YYYY-MM-DD'
       }
     }),
-    defineField({
+/*     defineField({
       name: 'excerpt',
       title: 'Custom Excerpt',
       description: "This will override the default excerpt",
       type: 'string',
-    }),
+    }), */
     defineField({
-      title: 'Content',
-      name: 'content',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'block',
-          marks: {
-            annotations: [
-              {
-                name: 'internalLink',
-                type: 'object',
-                title: 'Internal link',
-                fields: [
-                  {
-                    name: 'reference',
-                    type: 'reference',
-                    title: 'Reference',
-                    to: [
-                      { type: 'post' as const },
-                      { type: 'album' as const },
-                      { type: 'category' as const },
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }),
-        defineArrayMember({ type: 'image' }),
-        { type: 'reference', name: 'Post', to: { type: 'post' as const } },
-        { type: 'reference', name: 'album', to: { type: 'album' as const } }
-
-      ]
-    })
+      name: 'postContent',
+      type: 'internationalizedArrayBlockContent',
+    }),
   ],
   preview: {
     select: {
