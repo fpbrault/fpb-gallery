@@ -6,13 +6,11 @@ import Link from 'next/link';
 export default function Post({ posts }: { posts: SanityDocument }) {
   const width = 1000;
   const height = 600;
-
   return (
     <div className='text-center text-base-content text-sans'>
       <h2 className='pb-4 text-4xl font-bold'></h2>
       {posts.map((post: any, index: number) => {
         const imageUrl = post.coverImage ? urlForImage(post.coverImage).height(height).width(width).quality(80).url() : null;
-
         return (
           <div className='' key={post.slug.current}>
             <article className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side">
@@ -31,7 +29,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
               <div className="items-center max-w-lg mx-auto card-body">
                 <h2 className="card-title">
                   <Link className='text-2xl font-bold text-center link link-hover link-primary' href={"/blog/" + post.slug.current}>
-                    {post.title ?? "Untitled"}
+                    {post?.title ?? "Untitled"}
                   </Link>
                 </h2>
                 <span className='badge badge-outline'>

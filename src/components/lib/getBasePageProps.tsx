@@ -35,6 +35,8 @@ export async function getBasePageProps(context: any, query: any) {
   if (context.params) {
     context.params.locale = context?.locale
   }
+
+  
   
   const data = await client.fetch(query, context.params);
   data.headerData = headerData;

@@ -28,8 +28,6 @@ const Layout: React.FC<Props> = (props) => {
     description: props.siteMetadata?.description ?? "Description",
     socialLinks: props.siteMetadata?.socialLinks ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => { return { "name": socialLink.name, "url": socialLink.url, type: socialLink.type } }) : {
     },
-
-
   }
   return (
     <>
@@ -48,7 +46,7 @@ const Layout: React.FC<Props> = (props) => {
       <div className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}>
         
         <Header title={metadata.title} contactText={metadata?.socialLinks[0]?.name ?? ""} contactType={metadata?.socialLinks[0]?.type ?? ""} contactUrl={metadata?.socialLinks[0]?.url ?? ""} headerData={props.headerData} context={props.context} />
-        <main className="flex-grow w-full h-full px-4 py-4 mx-auto sm:py-4 max-w-7xl">
+        <main className="flex-grow w-full h-full px-4 pb-8 mx-auto sm:py-4 max-w-7xl">
           {props.children}
         </main>
         <ScrollToTopButton></ScrollToTopButton>

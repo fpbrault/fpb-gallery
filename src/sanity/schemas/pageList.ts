@@ -1,8 +1,9 @@
-import { defineField, defineType } from "sanity";
-
+import { defineField } from "sanity";
+import { FaFile } from "react-icons/fa6";
 export const pageList = {
     name: 'pageList',
     type: 'document',
+    icon: FaFile,
     title: 'Page List',
     fields: [
         defineField({
@@ -28,6 +29,7 @@ export const pageList = {
                 {
                     type: 'object',
                     name: 'hardcodedPage',
+                    icon: FaFile,
                     title: 'Hardcoded Page',
                     fields: [
                         {

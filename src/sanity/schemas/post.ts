@@ -1,14 +1,20 @@
 import { PreviewValue } from 'sanity';
 import { defineArrayMember, defineField, defineType } from "sanity"
+import { MdOutlineArticle } from "react-icons/md";
 
 export const post = defineType({
   name: 'post',
   type: 'document',
   title: 'Post',
+  icon: MdOutlineArticle,
   fields: [
     defineField({
-      name: 'title', type: 'string',
+      name: 'title', type: 'internationalizedArrayString',
       title: 'Post Title',
+    }),
+    defineField({
+      name: 'postContent',
+      type: 'internationalizedArrayBlockContent',
     }),
     defineField({
       name: 'slug', type: 'slug',
@@ -16,8 +22,23 @@ export const post = defineType({
       options: {
         source: 'title',
         maxLength: 96,
-        slugify: input => {
-          return input.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "")
+        slugify: (input: any) => {
+          console.log
+          const title = input.find((element: { _key: string; _type: string; value: string; }) => element._key == 'en')?.value ?? input[0]?.value;
+          return title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "")
+        },
+      },
+    }),
+
+    defineField({
+      name: 'slug_fr', type: 'slug',
+      title: 'Post slug (FR)',
+      options: {
+        source: 'title',
+        maxLength: 96,
+        slugify: (input: any) => {
+          const title = input.find((element: { _key: string; _type: string; value: string; }) => element._key == 'fr')?.value ?? input[0]?.value;
+          return title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "")
         },
       },
     }),
@@ -125,7 +146,7 @@ export const post = defineType({
     prepare(value: Record<string, any>, viewOptions?: any): PreviewValue {
       const { author } = value
       return {
-        title: value.title,
+        title: value.title[0].value,
         subtitle: author && `by ${author.name}`,
         media: value.coverImage
       }

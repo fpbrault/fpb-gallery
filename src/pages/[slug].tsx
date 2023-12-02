@@ -29,7 +29,7 @@ export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (lan
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await client.fetch(
     groq`*[_type == "page" && defined(slug.current)][]{
-      "params": {  "slug": slug.current , "locale": language, "name": name }, "locale": language,
+      "params": {"slug": slug.current, "locale": language, "name": name }, "locale": language,
     }`
   );
   return { paths, fallback: 'blocking' };

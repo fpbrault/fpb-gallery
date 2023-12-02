@@ -10,12 +10,12 @@ function PostNavigationItem(props : any) {
       <div className='indicator-item indicator-center badge-sm badge badge-primary backdrop-blur-xl'>
         {props.label}
       </div>
-      <Link className='w-full group-[&>:nth-of-type(even)]:ml-auto' href={"/blog/" + (props.data.slug)}>
+      <Link className='w-full group-[&>:nth-of-type(even)]:ml-auto' href={"/blog/" + (props.data.slug.current)}>
 
         <div className='flex justify-start text-center group-[&>:nth-of-type(even)]:flex-row-reverse rounded-2xl w-full bg-base-300'>
 
           <Image unoptimized className='w-1/3 max-w-[100px] shadow-md group-[&>:nth-of-type(even)]:rounded-r-2xl group-[&>:nth-of-type(odd)]:rounded-l-2xl' alt="Previous post" src={props.relatedPostImage.imageUrl ?? ""} height={props.relatedPostImage.imageHeight} width={props.relatedPostImage.imageWidth}></Image>
-          <span className='flex flex-col justify-center w-full px-2 text-sm font-bold'>{props.data.title.length >= 60 ? props.data.title.substring(0,60) + "..." : props.data.title}</span>
+         <span className='flex flex-col justify-center w-full px-2 text-sm font-bold'>{props.data.title.length >= 60 ? props.data.title.substring(0,60) + "..." : props.data.title}</span> 
         </div>
       </Link>
     </>}

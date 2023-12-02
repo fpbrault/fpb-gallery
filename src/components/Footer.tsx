@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Layout } from "@/types/layout";
 import { getSocialIcon } from "./lib/getSocialIcon";
+import ThemeSelector from "./ThemeSelector";
 
 
 export function Footer({metadata} : {metadata: Layout.LayoutMetadata}) {
@@ -12,7 +13,9 @@ export function Footer({metadata} : {metadata: Layout.LayoutMetadata}) {
 
       <span>  Copyright © {new Date().getFullYear()} - {metadata.author}. Tout Droits Reservés</span>
     </aside>
+    
     <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end place-items-center">
+      
     {metadata.socialLinks.length > 0 && metadata.socialLinks.map((socialLink, index) => (
           <Link
             key={index}

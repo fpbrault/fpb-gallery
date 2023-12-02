@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { getResizedImage } from '@/sanity/lib/client';
 import PhotoAlbum from 'react-photo-album';
 import { PortableText } from '@portabletext/react';
-import { myPortableTextComponents } from '@/pages/blog/[slug]';
+import { myPortableTextComponents } from '@/components/myPortableTextComponents';
 
 type Props = {
     images: any[];

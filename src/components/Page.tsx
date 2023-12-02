@@ -1,5 +1,5 @@
 import { PortableText } from '@portabletext/react';
-import { myPortableTextComponents } from '../pages/blog/[slug]';
+import { myPortableTextComponents } from '@/components/myPortableTextComponents';
 import { SanityDocument } from 'next-sanity';
 
 export default function Page({ page }: { page: SanityDocument }) {

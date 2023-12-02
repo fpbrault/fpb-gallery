@@ -14,6 +14,7 @@ import {SanityDocument} from 'sanity'
 // Import this into the deskTool() plugin
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType}) => {
   // Only show preview pane on `movie` schema type documents
+ 
   switch (schemaType) {
     case `post`:
       return S.document().views([

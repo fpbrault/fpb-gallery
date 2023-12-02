@@ -1,10 +1,10 @@
-import { defineArrayMember, defineField, defineType } from "sanity"
-import { client } from "../lib/client";
-
+import { FaFile } from "react-icons/fa6";
+import { SlugValidationContext, defineArrayMember, defineField } from "sanity"
 export const page = {
   name: 'page',
   type: 'document',
   title: 'Page',
+  icon: FaFile,
   fields: [
     defineField({
       name: 'language',
@@ -37,19 +37,7 @@ export const page = {
         slugify: input => {
           return input.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "")
         },
-        isUnique: (input, { document }) => {
-          // Check if the slug is unique within the same locale
-          const query = `*[slug.current == $slug && language == $language && _id != $id]`;
-          const params = {
-            slug: input,
-            language: document?.language,
-            id: document?._id || 'does-not-exist', // Handle the case when creating a new document
-          };
-          
-          return client.fetch(query, params).then(existingDocs => {
-            return existingDocs.length === 0;
-          });
-        },
+        isUnique: isUniqueOtherThanLanguage
       },
     }),
     defineField({
@@ -88,4 +76,53 @@ export const page = {
       ]
     })
   ],
+  preview: {
+    select: {
+      title: 'title',
+      language: 'language',
+    },
+    prepare(value: any) {
+      const { title, language } = value;
+      const flagEmoji = getFlagEmoji(language); // Add a function to get the flag emoji based on the language
+  
+      return {
+        title: title,
+        subtitle: flagEmoji ? `${flagEmoji} ${language}` : language,
+      };
+    },
+  },
+  
+}
+export async function isUniqueOtherThanLanguage(slug: string, context: SlugValidationContext) {
+  const {document, getClient} = context
+  if (!document?.language) {
+    return true
+  }
+  const client = getClient({apiVersion: '2023-04-24'})
+  const id = document._id.replace(/^drafts\./, '')
+  const params = {
+    draft: `drafts.${id}`,
+    published: id,
+    language: document.language,
+    slug,
+  }
+  const query = `!defined(*[
+    !(_id in [$draft, $published]) &&
+    slug.current == $slug &&
+    language == $language
+  ][0]._id)`
+  const result = await client.fetch(query, params)
+  return result
+}
+
+function getFlagEmoji(language: string): string | null {
+  switch (language) {
+    case 'en':
+      return '🇺🇸'; // Replace with the flag emoji for English
+    case 'fr':
+      return '🇫🇷'; // Replace with the flag emoji for French
+    // Add more cases for other languages as needed
+    default:
+      return null; // Return null if the language is not supported
+  }
 }

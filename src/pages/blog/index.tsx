@@ -3,7 +3,6 @@ import Breadcrumbs from '@/components/BreadCrumbs';
 import dynamic from 'next/dynamic';
 import { SanityDocument, groq } from 'next-sanity';
 import { GetStaticProps } from 'next';
-import { getClient } from '@/sanity/lib/client';
 import PostList from '@/components/PostList';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import PreviewPostList from '@/components/studio/PreviewPostList';
@@ -11,12 +10,26 @@ import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const postListQuery = groq`*[_type == "post" && defined(slug.current)]{...,"blurDataURL": coverImage.asset->.metadata.lqip,"excerpt": array::join(string::split((pt::text(content)), "")[0..255], "") + "..."} | order(publishDate desc)`;
+export const postListQuery = groq`*[_type == "post" && defined(slug.current) || defined(slug_fr.current)]{...,"slug": select(
+    $locale == 'en' => coalesce(slug, slug_fr),
+    $locale == 'fr' => coalesce(slug_fr, slug)
+  ),
+    
+    "title": title[_key == $locale].value,"blurDataURL": coverImage.asset->.metadata.lqip,"excerpt":array::join(
+    string::split(
+      (pt::text(
+        postContent[_key == $locale].value[]
+      )
+    )
+  , ""
+    )[0..255], "") + "..."} | order(publishDate desc)`;
 
 
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, postListQuery); 
+    const contextWithParams = {...context, params: {}}
+  
+    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(contextWithParams, postListQuery); 
     return { props: { data, preview, previewToken, siteMetadata, headerData, context}, revalidate: 10 };
 };
 

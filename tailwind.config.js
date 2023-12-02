@@ -12,6 +12,9 @@ module.exports = {
       },
     },
   },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
 daisyui: {
     themes: [
       'garden',
