@@ -55,7 +55,7 @@ export default function Header({
                 <li key={headerLink?.slug}>
                   <Link
                     className="mx-auto link link-hover link-primary"
-                    href={translatedHeaderLink?.slug?.current ?? headerLink?.slug}
+                    href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
                   >
                     {translatedHeaderLink?.title ?? headerLink?.title}
                   </Link>
