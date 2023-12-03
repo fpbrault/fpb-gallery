@@ -1,21 +1,21 @@
-import React, { ReactNode} from "react";
+import React, { ReactNode } from "react";
 import Head from "next/head";
-import { Raleway } from 'next/font/google'
+import { Raleway } from "next/font/google";
 import Header from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
-import { Layout } from "@/types/layout"
+import { Layout } from "@/types/layout";
 
 const raleway = Raleway({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-raleway',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-raleway"
+});
 
 type Props = {
   children: ReactNode;
-  headerData?: any
-  siteMetadata?: any
+  headerData?: any;
+  siteMetadata?: any;
   context?: any;
 };
 
@@ -24,9 +24,12 @@ const Layout: React.FC<Props> = (props) => {
     title: props.siteMetadata?.siteTitle ?? "My Site",
     author: props.siteMetadata?.author ?? "Unknown Author",
     description: props.siteMetadata?.description ?? "Description",
-    socialLinks: props.siteMetadata?.socialLinks ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => { return { "name": socialLink.name, "url": socialLink.url, type: socialLink.type } }) : {
-    },
-  }
+    socialLinks: props.siteMetadata?.socialLinks
+      ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => {
+          return { name: socialLink.name, url: socialLink.url, type: socialLink.type };
+        })
+      : {}
+  };
   return (
     <>
       <Head>
@@ -38,13 +41,20 @@ const Layout: React.FC<Props> = (props) => {
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
-
       </Head>
-     
-      <div className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}>
-        
-        <Header title={metadata.title} contactText={metadata?.socialLinks[0]?.name ?? ""} contactType={metadata?.socialLinks[0]?.type ?? ""} contactUrl={metadata?.socialLinks[0]?.url ?? ""} headerData={props && props.headerData} context={props.context} />
-        <main className="flex-grow w-full h-full px-4 pb-8 mx-auto sm:py-4 max-w-7xl">
+
+      <div
+        className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}
+      >
+        <Header
+          title={metadata.title}
+          contactText={metadata?.socialLinks[0]?.name ?? ""}
+          contactType={metadata?.socialLinks[0]?.type ?? ""}
+          contactUrl={metadata?.socialLinks[0]?.url ?? ""}
+          headerData={props && props.headerData}
+          context={props.context}
+        />
+        <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
           {props.children}
         </main>
         <ScrollToTopButton></ScrollToTopButton>

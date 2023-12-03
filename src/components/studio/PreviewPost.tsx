@@ -9,8 +9,8 @@ import Post from "../Post";
 export default function PreviewPost({ post }: { post: SanityDocument }) {
   const params = useRouter().query;
   const [data] = useLiveQuery(null, postQuery, params);
- if (data == null) {
-  return null;
- }
+  if (data == null) {
+    return null;
+  }
   return <Post post={data} />;
-}/*  */
+} /*  */

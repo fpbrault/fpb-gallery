@@ -9,8 +9,8 @@ import AlbumGallery from "../AlbumGallery";
 export default function PreviewAlbumGallery({ albums }: { albums: SanityDocument }) {
   const params = useRouter().query;
   const [data] = useLiveQuery(null, categoryQuery, params);
- if (data == null) {
-  return null;
- }
+  if (data == null) {
+    return null;
+  }
   return <AlbumGallery albums={data} />;
-}/*  */
+} /*  */

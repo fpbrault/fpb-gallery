@@ -1,4 +1,3 @@
-
 import React, { ReactNode, ReactElement, useEffect } from "react";
 import "styles/globals.css";
 import { AppProps } from "next/app";
@@ -12,7 +11,6 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
-
 
 /*   useEffect(() => {
     const fetchSettings = async () => {
@@ -43,13 +41,20 @@ type AppPropsWithLayout = AppProps & {
   }, []); */
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-const siteMetadata = pageProps.siteMetadata;
-
-  const getLayout = Component.getLayout || ((page) => <Layout siteMetadata={siteMetadata} headerData={pageProps.headerData} context={pageProps.context}>{page}</Layout>);
-
+  const siteMetadata = pageProps.siteMetadata;
+  const getLayout =
+    Component.getLayout ||
+    ((page) => (
+      <Layout
+        siteMetadata={siteMetadata}
+        headerData={pageProps.headerData}
+        context={pageProps.context}
+      >
+        {page}
+      </Layout>
+    ));
 
   return getLayout(<Component {...pageProps} />);
 }
-
 
 export default App;

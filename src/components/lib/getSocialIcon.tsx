@@ -1,10 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faInstagram,
-  faYoutube,
-  faFacebook
-} from "@fortawesome/free-brands-svg-icons";
+import { faInstagram, faYoutube, faFacebook } from "@fortawesome/free-brands-svg-icons";
 
 export function getSocialIcon(type: string) {
   switch (type) {

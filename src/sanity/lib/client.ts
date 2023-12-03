@@ -1,17 +1,17 @@
-import { SanityClient, createClient } from 'next-sanity'
+import { SanityClient, createClient } from "next-sanity";
 
-import { apiVersion, dataset, projectId, useCdn } from '@/sanity/env'
-import { urlForImage } from './image';
-import { UseNextSanityImageDimensions } from 'next-sanity-image';
-import { marked } from 'marked';
-import { Image } from 'sanity';
+import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
+import { urlForImage } from "./image";
+import { UseNextSanityImageDimensions } from "next-sanity-image";
+import { marked } from "marked";
+import { Image } from "sanity";
 
 export function getClient(previewToken?: string): SanityClient {
   const client = createClient({
     projectId,
     dataset,
     apiVersion,
-    useCdn,
+    useCdn
   });
 
   return previewToken
@@ -19,7 +19,7 @@ export function getClient(previewToken?: string): SanityClient {
         token: previewToken,
         useCdn: false,
         ignoreBrowserTokenWarning: true,
-        perspective: 'previewDrafts'
+        perspective: "previewDrafts"
       })
     : client;
 }
@@ -29,13 +29,13 @@ export const client = createClient({
   dataset,
   projectId,
   useCdn,
-  perspective: 'published',
-})
+  perspective: "published"
+});
 
 export function getImageDimensions(id: string): UseNextSanityImageDimensions {
-  const dimensions = id.split('-')[2];
+  const dimensions = id.split("-")[2];
 
-  const [width, height] = dimensions.split('x').map((num: string) => parseInt(num, 10));
+  const [width, height] = dimensions.split("x").map((num: string) => parseInt(num, 10));
   const aspectRatio = width / height;
 
   return { width, height, aspectRatio };
@@ -54,13 +54,12 @@ function calculateNewWidth(originalWidth: number, originalHeight: number, newHei
 export function getResizedImage(image: Image, quality?: number, height?: number, blur?: boolean) {
   try {
     if (image.asset) {
-
       const dimensions = getImageDimensions(image.asset._ref);
-      let imageBuilder = urlForImage(image)
+      let imageBuilder = urlForImage(image);
       let imageHeight = height ? height : dimensions.height;
       let imageWidth = calculateNewWidth(dimensions.width, dimensions.height, imageHeight);
 
-      imageBuilder = imageBuilder.height(height ? height : imageHeight).width(imageWidth)
+      imageBuilder = imageBuilder.height(height ? height : imageHeight).width(imageWidth);
 
       if (quality) {
         imageBuilder = imageBuilder.quality(quality);
@@ -70,27 +69,30 @@ export function getResizedImage(image: Image, quality?: number, height?: number,
       if (blur) {
         imageBuilder = imageBuilder.blur(100);
       }
-      const imageUrl = imageBuilder.url()
+      const imageUrl = imageBuilder.url();
       return { imageUrl, imageHeight, imageWidth };
     } else {
-      throw new Error("No Asset for Image")
+      throw new Error("No Asset for Image");
     }
-  }
-  catch (error) {
-    throw error
+  } catch (error) {
+    throw error;
   }
 }
 
-export function getResizedImageSquare(image: Image,  size: number, quality?: number, blur?: boolean) {
+export function getResizedImageSquare(
+  image: Image,
+  size: number,
+  quality?: number,
+  blur?: boolean
+) {
   try {
     if (image.asset) {
-
-      let imageBuilder = urlForImage(image)
+      let imageBuilder = urlForImage(image);
 
       let imageHeight = size;
       let imageWidth = size;
-      
-      imageBuilder = imageBuilder.height(size).width(size)
+
+      imageBuilder = imageBuilder.height(size).width(size);
 
       if (quality) {
         imageBuilder = imageBuilder.quality(quality);
@@ -100,29 +102,30 @@ export function getResizedImageSquare(image: Image,  size: number, quality?: num
       if (blur) {
         imageBuilder = imageBuilder.blur(100);
       }
-      const imageUrl = imageBuilder.url()
+      const imageUrl = imageBuilder.url();
       return { imageUrl, imageHeight, imageWidth };
     } else {
-      throw new Error("No Asset for Image")
+      throw new Error("No Asset for Image");
     }
-  }
-  catch (error) {
-    throw error
+  } catch (error) {
+    throw error;
   }
 }
 
-
 export async function getCategories() {
-  const query = '*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]{...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}';
-
+  const query =
+    '*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]{...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}';
 
   const categories = await client.fetch(query);
   const categoriesWithComputedURLs = await Promise.all(
-    categories.map(async (category: { albums: any[]; categoryName: any; }) => {
+    categories.map(async (category: { albums: any[]; categoryName: any }) => {
       const recentAlbum = category.albums[0];
-      if (typeof recentAlbum != 'undefined') {
-
-        const { imageUrl: coverImageUrl, imageWidth, imageHeight } = getResizedImage(recentAlbum.cover, 75, 600)
+      if (typeof recentAlbum != "undefined") {
+        const {
+          imageUrl: coverImageUrl,
+          imageWidth,
+          imageHeight
+        } = getResizedImage(recentAlbum.cover, 75, 600);
         return {
           categoryName: category.categoryName,
           albums: category.albums,
@@ -137,34 +140,32 @@ export async function getCategories() {
   return categoriesWithComputedURLs;
 }
 
-
 export async function getAlbumsForCategory(categoryName: string | string[] | undefined) {
   const query = `*[_type == "category" && lower(categoryName) == lower("${categoryName}")]{...,"albums": *[_type=="album" && references(^._id)]{...,images[]{...,"placeholders" : asset->{metadata{lqip}}}}}`;
 
   const category = await client.fetch(query);
 
   // Compute the URLs using the urlForImage function
-  const albumsWithComputedURLs = category[0].albums.map((album: { images: any[]; coverImage: string; }) => {
-    const imagesWithComputedURLs = album.images.map((image: Image) => {
-
-      const { imageUrl, imageWidth, imageHeight,
-      } = getResizedImage(image, 75, 800)
-      const blurdata = image?.placeholders ?? null as any
+  const albumsWithComputedURLs = category[0].albums.map(
+    (album: { images: any[]; coverImage: string }) => {
+      const imagesWithComputedURLs = album.images.map((image: Image) => {
+        const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 75, 800);
+        const blurdata = image?.placeholders ?? (null as any);
+        return {
+          ...image,
+          src: imageUrl,
+          height: imageHeight,
+          width: imageWidth,
+          blurDataURL: blurdata.metadata.lqip
+        };
+      });
+      album.coverImage = urlForImage(album.images[0]).height(800).url();
       return {
-        ...image,
-        src: imageUrl,
-        height: imageHeight,
-        width: imageWidth,
-        blurDataURL: blurdata.metadata.lqip
-
+        ...album,
+        images: imagesWithComputedURLs
       };
-    });
-    album.coverImage = urlForImage(album.images[0]).height(800).url()
-    return {
-      ...album,
-      images: imagesWithComputedURLs,
-    };
-  });
+    }
+  );
 
   return albumsWithComputedURLs;
 }
@@ -174,30 +175,29 @@ export async function getAlbum(id: string | string[] | undefined) {
 
   const albums = await client.fetch(query);
   // Compute the URLs using the urlForImage function
-  const albumsWithComputedURLs = albums.map((album: { images: any[]; coverImage: string; albumDescription: string; }) => {
-    const imagesWithComputedURLs = album.images.map((image: Image) => {
+  const albumsWithComputedURLs = albums.map(
+    (album: { images: any[]; coverImage: string; albumDescription: string }) => {
+      const imagesWithComputedURLs = album.images.map((image: Image) => {
+        const { imageUrl: thumbnailSrc } = getResizedImage(image, 80, 800);
+        const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
+        return {
+          ...image,
+          description: image.description ? marked(image.description.toString()) : null,
+          src: imageUrl,
+          thumbnailSrc: thumbnailSrc,
+          height: imageHeight,
+          width: imageWidth
+        };
+      });
+      album.coverImage = urlForImage(album.images[0]).height(800).url();
 
-      const { imageUrl: thumbnailSrc } = getResizedImage(image, 80, 800)
-      const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048)
       return {
-        ...image,
-        description: image.description ? marked(image.description.toString()) : null,
-        src: imageUrl,
-        thumbnailSrc: thumbnailSrc,
-        height: imageHeight,
-        width: imageWidth,
+        ...album,
+        images: imagesWithComputedURLs,
+        albumDescription: album.albumDescription ? marked(album.albumDescription) : null
       };
-
-
-    });
-    album.coverImage = urlForImage(album.images[0]).height(800).url()
-
-    return {
-      ...album,
-      images: imagesWithComputedURLs,
-      albumDescription: album.albumDescription ? marked(album.albumDescription) : null,
-    };
-  });
+    }
+  );
 
   return albumsWithComputedURLs[0];
 }
@@ -208,43 +208,42 @@ export async function getFeaturedImagesAlbum() {
   } | order(featuredImages.stuff._createdAt desc)`;
 
   const albums = await client.fetch(query);
- 
-  const combinedFeaturedImages = [].concat(...albums.map((item: { featuredImages: any; }) => item.featuredImages));
+
+  const combinedFeaturedImages = [].concat(
+    ...albums.map((item: { featuredImages: any }) => item.featuredImages)
+  );
 
   const myAlbum = [
     {
-      display: 'rows',
-      albumId: 'featured',
-      category: { categoryName: "Featured", },
+      display: "rows",
+      albumId: "featured",
+      category: { categoryName: "Featured" },
 
-      albumName: 'Featured',
-      images: combinedFeaturedImages,
+      albumName: "Featured",
+      images: combinedFeaturedImages
     }
-  ]
+  ];
 
   // Compute the URLs using the urlForImage function
   const albumsWithComputedURLs = myAlbum.map((album: any) => {
     const imagesWithComputedURLs = album.images.map((image: Image) => {
-
-      const { imageUrl: thumbnailSrc } = getResizedImage(image, 75, 800)
-      const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 75, 2048)
+      const { imageUrl: thumbnailSrc } = getResizedImage(image, 75, 800);
+      const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 75, 2048);
       return {
         ...image,
         description: image.description ? marked(image.description.toString()) : null,
         src: imageUrl,
         thumbnailSrc: thumbnailSrc,
         height: imageHeight,
-        width: imageWidth,
+        width: imageWidth
       };
-
-
     });
-    album.coverImage = urlForImage(album.images[0]).height(800).url()
+    album.coverImage = urlForImage(album.images[0]).height(800).url();
 
     return {
       ...album,
       images: imagesWithComputedURLs,
-      albumDescription: album.albumDescription ? marked(album.albumDescription) : null,
+      albumDescription: album.albumDescription ? marked(album.albumDescription) : null
     };
   });
 
@@ -252,16 +251,15 @@ export async function getFeaturedImagesAlbum() {
 }
 
 export async function getAllPosts() {
-  const query = '*[_type == "post"] {...,"blurDataURL": coverImage.asset->.metadata.lqip,"excerpt": array::join(string::split((pt::text(content)), "")[0..255], "") + "..."}';
-
+  const query =
+    '*[_type == "post"] {...,"blurDataURL": coverImage.asset->.metadata.lqip,"excerpt": array::join(string::split((pt::text(content)), "")[0..255], "") + "..."}';
 
   const posts = await client.fetch(query);
-  
 
-  const postsWithImages = posts.map((post : any) => {
+  const postsWithImages = posts.map((post: any) => {
     const width = 600;
-    const height = 300
-    const imageUrl =  urlForImage(post.coverImage).height(height).width(width).quality(80).url()
+    const height = 300;
+    const imageUrl = urlForImage(post.coverImage).height(height).width(width).quality(80).url();
 
     return {
       ...post,
@@ -270,23 +268,21 @@ export async function getAllPosts() {
       imageHeight: height,
       blurDataUrl: post.blurDataURL
     };
-
-  }
-
-  )
+  });
 
   return postsWithImages;
 }
 
 export async function getPostBySlug(slug: string) {
-  const query = '*[_type == "post" && slug.current =="' + slug + '"][0]{...,content[]{...,_type == "album" =>{...}->{albumName,albumId,images[]{...,asset->}}},"blurDataURL": coverImage.asset->.metadata.lqip}';
-
+  const query =
+    '*[_type == "post" && slug.current =="' +
+    slug +
+    '"][0]{...,content[]{...,_type == "album" =>{...}->{albumName,albumId,images[]{...,asset->}}},"blurDataURL": coverImage.asset->.metadata.lqip}';
 
   const post = await client.fetch(query);
   const width = 1000;
-  const height = 750
-  const imageUrl =  urlForImage(post.coverImage).height(height).width(width).quality(80).url()
-
+  const height = 750;
+  const imageUrl = urlForImage(post.coverImage).height(height).width(width).quality(80).url();
 
   return {
     ...post,
@@ -295,5 +291,4 @@ export async function getPostBySlug(slug: string) {
     imageHeight: height,
     blurDataUrl: post.blurDataURL
   };
-
 }

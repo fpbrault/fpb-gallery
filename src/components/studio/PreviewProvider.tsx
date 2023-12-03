@@ -1,11 +1,10 @@
-
 import { getClient } from "@/sanity/lib/client";
 import { LiveQueryProvider } from "@sanity/preview-kit";
 import { useMemo } from "react";
 
 export default function PreviewProvider({
   children,
-  previewToken,
+  previewToken
 }: {
   children: React.ReactNode;
   previewToken: string;

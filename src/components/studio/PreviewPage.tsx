@@ -9,8 +9,8 @@ import Page from "../Page";
 export default function PreviewPage({ page }: { page: SanityDocument }) {
   const params = useRouter().query;
   const [data] = useLiveQuery(page, pageQuery, params);
- if (data == null) {
-  return null;
- }
+  if (data == null) {
+    return null;
+  }
   return <Page page={data} />;
 }

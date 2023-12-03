@@ -8,10 +8,17 @@ import PhotoGallery from "../PhotoGallery";
 
 export default function PreviewPhotoGallery({ album }: { album: SanityDocument }) {
   const params = useRouter().query;
-  const [data]  = useLiveQuery(album, albumQuery, params) as any;
- if (data == null) {
-  return null;
- }
- 
-  return <PhotoGallery mode={data.display} columns={data.columns} images={data.images} albumId={data.albumId} />;
-}/*  */
+  const [data] = useLiveQuery(album, albumQuery, params) as any;
+  if (data == null) {
+    return null;
+  }
+
+  return (
+    <PhotoGallery
+      mode={data.display}
+      columns={data.columns}
+      images={data.images}
+      albumId={data.albumId}
+    />
+  );
+} /*  */

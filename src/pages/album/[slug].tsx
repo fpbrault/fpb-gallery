@@ -1,21 +1,28 @@
 // pages/album/[albumId].tsx
-import { useRouter } from 'next/router';
-import PhotoGallery from '@/components/PhotoGallery';
-import Breadcrumbs from '@/components/BreadCrumbs';
-import { PortableText } from '@portabletext/react'
-import Image from 'next/image';
-import { urlForImage } from '@/sanity/lib/image';
-import dynamic from 'next/dynamic';
-import { SanityDocument, groq } from 'next-sanity';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { client } from '@/sanity/lib/client';
-import { PreviewBar } from '@/components/studio/PreviewBar';
-import PreviewPhotoGallery from '@/components/studio/PreviewPhotoGallery';
-import { getBasePageProps } from '@/components/lib/getBasePageProps';
-
+import { useRouter } from "next/router";
+import PhotoGallery from "@/components/PhotoGallery";
+import Breadcrumbs from "@/components/BreadCrumbs";
+import { PortableText } from "@portabletext/react";
+import dynamic from "next/dynamic";
+import { SanityDocument, groq } from "next-sanity";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { client } from "@/sanity/lib/client";
+import { PreviewBar } from "@/components/studio/PreviewBar";
+import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
+import { getBasePageProps } from "@/components/lib/getBasePageProps";
+import { getPageData } from "@/components/lib/getPageData";
+import { getLocalizedPageProps, getPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
+import { myPortableTextComponents } from "@/components/myPortableTextComponents";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const albumQuery = groq`*[_type == "album" && slug.current == $slug][0]{...,category->,images[]{...,"placeholders" : asset->{metadata{lqip}}}}`;
+export const albumQuery = groq`*[_type == "album" && slug.current == $slug][0]{...,
+  "description": albumContent[_key == $locale][0]{value[]
+    {...,
+      _type == "Post"=>{...}->{coverImage{...,asset->}, title[_key == $locale]},
+      _type == "album" || _type == "albumCard" =>{...}->{albumName,albumId,images[0]{...,asset->}}}}.value
+
+,
+  category->,images[]{...,"placeholders" : asset->{metadata{lqip}}}}`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await client.fetch(
@@ -23,76 +30,45 @@ export const getStaticPaths: GetStaticPaths = async () => {
       "params": { "slug": slug.current }
     }`
   );
-  return { paths, fallback: 'blocking' };
+  return { paths, fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-
   try {
-    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, albumQuery);
-
-    if (!data) {
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false,
-        },
-      };
-    }
-
-    return {
-      props: { data, preview, previewToken, siteMetadata, headerData, context },  
-      revalidate: 10,
-    };
+    return getLocalizedPageProps(albumQuery, context,false)
   } catch (error) {
-    console.error("Error fetching data:", error);
-
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+    return handlePageFetchError(error);
   }
 };
-
-const myPortableTextComponents = {
-  types: {
-    image: ({ value }: any) => {
-      const src = urlForImage(value).url();
-      return (
-        <Image unoptimized width={200} height={200} alt="" quality={75} {...value} src={src} />
-      );
-    },
-  },
-};
-
 
 export default function AlbumPage({
   data,
   preview,
-  previewToken,
+  previewToken
 }: {
   data: SanityDocument;
   preview: boolean;
   previewToken?: string;
 }) {
-  const router = useRouter()
+  const router = useRouter();
   if (router.isFallback) {
     return (
       <div className="flex items-center justify-center h-screen">
         <span className="loading loading-infinity loading-lg"></span>
       </div>
     );
-
   }
   return (
     <div>
-      <Breadcrumbs items={[{ "name": data.category.categoryName, "url": "/category/" + data.category.categoryName }, { "name": data.albumName }]
-      }></Breadcrumbs>
-      <div className='max-w-xl pb-8 mx-auto prose text-center text-sans'>
+      <Breadcrumbs
+        items={[
+          { name: data.category.categoryName, url: "/category/" + data.category.categoryName },
+          { name: data.albumName }
+        ]}
+      ></Breadcrumbs>
+      <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
         <h2>{data.albumName}</h2>
-        <PortableText value={data.description} components={myPortableTextComponents} />
+        <PortableText value={data.description} components={myPortableTextComponents as any} />
       </div>
       {preview && previewToken ? (
         <PreviewProvider previewToken={previewToken}>
@@ -100,10 +76,15 @@ export default function AlbumPage({
           <PreviewBar />
         </PreviewProvider>
       ) : (
-        data && <PhotoGallery mode={data.display} columns={data.columns} images={data.images} albumId={data.slug.current} />
+        data && (
+          <PhotoGallery
+            mode={data.display}
+            columns={data.columns}
+            images={data.images}
+            albumId={data.slug.current}
+          />
+        )
       )}
     </div>
   );
 }
-
-

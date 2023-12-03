@@ -1,99 +1,76 @@
 // pages/album/[albumId].tsx
-import { useRouter } from 'next/router';
-import PhotoGallery from '@/components/PhotoGallery';
-import Breadcrumbs from '@/components/BreadCrumbs';
-import { PortableText } from '@portabletext/react'
-import Image from 'next/image';
-import { urlForImage } from '@/sanity/lib/image';
-import dynamic from 'next/dynamic';
-import { groq } from 'next-sanity';
-import {  GetStaticProps } from 'next';
-import { PreviewBar } from '@/components/studio/PreviewBar';
-import PreviewPhotoGallery from '@/components/studio/PreviewPhotoGallery';
-import { getBasePageProps } from '@/components/lib/getBasePageProps';
-
+import { useRouter } from "next/router";
+import PhotoGallery from "@/components/PhotoGallery";
+import Breadcrumbs from "@/components/BreadCrumbs";
+import { PortableText } from "@portabletext/react";
+import dynamic from "next/dynamic";
+import { groq } from "next-sanity";
+import { GetStaticProps } from "next";
+import { PreviewBar } from "@/components/studio/PreviewBar";
+import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
+import { getBasePageProps } from "@/components/lib/getBasePageProps";
+import { getPageData } from "@/components/lib/getPageData";
+import { handlePageFetchError } from "@/components/lib/pageHelpers";
+import { myPortableTextComponents } from "@/components/myPortableTextComponents";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album"]{...,category->,images[featured == true]
   {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
 
-
 export const getStaticProps: GetStaticProps = async (context) => {
-
   try {
-    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, albumQuery);
-
-    if (!data) {
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false,
-        },
-      };
+    if (context.params) {
+      context.params.locale = context?.locale;
     }
+    const { ctx, preview, previewToken, siteMetadata, headerData } =
+      await getBasePageProps(context);
 
-    function shuffleArray(array : any) {
+    const { data } = await getPageData(albumQuery, ctx, previewToken);
+
+    function shuffleArray(array: any) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
     }
-    
+
     const newData = shuffleArray(data);
+
+
+    
     return {
-      props: { data: newData, preview, previewToken, siteMetadata, headerData, context },  
-      revalidate: 10,
+      props: { data: newData, preview, previewToken, siteMetadata, headerData, ctx },
+      revalidate: 10
     };
   } catch (error) {
-    console.error("Error fetching data:", error);
-
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+    return handlePageFetchError(error);
   }
 };
-
-const myPortableTextComponents = {
-  types: {
-    image: ({ value }: any) => {
-      const src = urlForImage(value).url();
-      return (
-        <Image unoptimized width={200} height={200} alt="" quality={75} {...value} src={src} />
-      );
-    },
-  },
-};
-
 
 export default function AlbumPage({
   data,
   preview,
-  previewToken,
+  previewToken
 }: {
   data: any;
   preview: boolean;
   previewToken?: string;
 }) {
-  const router = useRouter()
+  const router = useRouter();
   if (router.isFallback) {
     return (
       <div className="flex items-center justify-center h-screen">
         <span className="loading loading-infinity loading-lg"></span>
       </div>
     );
-
   }
   return (
     <div>
-      <Breadcrumbs items={[ { "name": 'featured' }]
-      }></Breadcrumbs>
-      <div className='max-w-xl pb-8 mx-auto prose text-center text-sans'>
+      <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
+      <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
         <h2>Featured Photos</h2>
-        <PortableText value={data.description} components={myPortableTextComponents} />
+        <PortableText value={data.description} components={myPortableTextComponents as any} />
       </div>
       {preview && previewToken ? (
         <PreviewProvider previewToken={previewToken}>
@@ -101,10 +78,10 @@ export default function AlbumPage({
           <PreviewBar />
         </PreviewProvider>
       ) : (
-        data && <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="featured" />
+        data && (
+          <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="featured" />
+        )
       )}
     </div>
   );
 }
-
-

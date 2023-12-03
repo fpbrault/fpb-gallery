@@ -1,13 +1,13 @@
-
-import Breadcrumbs from '@/components/BreadCrumbs';
-import dynamic from 'next/dynamic';
-import { SanityDocument, groq } from 'next-sanity';
-import { GetStaticProps } from 'next';
-import PostList from '@/components/PostList';
-import { PreviewBar } from '@/components/studio/PreviewBar';
-import PreviewPostList from '@/components/studio/PreviewPostList';
-import { getBasePageProps } from '@/components/lib/getBasePageProps';
-
+import Breadcrumbs from "@/components/BreadCrumbs";
+import dynamic from "next/dynamic";
+import { SanityDocument, groq } from "next-sanity";
+import { GetStaticProps } from "next";
+import PostList from "@/components/PostList";
+import { PreviewBar } from "@/components/studio/PreviewBar";
+import PreviewPostList from "@/components/studio/PreviewPostList";
+import { getBasePageProps } from "@/components/lib/getBasePageProps";
+import { getPageData } from "@/components/lib/getPageData";
+import { getPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const postListQuery = groq`*[_type == "post" && defined(slug.current) || defined(slug_fr.current)]{...,"slug": select(
@@ -24,37 +24,34 @@ export const postListQuery = groq`*[_type == "post" && defined(slug.current) || 
   , ""
     )[0..255], "") + "..."} | order(publishDate desc)`;
 
-
-
 export const getStaticProps: GetStaticProps = async (context) => {
-    const contextWithParams = {...context, params: {}}
-  
-    const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(contextWithParams, postListQuery); 
-    return { props: { data, preview, previewToken, siteMetadata, headerData, context}, revalidate: 10 };
+  try {
+    return getPageProps(postListQuery, context)
+  } catch (error) {
+    return handlePageFetchError(error);
+  }
 };
 
-
 export default function BlogPage({
-    data,
-    preview,
-    previewToken,
+  data,
+  preview,
+  previewToken
 }: {
-    data: SanityDocument;
-    preview: boolean;
-    previewToken?: string;
+  data: SanityDocument;
+  preview: boolean;
+  previewToken?: string;
 }) {
-    return (
-        <div>
-            <Breadcrumbs items={[{ "name": "blog", "url": "/blog" }]} />
-            {preview && previewToken ? (
-                <PreviewProvider previewToken={previewToken}>
-                    <PreviewPostList posts={data} />
-                    <PreviewBar />
-                </PreviewProvider>
-            ) : (
-                data && <PostList posts={data} />
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <Breadcrumbs items={[{ name: "blog", url: "/blog" }]} />
+      {preview && previewToken ? (
+        <PreviewProvider previewToken={previewToken}>
+          <PreviewPostList posts={data} />
+          <PreviewBar />
+        </PreviewProvider>
+      ) : (
+        data && <PostList posts={data} />
+      )}
+    </div>
+  );
 }
-

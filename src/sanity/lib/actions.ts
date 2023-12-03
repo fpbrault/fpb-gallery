@@ -1,49 +1,12 @@
 import { revalidatePath } from "next/cache";
 import { useMemo, useState } from "react";
 
-export function createAsyncPublishAction(originalAction : any, context: any) {
-    const client = context.getClient({ apiVersion: '2022-11-29'})
-    const AsyncPublishAction = (props: any) => {
-      const originalResult = originalAction(props)
-      const [status, setStatus] = useState("pending");
-  
-      const label = useMemo(() => {
-        switch (status) {
-          case "success":
-            return "Updated";
-          case "error":
-            return "Something went wrong";
-          default:
-            return "Update blog";
-        }
-      }, [status]);
-    
-      if (props.type !== "post") {
-        return null;
-      }
-      return {
-        ...originalResult,
-        onHandle: async () => {
-            try {
-              const rev = await fetch(`/api/revalidate?slug=${props.draft.slug.current}`);
-
-              setStatus("success");
-            } catch (err) {
-              setStatus("error");
-            } finally {
-              // Signal that the action is completed
-              props.onComplete();
-            }
-          originalResult.onHandle()
-        },
-      }
-    }
-    return AsyncPublishAction
-  }
-
-export function PostUpdate(props: { type: string; onComplete: () => void; }) {
+export function createAsyncPublishAction(originalAction: any, context: any) {
+  const client = context.getClient({ apiVersion: "2022-11-29" });
+  const AsyncPublishAction = (props: any) => {
+    const originalResult = originalAction(props);
     const [status, setStatus] = useState("pending");
-  
+
     const label = useMemo(() => {
       switch (status) {
         case "success":
@@ -54,18 +17,16 @@ export function PostUpdate(props: { type: string; onComplete: () => void; }) {
           return "Update blog";
       }
     }, [status]);
-  
+
     if (props.type !== "post") {
       return null;
     }
-  
     return {
-      label,
+      ...originalResult,
       onHandle: async () => {
-        // this gets called when the button is clicked
         try {
-          //await revalidatePath(`/blog/${props.published.slug.current}`);
-  
+          const rev = await fetch(`/api/revalidate?slug=${props.draft.slug.current}`);
+
           setStatus("success");
         } catch (err) {
           setStatus("error");
@@ -73,6 +34,45 @@ export function PostUpdate(props: { type: string; onComplete: () => void; }) {
           // Signal that the action is completed
           props.onComplete();
         }
-      },
+        originalResult.onHandle();
+      }
     };
+  };
+  return AsyncPublishAction;
+}
+
+export function PostUpdate(props: { type: string; onComplete: () => void }) {
+  const [status, setStatus] = useState("pending");
+
+  const label = useMemo(() => {
+    switch (status) {
+      case "success":
+        return "Updated";
+      case "error":
+        return "Something went wrong";
+      default:
+        return "Update blog";
+    }
+  }, [status]);
+
+  if (props.type !== "post") {
+    return null;
   }
+
+  return {
+    label,
+    onHandle: async () => {
+      // this gets called when the button is clicked
+      try {
+        //await revalidatePath(`/blog/${props.published.slug.current}`);
+
+        setStatus("success");
+      } catch (err) {
+        setStatus("error");
+      } finally {
+        // Signal that the action is completed
+        props.onComplete();
+      }
+    }
+  };
+}
