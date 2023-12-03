@@ -20,7 +20,6 @@ export const post = defineType({
         source: 'title',
         maxLength: 96,
         slugify: (input: any) => {
-          console.log
           const title = input.find((element: { _key: string; _type: string; value: string; }) => element._key == 'en')?.value ?? input[0]?.value;
           return title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "")
         },

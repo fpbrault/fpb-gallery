@@ -1,7 +1,6 @@
 // pages/album/[albumId].tsx
 import { useRouter } from 'next/router';
 import PhotoGallery from '@/components/PhotoGallery';
-import useSWR from 'swr';
 import Breadcrumbs from '@/components/BreadCrumbs';
 import { PortableText } from '@portabletext/react'
 import Image from 'next/image';
@@ -9,7 +8,7 @@ import { urlForImage } from '@/sanity/lib/image';
 import dynamic from 'next/dynamic';
 import { SanityDocument, groq } from 'next-sanity';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { client, getClient, getResizedImage } from '@/sanity/lib/client';
+import { client } from '@/sanity/lib/client';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import PreviewPhotoGallery from '@/components/studio/PreviewPhotoGallery';
 import { getBasePageProps } from '@/components/lib/getBasePageProps';

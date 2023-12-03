@@ -1,12 +1,12 @@
 import { PreviewImage } from '@/components/studio/PreviewImage';
 import { defineArrayMember, defineField } from "sanity"
-import {ImagesIcon} from '@sanity/icons'
+import { FaImages } from 'react-icons/fa6';
 
 export const album = {
   name: 'album',
   type: 'document',
   title: 'Albums',
-  icon: ImagesIcon,
+  icon: FaImages,
   groups: [
     {
       name: 'metadata',

@@ -1,18 +1,15 @@
 // pages/album/[albumId].tsx
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
 import AlbumGallery from '@/components/AlbumGallery';
 import Breadcrumbs from '@/components/BreadCrumbs';
 import dynamic from 'next/dynamic';
 import { SanityDocument, groq } from 'next-sanity';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { client, getClient } from '@/sanity/lib/client';
+import { client } from '@/sanity/lib/client';
 import PreviewAlbumGallery from '@/components/studio/PreviewAlbumGallery';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
-
-const fetcher = (url: RequestInfo | URL) => fetch(url).then(r => r.json())
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const categoryQuery = groq`*[_type == "album" && category->.slug.current == $slug]{...,"category": category->categoryName,images[]{...,"placeholders" : asset->{metadata{lqip}}}}|

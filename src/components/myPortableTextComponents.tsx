@@ -67,7 +67,6 @@ export const myPortableTextComponents = {
       const height = 300;
       const width = 200;
       try {
-        console.log(value)
         const src = urlForImage(value.images).width(width).height(height).url();
         return (<div style={{ height: height, width: width }} className="relative mx-auto rounded cover group">
           <Link href={value.albumId}>

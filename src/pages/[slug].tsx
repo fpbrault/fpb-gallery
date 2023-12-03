@@ -43,7 +43,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    console.log(context)
     const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, pageQuery);
 
     if (!data) {
@@ -54,7 +53,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         },
       };
     }
-    console.log
     const otherLocale = data._translations.find((translation: { language: string; }) => translation?.language != context.locale) ?? null;
     const currentLocale = data._translations.find((translation: { language: string; }) => translation?.language == context.locale) 
 

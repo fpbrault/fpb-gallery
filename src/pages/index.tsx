@@ -2,11 +2,10 @@
 import AlbumGallery from '@/components/AlbumGallery';
 import { PreviewBar } from '@/components/studio/PreviewBar';
 import { client } from '@/sanity/lib/client';
-import { InferType, makeSafeQueryRunner } from 'groqd';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import {  makeSafeQueryRunner } from 'groqd';
+import {  GetStaticProps } from 'next';
 import { SanityDocument, groq } from 'next-sanity';
 import dynamic from 'next/dynamic';
-import useSWR from 'swr';
 import { getBasePageProps } from '../components/lib/getBasePageProps';
 import PreviewPage from '@/components/studio/PreviewPage';
 import Page from '@/components/Page';
