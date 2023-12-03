@@ -45,7 +45,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    console.log(pageQuery)
     return getLocalizedPageProps(pageQuery, context, false)
     
   } catch (error) {
