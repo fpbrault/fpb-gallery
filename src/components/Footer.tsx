@@ -7,8 +7,8 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata; context: any }) {
   return (
-    <footer className="flex items-center justify-between px-8 py-4 font-sans text-xs sm:text-sm footer bg-neutral text-neutral-content">
-      <aside className="flex items-center w-1/3 sm:w-5/12 ">
+    <footer className="flex flex-col-reverse items-center justify-between gap-3 px-8 py-4 font-sans text-xs sm:flex-row sm:text-sm footer bg-neutral text-neutral-content">
+      <aside className="flex items-center lg:w-5/12 ">
         <svg
           className="fill-neutral-content"
           xmlns="http://www.w3.org/2000/svg"
@@ -24,14 +24,13 @@ export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata;
           Copyright © {new Date().getFullYear()} - {metadata.author}
         </span>
       </aside>
-      <div className="flex justify-center gap-4 sm:w-2/12">
-        <div className="divider sm:hidden divider-primary divider-horizontal"></div>
+      <div className="justify-center hidden gap-4 lg:flex sm:w-2/12">
+
         <LanguageSwitcher context={context}></LanguageSwitcher>
         <ThemeSelector></ThemeSelector>
-        <div className="divider sm:hidden divider-primary divider-horizontal"></div>
       </div>
 
-      <nav className="justify-end grid-flow-col gap-4 sm:w-5/12 md:place-self-center md:justify-self-end place-items-center">
+      <nav className="justify-end grid-flow-col gap-4 py-2 lg:w-5/12 md:place-self-center md:justify-self-end place-items-center">
 
        
         {metadata.socialLinks.length > 0 &&
