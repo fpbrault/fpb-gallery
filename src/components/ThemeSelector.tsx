@@ -21,18 +21,18 @@ const ThemeSelector = () => {
       if (savedTheme) {
         document.documentElement.setAttribute("data-theme", savedTheme);
         setIsDarkTheme(savedTheme === "mytheme");
-      } /*  else {
+      }  else {
       const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const newTheme = prefersDarkMode ? 'mytheme' : 'light'
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme)
       setIsDarkTheme(prefersDarkMode);
-    } */
+    } 
     }
   }, []);
 
   return (
-    <span className="w-6 h-6 mx-auto">
+    <span className="w-6 h-6 ">
       <label className="px-1 pt-0.5 rounded-full swap swap-flip link hover:text-accent">
         <input
           type="checkbox"
