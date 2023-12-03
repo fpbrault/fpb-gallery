@@ -19,8 +19,7 @@ export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slu
   "postContent": postContent[_key == $locale]{value[]
     {...,
       _type == "Post"=>{...}->{coverImage{...,asset->}, title[_key == $locale]},
-      _type == "album"=>{...}->{albumName,albumId,images[0]{...,asset->}}}}
-  
+      _type == "album" || _type == "albumCard" =>{...}->{albumName,albumId,images[0]{...,asset->}}}}
   ,"title": title[_key == $locale][0].value,
     "blurDataURL": coverImage.asset->.metadata.lqip
 }

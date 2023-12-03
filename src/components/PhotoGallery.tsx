@@ -39,7 +39,7 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
             height: imageHeight,
             width: imageWidth,
             title: <><div className='mt-6'>{image.title}</div></>,
-            description: <><div className='max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg'> <PortableText components={myPortableTextComponents} value={image.description}/></div></>,
+            description: <><div className='max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg'> <PortableText components={myPortableTextComponents as any} value={image.description}/></div></>,
             type: "image",
         })
     }) : []);

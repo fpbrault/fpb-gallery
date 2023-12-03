@@ -7,7 +7,7 @@ import { getResizedImage } from '@/sanity/lib/client';
 export default function Post({ post }: { post: SanityDocument }) {
   const height = 750
   const image = post.coverImage ? getResizedImage(post.coverImage, 80, height) : null;
-  return (<div className='max-w-4xl mx-auto font-sans text-center text-base-content'>
+  return (<div className='max-w-6xl mx-auto font-sans text-center text-base-content'>
     <article key={post?.slug}>
     {image ?
       <Image unoptimized className='max-w-3xl mx-auto rounded shadow-2xl' blurDataURL={post?.blurDataURL} placeholder='blur' height={image?.imageHeight} width={image?.imageWidth} alt="alt" src={image?.imageUrl}></Image> : null}
@@ -19,7 +19,7 @@ export default function Post({ post }: { post: SanityDocument }) {
       <div className="divider"></div>
  
       <div className='px-4 mx-auto prose text-left lg:prose-xl prose-headings:text-center'>
-        <PortableText value={post?.postContent && post?.postContent[0]?.value} components={myPortableTextComponents} /></div>
+        <PortableText value={post?.postContent && post?.postContent[0]?.value} components={myPortableTextComponents as any} /></div>
     </article>
 
   </div>);

@@ -1,6 +1,6 @@
 import { getClient } from '@/sanity/lib/client';
 import { q } from 'groqd';
-import { runQuery, indexQuery } from '../../pages';
+import { runQuery, indexAlbumQuery } from '../../pages';
 import { getHeaderData } from '@/hooks/getHeaderData';
 
 export async function getBasePageProps(context: any, query: any) {
@@ -9,7 +9,6 @@ export async function getBasePageProps(context: any, query: any) {
   const client = getClient(previewToken);
 
   const headerData = await getHeaderData();
-
 
   const siteMetadataQuery = q("*", { isArray: true }).filter("_type == 'siteSettings'").slice(0).grab({
     siteTitle: q.string(),
@@ -29,16 +28,15 @@ export async function getBasePageProps(context: any, query: any) {
     ),
     socialLinks: q("socialLinks")
   }
-
   );
   const siteMetadata = await runQuery(siteMetadataQuery);
   if (context.params) {
     context.params.locale = context?.locale
   }
 
-  
-  
   const data = await client.fetch(query, context.params);
-  data.headerData = headerData;
+  if (data) {
+    data.headerData = headerData;
+  }
   return { data, preview, previewToken, siteMetadata, headerData };
 }

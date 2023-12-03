@@ -1,5 +1,5 @@
 import { FaFile } from "react-icons/fa6";
-import { SlugValidationContext, defineArrayMember, defineField } from "sanity"
+import { SlugValidationContext, defineField } from "sanity"
 export const page = {
   name: 'page',
   type: 'document',
@@ -43,37 +43,7 @@ export const page = {
     defineField({
       title: 'Content',
       name: 'content',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'block',
-          marks: {
-            annotations: [
-              {
-                name: 'internalLink',
-                type: 'object',
-                title: 'Internal link',
-                fields: [
-                  {
-                    name: 'reference',
-                    type: 'reference',
-                    title: 'Reference',
-                    to: [
-                      { type: 'post' },
-                      { type: 'album' },
-                      { type: 'category' },
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }),
-        defineArrayMember({ type: 'image' }),
-        { type: 'reference', name: 'Post', to: { type: 'post' as any } },
-        { type: 'reference', name: 'album', to: { type: 'album' as const } },
-
-      ]
+      type: 'blockContent',
     })
   ],
   preview: {

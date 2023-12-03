@@ -1,11 +1,10 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode} from "react";
 import Head from "next/head";
 import { Raleway } from 'next/font/google'
 import Header from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
 import { Layout } from "@/types/layout"
-import { getSocialIcon } from "./lib/getSocialIcon";
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -19,7 +18,6 @@ type Props = {
   siteMetadata?: any
   context?: any;
 };
-
 
 const Layout: React.FC<Props> = (props) => {
   const metadata: Layout.LayoutMetadata = {
@@ -45,13 +43,13 @@ const Layout: React.FC<Props> = (props) => {
      
       <div className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}>
         
-        <Header title={metadata.title} contactText={metadata?.socialLinks[0]?.name ?? ""} contactType={metadata?.socialLinks[0]?.type ?? ""} contactUrl={metadata?.socialLinks[0]?.url ?? ""} headerData={props.headerData} context={props.context} />
+        <Header title={metadata.title} contactText={metadata?.socialLinks[0]?.name ?? ""} contactType={metadata?.socialLinks[0]?.type ?? ""} contactUrl={metadata?.socialLinks[0]?.url ?? ""} headerData={props && props.headerData} context={props.context} />
         <main className="flex-grow w-full h-full px-4 pb-8 mx-auto sm:py-4 max-w-7xl">
           {props.children}
         </main>
         <ScrollToTopButton></ScrollToTopButton>
 
-        <Footer metadata={metadata}></Footer>
+        <Footer context={props.context} metadata={metadata}></Footer>
       </div>
     </>
   );

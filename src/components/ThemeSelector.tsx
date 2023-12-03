@@ -34,9 +34,9 @@ useEffect(() => {
 
 
   return (
-    <span className=" w-6 h-6 px-3 mx-auto mt-0.5">
+    <span className="w-6 h-6 mx-auto">
   
-      <label className="px-1 rounded-full swap swap-flip link hover:text-accent" >
+      <label className="px-1 pt-0.5 rounded-full swap swap-flip link hover:text-accent" >
         <input
           type="checkbox"
           className="hidden theme-controller"

@@ -13,7 +13,8 @@ import PreviewPage from '@/components/studio/PreviewPage';
 import Page from '@/components/Page';
 import { getBasePageProps } from '@/components/lib/getBasePageProps';
 
-
+const queryLayoutPart =  `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}
+,leftCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")][0]{  
@@ -22,7 +23,9 @@ export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (lan
     title,
     language
   }},content[]
-  {...,_type == "album" =>{...}->{albumName,albumId,images[]{...,asset->}}},
+  {...,
+    ${queryLayoutPart},
+    _type == "album" || _type == "albumCard" =>{...}->{albumName,albumId,images[0]{...,asset->}}},
     "blurDataURL": coverImage.asset->.metadata.lqip
 }`;
 
@@ -40,6 +43,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
+    console.log(context)
     const { data, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context, pageQuery);
 
     if (!data) {
@@ -50,8 +54,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         },
       };
     }
-    const otherLocale = data._translations.find((translation: { language: string; }) => translation.language != context.locale) ?? null;
-    const currentLocale = data._translations.find((translation: { language: string; }) => translation.language == context.locale) 
+    console.log
+    const otherLocale = data._translations.find((translation: { language: string; }) => translation?.language != context.locale) ?? null;
+    const currentLocale = data._translations.find((translation: { language: string; }) => translation?.language == context.locale) 
 
     try {
       if (currentLocale?.slug?.current && (currentLocale?.slug?.current != context?.params?.slug)) {
