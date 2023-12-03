@@ -74,6 +74,7 @@ export const styledBlock = defineType({
           }
         ],
         annotations: [
+          {name: 'color', title: 'Color', type: 'color'},
           {
             title: 'URL',
             name: 'link',

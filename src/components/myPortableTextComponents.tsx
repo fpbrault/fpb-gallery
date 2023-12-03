@@ -8,26 +8,26 @@ import { RoughNotation } from "react-rough-notation";
 
 export const myPortableTextComponents = {
   marks: {
-    highlight: ({ children }: {children: any}) => {
-      return <RoughNotation type="highlight" color="yellow" show={true}><span className='text-black'>{children}</span></RoughNotation>
+    highlight: ({ children }: { children: any }) => {
+      return <RoughNotation multiline={true}  type="highlight" color="yellow" show={true}><span className='text-black'>{children}</span></RoughNotation>
     },
-    un: ({ children }: {children: any}) => {
-      return <RoughNotation type="underline" show={true}>{children}</RoughNotation>
+    un: ({ children }: { children: any }) => {
+      return <RoughNotation multiline={true} type="underline" show={true}>{children}</RoughNotation>
     },
-    s: ({ children }: {children: any}) => {
-      return <RoughNotation type="strike-through" show={true}>{children}</RoughNotation>
+    s: ({ children }: { children: any }) => {
+      return <RoughNotation multiline={true} color="red" type="strike-through" show={true}>{children}</RoughNotation>
     },
-    box: ({ children }: {children: any}) => {
-      return <RoughNotation type="box" brackets={['top',"bottom"]} show={true}>{children}</RoughNotation>
+    box: ({ children }: { children: any }) => {
+      return <RoughNotation multiline={true}  type="box" brackets={['top', "bottom"]} show={true}>{children}</RoughNotation>
     }
 
   },
   block: {
-    justify: ({ children }: {children: any}) => {
-      return  <div className='text-justify'>{children}</div>
+    justify: ({ children }: { children: any }) => {
+      return <div className='text-justify'>{children}</div>
     },
-    center: ({ children }: {children: any}) => {
-      return  <div className='text-center'>{children}</div>
+    center: ({ children }: { children: any }) => {
+      return <div className='text-center'>{children}</div>
     }
   },
   types: {
@@ -40,11 +40,11 @@ export const myPortableTextComponents = {
     },
     "layout-col-2": ({ value }: any) => {
       return (
-        <div className='flex flex-col gap-4 text-justify lg:flex-row'>
+        <div className='flex flex-col text-justify sm:gap-4 lg:flex-row'>
           <div className='w-full lg:w-5/12'>
             <PortableText components={myPortableTextComponents as any} value={value.leftCol} />
           </div>
-          <span className='my-2 lg:w-2/12 sm:flex divider divider-horizontal'></span>
+          <span className='hidden sm:my-2 lg:w-2/12 sm:flex divider divider-horizontal'></span>
           <div className='w-full lg:w-5/12'>
             <PortableText components={myPortableTextComponents as any} value={value.rightCol} />
           </div>
