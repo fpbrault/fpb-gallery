@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import { getBasePageProps } from "../components/lib/getBasePageProps";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
-import { pageQuery } from "./[slug]";
+import { pageQuery } from "./[...slug]";
 import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
 

@@ -3,7 +3,7 @@
 import { useRouter } from "next/router";
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
-import { pageQuery } from "@/pages/[slug]";
+import { pageQuery } from "@/pages/[...slug]";
 import Page from "../Page";
 
 export default function PreviewPage({ page }: { page: SanityDocument }) {
