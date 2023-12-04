@@ -19,6 +19,7 @@ export const albumQuery = groq`*[_type == "album"]{...,category->,images[feature
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
+
     if (context.params) {
       context.params.locale = context?.locale;
     }
@@ -37,10 +38,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const newData = shuffleArray(data);
 
-
+ 
     
     return {
-      props: { data: newData, preview, previewToken, siteMetadata, headerData, ctx },
+      props: { data: newData, preview, previewToken, siteMetadata, headerData, context: ctx },
       revalidate: 10
     };
   } catch (error) {

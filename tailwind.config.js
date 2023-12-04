@@ -16,9 +16,11 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
 daisyui: {
-    themes: [
+    themes: 
+    [
       'garden',
       'dim',
+      'retro',
       {
         light: {
           ...require("daisyui/src/theming/themes")["light"],

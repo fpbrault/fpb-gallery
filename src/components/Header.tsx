@@ -96,7 +96,7 @@ export default function Header({
           </Link>
         </div>
         <div className="justify-center hidden w-full navbar-center lg:flex">
-          <ul className="px-1 py-0 text-2xl font-bold menu menu-horizontal">
+          <ul className="flex gap-8 px-1 py-0 text-2xl font-bold">
             <li>
               <Link className="mx-auto link link-hover link-primary" href={"/"}>
                 {context?.locale == "en" ? "Home" : "Accueil"}

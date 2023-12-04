@@ -9,12 +9,12 @@ export async function getPageData(
 
   if (context.params) {
     context.params.locale = context?.locale;
-  }
 
-  if (context.params.slug) {
-    context.params.slug = context.params.slug.join('/');
+    // Check if context.params.slug is an array and then join it
+    if (Array.isArray(context.params.slug)) {
+      context.params.slug = context.params.slug.join('/');
+    }
   }
-
 
   const data = await client.fetch(query, context.params);
 

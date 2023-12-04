@@ -18,7 +18,7 @@ export const myPortableTextComponents = {
       const { blank, href } = value
       return blank ?
         <a className="link link-secondary" href={href} target="_blank" rel="noopener">{children}</a>
-        : <a className="link link-secondary" href={href}>{children}</a>
+        : <a className="link link-secondary" target="_blank" href={href}>{children}</a>
     },
     rough: (props: any) => {
       return (

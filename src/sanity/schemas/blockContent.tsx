@@ -1,5 +1,5 @@
 import {
-  FaImages,
+  FaImages, FaLink, FaPen,
 } from "react-icons/fa6";
 import { defineType, defineArrayMember, defineField } from "sanity";
 import LinkRenderer from "@/components/LinkRenderer";
@@ -38,6 +38,7 @@ export const styledBlock = defineType({
       {
         name: 'rough',
         type: 'object',
+        icon: FaPen,
         title: 'Hand Drawn annotation',
         components:
         {  annotation: RoughAnnotationRenderer} ,
@@ -77,6 +78,7 @@ export const styledBlock = defineType({
         name: 'link',
         type: 'object',
         title: 'Link',
+        icon: FaLink,
         components:
         {  annotation: LinkRenderer} ,
         fields: [
@@ -95,6 +97,7 @@ export const styledBlock = defineType({
         name: "internalLink",
         type: "object",
         title: "Internal link",
+        icon: FaLink,
         components:
       {  annotation: LinkRenderer} ,
         fields: [
