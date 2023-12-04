@@ -2,6 +2,8 @@ import { getClient } from "@/sanity/lib/client";
 import { makeSafeQueryRunner, q, InferType } from 'groqd';
 import { getHeaderData } from "@/hooks/getHeaderData";
 import { parse, converter } from 'culori'
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 
 const siteMetadataQuery = q("*", { isArray: true })
   .filter("_type == 'siteSettings'")
@@ -34,17 +36,17 @@ interface Theme {
 
 function generateCustomTheme(themeData: any) {
   try {
-  delete themeData["_rev"]
-  delete themeData["_createdAt"]
-  delete themeData["_id"]
-  delete themeData["_type"]
-  delete themeData["_updatedAt"]
-  delete themeData["_id"]
+    delete themeData["_rev"]
+    delete themeData["_createdAt"]
+    delete themeData["_id"]
+    delete themeData["_type"]
+    delete themeData["_updatedAt"]
+    delete themeData["_id"]
 
-  const oklch = converter('oklch')
+    const oklch = converter('oklch')
 
-  const theme: Theme = {}
-  
+    const theme: Theme = {}
+
     if (themeData) {
       // Set CSS variables based on custom theme colors
       Object.keys(themeData).forEach((colorKey) => {
@@ -74,8 +76,8 @@ export async function getBasePageProps(context: any) {
   const siteMetadata = await runQuery(siteMetadataQuery) as CustomSiteMetadata;
 
   try {
-    const customDarkThemeVariables = siteMetadata.customThemes?.darkTheme &&generateCustomTheme(siteMetadata.customThemes?.darkTheme)
-    const customLightThemeVariables = siteMetadata.customThemes?.lightTheme &&generateCustomTheme(siteMetadata.customThemes?.lightTheme)
+    const customDarkThemeVariables = siteMetadata.customThemes?.darkTheme && generateCustomTheme(siteMetadata.customThemes?.darkTheme)
+    const customLightThemeVariables = siteMetadata.customThemes?.lightTheme && generateCustomTheme(siteMetadata.customThemes?.lightTheme)
 
     if (customDarkThemeVariables || customLightThemeVariables) {
 
@@ -94,7 +96,14 @@ export async function getBasePageProps(context: any) {
     context = { ...context, params: {} };
   }
 
-  return { ctx: context, preview, previewToken, siteMetadata, headerData };
+  return {
+    _nextI18Next: {
+      ...(await serverSideTranslations(context.locale ?? "en", [
+        'common',
+        'footer',
+      ]))
+    }, ctx: context, preview, previewToken, siteMetadata, headerData
+  };
 }
 
 

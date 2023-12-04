@@ -11,9 +11,8 @@ import { pageQuery } from "./[...slug]";
 import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
 import { postListQuery } from "./blog";
-import Image from "next/image";
-import Link from "next/link";
 import { urlForImage } from "@/sanity/lib/image";
+import HomePostMessage from "@/components/HomePostMessage";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const indexAlbumQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
@@ -27,7 +26,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const postListData = await client.fetch(postListQuery, context);
 
-    const { ctx, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context);
+    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context);
     const { data } = await getPageData(indexAlbumQuery, ctx, previewToken);
 
 
@@ -35,9 +34,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     handleLocaleRedirect(currentLocale, ctx);
     ctx.otherLocale = otherLocale;
     const dataWithPosts = { albumData: data, posts: postListData }
-
+    
     return {
       props: {
+        ..._nextI18Next,
         data: customHomePageData ? { ...customHomePageData, type: "customPage" } : dataWithPosts,
         preview,
         previewToken,
@@ -65,12 +65,7 @@ export default function IndexPage({
   preview: boolean;
   previewToken?: string;
 }) {
-  const post = data.posts[0]
-  const width = 1000;
-  const height = 600;
-  const imageUrl = post.coverImage
-    ? urlForImage(post.coverImage).height(height).width(width).quality(80).url()
-    : null;
+  const post = data.posts[0] ?? null
   return (
     <div>
       {preview && previewToken ? (
@@ -89,15 +84,7 @@ export default function IndexPage({
         <Page page={data} />
       ) : (
         <div className="my-4 font-sans text-sm text-center">
-          <div className="p-2 mb-2 rounded sm:mx-1 card bg-base-300">
-            <span>Read my latest blog post:</span>
-            <Link
-              className="text-2xl font-bold text-center link link-hover link-primary"
-              href={"/blog/" + post.slug.current}
-            >
-              {post?.title ?? "Untitled"}
-            </Link>
-          </div>
+          {post && <HomePostMessage post={post}/>}
           <AlbumGallery categories={true} albums={data.albumData} />
         </div>
       )}

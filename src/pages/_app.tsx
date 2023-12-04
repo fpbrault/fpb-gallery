@@ -3,6 +3,7 @@ import "styles/globals.css";
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { NextPage } from "next";
+import { appWithTranslation } from 'next-i18next'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -49,10 +50,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       // Clean up the style element when the component is unmounted
       document.head.removeChild(styleElement);
     };
-  }, [siteMetadata?.customThemeVariables]);
+  }, [siteMetadata?.customThemeVariables, siteMetadata?.themes?.darkThemeName, siteMetadata?.themes?.lightThemeName]);
 
   
-
   const getLayout =
     Component.getLayout ||
     ((page) => (
@@ -69,4 +69,4 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 }
 
 
-export default App;
+export default appWithTranslation(App);

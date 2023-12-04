@@ -1,3 +1,4 @@
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getBasePageProps } from "./getBasePageProps";
 import { getPageData } from "./getPageData";
 
@@ -63,23 +64,30 @@ export function handlePageFetchError(error: unknown, redirectPath?: string) {
  * @returns {Promise<{ props: { data: any, preview: any, previewToken: any, siteMetadata: any, headerData: any, context: any }, revalidate: number }>} The page properties with context.
  */
 export async function getLocalizedPageProps(query: any, context: any, isSlug: boolean, redirectPath?: string | undefined) {
-  try{
-  const { ctx, preview, previewToken, siteMetadata, headerData } =
-    await getBasePageProps(context);
-  const { data } = await getPageData(query, ctx, previewToken);
+  try {
+    const { ctx, preview, previewToken, siteMetadata, headerData } =
+      await getBasePageProps(context);
+    const { data } = await getPageData(query, ctx, previewToken);
 
 
-  const { currentLocale, otherLocale } = isSlug ? getPageLocaleVersions(data, ctx, true) : getPageLocaleVersions(data, ctx, false)
-  handleLocaleRedirect(currentLocale, ctx, redirectPath);
-  ctx.otherLocale = otherLocale;
+    const { currentLocale, otherLocale } = isSlug ? getPageLocaleVersions(data, ctx, true) : getPageLocaleVersions(data, ctx, false)
+    handleLocaleRedirect(currentLocale, ctx, redirectPath);
+    ctx.otherLocale = otherLocale;
 
-  return {
-    props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
-    revalidate: 10
-  };}
-  catch(error){
+    return {
+      props: {
+        ...(await serverSideTranslations(context.locale ?? "en", [
+          'common',
+          'footer',
+        ]))
+        , data, preview, previewToken, siteMetadata, headerData, context: ctx
+      },
+      revalidate: 10
+    };
+  }
+  catch (error) {
     console.error(error)
-    return handlePageFetchError(error,"/");
+    return handlePageFetchError(error, "/");
   }
 }
 

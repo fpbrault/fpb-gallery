@@ -12,18 +12,20 @@ import { getBasePageProps } from "@/components/lib/getBasePageProps";
 import { getPageData } from "@/components/lib/getPageData";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/myPortableTextComponents";
+import { useTranslation } from "next-i18next";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album"]{...,category->,images[featured == true]
   {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  
   try {
 
     if (context.params) {
       context.params.locale = context?.locale;
     }
-    const { ctx, preview, previewToken, siteMetadata, headerData } =
+    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } =
       await getBasePageProps(context);
 
     const { data } = await getPageData(albumQuery, ctx, previewToken);
@@ -41,7 +43,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
  
     
     return {
-      props: { data: newData, preview, previewToken, siteMetadata, headerData, context: ctx },
+      props: { ..._nextI18Next,data: newData, preview, previewToken, siteMetadata, headerData, context: ctx },
       revalidate: 10
     };
   } catch (error) {
@@ -58,6 +60,7 @@ export default function AlbumPage({
   preview: boolean;
   previewToken?: string;
 }) {
+  const { t } = useTranslation('common')
   const router = useRouter();
   if (router.isFallback) {
     return (
@@ -70,7 +73,7 @@ export default function AlbumPage({
     <div>
       <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
       <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-        <h2>Featured Photos</h2>
+        <h2>{t('featuredHeader')}</h2>
         <PortableText value={data.description} components={myPortableTextComponents as any} />
       </div>
       {preview && previewToken ? (

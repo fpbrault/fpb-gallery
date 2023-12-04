@@ -1,0 +1,10 @@
+{
+    "home": {
+        "readPost": "Read my latest blog post:"
+    },
+    "blog": {
+        "previousPost": "Previous",
+        "nextPost": "Next"
+    },
+    "featuredHeader": "Featured Photos"
+}

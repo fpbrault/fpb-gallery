@@ -2,8 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { getResizedImageSquare } from "@/sanity/lib/client";
 import React from "react";
+import { useTranslation } from "next-i18next";
 
 function PostNavigationItem(props: any) {
+ 
   return (
     <div className="flex w-full nav-item indicator">
       {props.data?.slug && (
@@ -38,6 +40,7 @@ function PostNavigationItem(props: any) {
 }
 
 export function PostNavigation(props: any) {
+  const { t } = useTranslation('common')
   const height = 100;
   const relatedPostImages = {
     previous: props.data.previous?.coverImage
@@ -57,13 +60,13 @@ export function PostNavigation(props: any) {
       <PostNavigationItem
         data={props.data.previous}
         relatedPostImage={relatedPostImages.previous}
-        label={"← Previous"}
+        label={"← " + t('blog.previousPost')}
       ></PostNavigationItem>
       <span className="hidden my-2 sm:w-2/12 sm:flex divider divider-horizontal"></span>
       <PostNavigationItem
         data={props.data.next}
         relatedPostImage={relatedPostImages.next}
-        label={"Next →"}
+        label={t('blog.nextPost') + " →"}
       ></PostNavigationItem>
       <span className="flex divider sm:hidden"></span>
     </nav>
