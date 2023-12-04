@@ -5,6 +5,7 @@ import Header from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
 import { Layout } from "@/types/layout";
+import { SiteMetadataProvider } from "./lib/SiteMetadataContext";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -42,7 +43,7 @@ const Layout: React.FC<Props> = (props) => {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-
+      <SiteMetadataProvider siteMetadata={props.siteMetadata}>
       <div
         className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}
       >
@@ -61,6 +62,7 @@ const Layout: React.FC<Props> = (props) => {
 
         <Footer context={props.context} metadata={metadata}></Footer>
       </div>
+      </SiteMetadataProvider>
     </>
   );
 };

@@ -16,7 +16,8 @@ const queryLayoutPart = `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "
 ,leftCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")][0]{  
+export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")] | score(language == $locale)
+| order(_score desc)[0]{  
   ...{"_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{
     slug,
     title,

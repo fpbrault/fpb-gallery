@@ -9,9 +9,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { client } from "@/sanity/lib/client";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
-import { getBasePageProps } from "@/components/lib/getBasePageProps";
-import { getPageData } from "@/components/lib/getPageData";
-import { getLocalizedPageProps, getPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
+import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/myPortableTextComponents";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));

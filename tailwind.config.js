@@ -18,9 +18,25 @@ module.exports = {
 daisyui: {
     themes: 
     [
-      'garden',
-      'dim',
+      'light',
       'retro',
+      'cupcake',
+      'emerald',
+      'lofi',
+      'garden',
+      'cmyk',
+      'pastel',
+      'winter',
+      'nord',
+      'dark',
+      'synthwave',
+      'dracula',
+      'black',
+      'night',
+      'dim',
+      'sunset',
+      'business',
+      'cyberpunk',
       {
         light: {
           ...require("daisyui/src/theming/themes")["light"],

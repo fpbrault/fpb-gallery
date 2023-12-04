@@ -10,6 +10,10 @@ import Page from "@/components/Page";
 import { pageQuery } from "./[...slug]";
 import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
+import { postListQuery } from "./blog";
+import Image from "next/image";
+import Link from "next/link";
+import { urlForImage } from "@/sanity/lib/image";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const indexAlbumQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
@@ -21,6 +25,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const customContext = { params: { slug: "home", locale: context.locale }, ...context };
     const customHomePageData = await client.fetch(pageQuery, customContext.params);
 
+    const postListData = await client.fetch(postListQuery, context);
+
     const { ctx, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context);
     const { data } = await getPageData(indexAlbumQuery, ctx, previewToken);
 
@@ -28,10 +34,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const { currentLocale, otherLocale } = getPageLocaleVersions(data, ctx);
     handleLocaleRedirect(currentLocale, ctx);
     ctx.otherLocale = otherLocale;
+    const dataWithPosts = { albumData: data, posts: postListData }
 
     return {
       props: {
-        data: customHomePageData ? { ...customHomePageData, type: "customPage" } : data,
+        data: customHomePageData ? { ...customHomePageData, type: "customPage" } : dataWithPosts,
         preview,
         previewToken,
         siteMetadata,
@@ -58,6 +65,12 @@ export default function IndexPage({
   preview: boolean;
   previewToken?: string;
 }) {
+  const post = data.posts[0]
+  const width = 1000;
+  const height = 600;
+  const imageUrl = post.coverImage
+    ? urlForImage(post.coverImage).height(height).width(width).quality(80).url()
+    : null;
   return (
     <div>
       {preview && previewToken ? (
@@ -66,7 +79,7 @@ export default function IndexPage({
             <PreviewPage page={data} />
           ) : (
             <div className="my-4 font-sans text-sm text-center">
-              <AlbumGallery categories={true} albums={data} />
+              <AlbumGallery categories={true} albums={data.albumData} />
             </div>
           )}
 
@@ -76,7 +89,16 @@ export default function IndexPage({
         <Page page={data} />
       ) : (
         <div className="my-4 font-sans text-sm text-center">
-          <AlbumGallery categories={true} albums={data} />
+          <div className="p-2 mb-2 rounded sm:mx-1 card bg-base-300">
+            <span>Read my latest blog post:</span>
+            <Link
+              className="text-2xl font-bold text-center link link-hover link-primary"
+              href={"/blog/" + post.slug.current}
+            >
+              {post?.title ?? "Untitled"}
+            </Link>
+          </div>
+          <AlbumGallery categories={true} albums={data.albumData} />
         </div>
       )}
     </div>

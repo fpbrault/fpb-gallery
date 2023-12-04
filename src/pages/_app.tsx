@@ -12,36 +12,47 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-/*   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        console.log(document.documentElement.style.getPropertyValue("--p"))
-        // Check if color is already in local storage
-        
-        // Fetch data from Sanity using your client
-        const siteColors = await client.fetch('*[_type == "siteSettings"][0]{siteColors->}.siteColors');
-
-        console.log(siteColors)
-
-        // Assuming your data structure is something like siteSettings.primaryColor
-        const fetchedPrimaryColor = siteColors.primary.rgb.r + ' ' + siteColors.primary.rgb.g + ' ' + siteColors.primary.rgb.b;
-       
-          document.documentElement.style.setProperty('--p', fetchedPrimaryColor);
-          console.log(document.documentElement.style.getPropertyValue('--p'))
-
- 
-
-
-      } catch (error) {
-        console.error('Error fetching data from Sanity:', error);
-      }
-    };
-
-    fetchSettings();
-  }, []); */
-
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const siteMetadata = pageProps.siteMetadata;
+  useEffect(() => {
+    const darkThemeVariables = siteMetadata?.customThemeVariables?.customDarkThemeVariables ?? null;
+    const lightThemeVariables = siteMetadata?.customThemeVariables?.customLightThemeVariables ?? null;
+    const lightThemeName = siteMetadata?.themes?.lightThemeName ?? 'light';
+    const darkThemeName = siteMetadata?.themes?.darkThemeName ?? 'mytheme';
+
+    // Create a style element
+    const styleElement = document.createElement('style');
+    styleElement.textContent = ""
+    if (darkThemeVariables) {
+      styleElement.textContent = styleElement.textContent.concat(`
+      [data-theme="${darkThemeName}"] {
+        ${Object.entries(darkThemeVariables)
+          .map(([variable, value]) => `${variable}: ${value};`)
+          .join('\n')}
+      }
+    `)
+    }
+
+    if (lightThemeVariables) {
+      styleElement.textContent = styleElement.textContent.concat(`
+    [data-theme="${lightThemeName}"] {
+      ${Object.entries(lightThemeVariables)
+          .map(([variable, value]) => `${variable}: ${value};`)
+          .join('\n')}
+      }
+    `)
+    }
+    // Append the style element to the document head
+    document.head.appendChild(styleElement);
+
+    return () => {
+      // Clean up the style element when the component is unmounted
+      document.head.removeChild(styleElement);
+    };
+  }, [siteMetadata?.customThemeVariables]);
+
+  
+
   const getLayout =
     Component.getLayout ||
     ((page) => (
@@ -56,5 +67,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(<Component {...pageProps} />);
 }
+
 
 export default App;

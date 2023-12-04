@@ -5,8 +5,6 @@ import { GetStaticProps } from "next";
 import PostList from "@/components/PostList";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPostList from "@/components/studio/PreviewPostList";
-import { getBasePageProps } from "@/components/lib/getBasePageProps";
-import { getPageData } from "@/components/lib/getPageData";
 import { getPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));

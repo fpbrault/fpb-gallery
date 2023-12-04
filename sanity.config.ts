@@ -142,10 +142,10 @@ export const config = defineConfig({
                       .title("Metadata")
                       .icon(FaCircleInfo)
                       .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
-                    S.listItem()
-                      .title("Colors Palettes")
+                      S.listItem()
+                      .title("Custom Theme Colors")
                       .icon(FaPalette)
-                      .child(S.documentTypeList("colors").title("Color Palettes"))
+                      .child(S.documentTypeList("customTheme").title("Custom Themes Colors"))
                   ])
               ),
             ...S.documentTypeListItems().filter(
@@ -158,7 +158,8 @@ export const config = defineConfig({
                   "category",
                   "pageList",
                   "author",
-                  "translation.metadata"
+                  "translation.metadata",
+                  "customTheme"
                 ].includes(listItem.getId() ?? "")
             )
           ])

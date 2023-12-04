@@ -1,6 +1,67 @@
 import { getClient } from "@/sanity/lib/client";
-import { makeSafeQueryRunner, q } from "groqd";
+import { makeSafeQueryRunner, q, InferType } from 'groqd';
 import { getHeaderData } from "@/hooks/getHeaderData";
+import { parse, converter } from 'culori'
+
+const siteMetadataQuery = q("*", { isArray: true })
+  .filter("_type == 'siteSettings'")
+  .slice(0)
+  .grab({
+    siteTitle: q.string(),
+    author: q.string(),
+    description: q.string(),
+    themes:
+      q("").grab({
+        darkThemeName: q.string(),
+        lightThemeName: q.string()
+      }),
+    customThemes: q("").grab({ darkTheme: q("customDarkTheme").deref(), lightTheme: q("customLightTheme").deref() }),
+    socialLinks: q("socialLinks")
+  });
+
+export type SiteMetadata = InferType<typeof siteMetadataQuery>;
+
+export interface CustomSiteMetadata extends SiteMetadata {
+  customThemeVariables: {
+    customDarkThemeVariables?: any,
+    customLightThemeVariables?: any
+  }
+}
+interface Theme {
+  [key: string]: string; // This is a string index signature
+}
+
+
+function generateCustomTheme(themeData: any) {
+  try {
+  delete themeData["_rev"]
+  delete themeData["_createdAt"]
+  delete themeData["_id"]
+  delete themeData["_type"]
+  delete themeData["_updatedAt"]
+  delete themeData["_id"]
+
+  const oklch = converter('oklch')
+
+  const theme: Theme = {}
+  
+    if (themeData) {
+      // Set CSS variables based on custom theme colors
+      Object.keys(themeData).forEach((colorKey) => {
+        const colorValue = themeData[colorKey];
+        const hexColor = parse(colorValue.hex)
+        const oklchColor = oklch(hexColor)
+        const colorCode = (oklchColor?.l ?? 0) + " " + (oklchColor?.c ?? 0) + " " + (oklchColor?.h ?? 0);
+        theme["--" + colorKey] = colorCode;
+      });
+    }
+    return theme;
+  }
+  catch (error) {
+    console.error(error)
+    return null
+  }
+}
 
 export async function getBasePageProps(context: any) {
   const preview = context.draftMode || false;
@@ -10,29 +71,22 @@ export async function getBasePageProps(context: any) {
   const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
 
   const headerData = await getHeaderData();
+  const siteMetadata = await runQuery(siteMetadataQuery) as CustomSiteMetadata;
 
-  const siteMetadataQuery = q("*", { isArray: true })
-    .filter("_type == 'siteSettings'")
-    .slice(0)
-    .grab({
-      siteTitle: q.string(),
-      author: q.string(),
-      description: q.string(),
-      siteColors: q("siteColors")
-        .deref()
-        .grab({
-          primary: q.object({
-            hex: q.string(),
-            rgb: q.object({
-              r: q.number(),
-              g: q.number(),
-              b: q.number()
-            })
-          })
-        }),
-      socialLinks: q("socialLinks")
-    });
-  const siteMetadata = await runQuery(siteMetadataQuery);
+  try {
+    const customDarkThemeVariables = siteMetadata.customThemes?.darkTheme &&generateCustomTheme(siteMetadata.customThemes?.darkTheme)
+    const customLightThemeVariables = siteMetadata.customThemes?.lightTheme &&generateCustomTheme(siteMetadata.customThemes?.lightTheme)
+
+    if (customDarkThemeVariables || customLightThemeVariables) {
+
+      siteMetadata.customThemeVariables = {}
+      siteMetadata.customThemeVariables.customDarkThemeVariables = customDarkThemeVariables;
+      siteMetadata.customThemeVariables.customLightThemeVariables = customLightThemeVariables;
+    }
+  }
+  catch (error) {
+    console.error(error)
+  }
 
   if (context.params) {
     context.params.locale = context?.locale;
@@ -42,3 +96,5 @@ export async function getBasePageProps(context: any) {
 
   return { ctx: context, preview, previewToken, siteMetadata, headerData };
 }
+
+

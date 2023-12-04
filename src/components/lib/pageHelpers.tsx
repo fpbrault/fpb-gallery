@@ -1,4 +1,3 @@
-import { getClient } from "@/sanity/lib/client";
 import { getBasePageProps } from "./getBasePageProps";
 import { getPageData } from "./getPageData";
 
@@ -64,6 +63,7 @@ export function handlePageFetchError(error: unknown, redirectPath?: string) {
  * @returns {Promise<{ props: { data: any, preview: any, previewToken: any, siteMetadata: any, headerData: any, context: any }, revalidate: number }>} The page properties with context.
  */
 export async function getLocalizedPageProps(query: any, context: any, isSlug: boolean, redirectPath?: string | undefined) {
+  try{
   const { ctx, preview, previewToken, siteMetadata, headerData } =
     await getBasePageProps(context);
   const { data } = await getPageData(query, ctx, previewToken);
@@ -76,7 +76,11 @@ export async function getLocalizedPageProps(query: any, context: any, isSlug: bo
   return {
     props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
     revalidate: 10
-  };
+  };}
+  catch(error){
+    console.error(error)
+    return handlePageFetchError(error,"/");
+  }
 }
 
 /**

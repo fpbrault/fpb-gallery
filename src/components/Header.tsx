@@ -91,7 +91,7 @@ export default function Header({
             </ul>
 
           </div>
-          <Link className="w-full font-sans text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover" href="/">
+          <Link className="w-full font-sans text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3" href="/">
             {title}
           </Link>
         </div>

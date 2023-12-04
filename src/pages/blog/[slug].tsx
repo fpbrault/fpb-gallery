@@ -9,9 +9,7 @@ import { PreviewBar } from "@/components/studio/PreviewBar";
 import { useRouter } from "next/router";
 import React from "react";
 import { PostNavigation } from "../../components/PostNavigation";
-import { getBasePageProps } from "@/components/lib/getBasePageProps";
-import { getPageData } from "@/components/lib/getPageData";
-import { getLocalizedPageProps, getPageLocaleVersions, getPageProps, handleLocaleRedirect, handlePageFetchError } from "@/components/lib/pageHelpers";
+import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)] {"current": {...,"slug": select(

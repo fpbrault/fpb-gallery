@@ -9,7 +9,6 @@ export async function getPageData(
 
   if (context.params) {
     context.params.locale = context?.locale;
-
     // Check if context.params.slug is an array and then join it
     if (Array.isArray(context.params.slug)) {
       context.params.slug = context.params.slug.join('/');
@@ -17,7 +16,6 @@ export async function getPageData(
   }
 
   const data = await client.fetch(query, context.params);
-
   if (!data) {
     throw new Error("Could not get data");
   }

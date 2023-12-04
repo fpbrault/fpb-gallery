@@ -12,20 +12,6 @@ type AlbumGalleryProps = {
 };
 
 const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
-  const router = useRouter();
-
-  /*  const handleImageClick = ({ index: current }: {index: any}) => {
-    console.log(albums[current].albums[0].slug.current)
-    let url = "/404"
-    if (categories && albums[current].albums.length == 1) {
-      url = `/album/${albums[current].albums[0].slug.current}`
-    } else {
-      url = categories ? `/category/${albums[current].slug.current}` : `/album/${albums[current].slug.current}`
-    }
-    console.log(url)
-
-    router.push(url);
-  }; */
 
   const photos = !categories
     ? albums.map((album: any) => {

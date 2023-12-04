@@ -1,35 +1,77 @@
 import { useEffect, useState } from "react";
+import { useSiteMetadata } from "./lib/SiteMetadataContext";
 
 const ThemeSelector = () => {
+  const siteMetadata = useSiteMetadata();
+  const [darkThemeName] = useState(siteMetadata?.themes.darkThemeName ?? 'mytheme');
+  const [lightThemeName] = useState(siteMetadata?.themes.lightThemeName ?? 'garden');
   const [isDarkTheme, setIsDarkTheme] = useState(true);
+
+
 
   // Function to toggle the theme
   const toggleTheme = () => {
-    const newTheme = !isDarkTheme ? "mytheme" : "light";
+    const newTheme = !isDarkTheme ? darkThemeName : lightThemeName;
     document.documentElement.setAttribute("data-theme", newTheme);
     setIsDarkTheme(!isDarkTheme);
 
     // Save the selected theme to local storage
     localStorage.setItem("theme", newTheme);
+    //applyCustomTheme();
   };
+
+  const applyCustomTheme = () => {
+    const themeVariables =
+      isDarkTheme
+        ? siteMetadata?.customThemeVariables?.customDarkThemeVariables
+        : siteMetadata?.customThemeVariables?.customLightThemeVariables;
+
+    if (themeVariables) {
+      // Apply each custom variable to the document root
+      const existingStyleElement = document.getElementById('customThemeStyle');
+      if (existingStyleElement) {
+        existingStyleElement.remove();
+      }
+    
+      // Create a new style element
+      const styleElement = document.createElement('style');
+      styleElement.id = 'customThemeStyle';
+    
+      // Add CSS rules for the selected theme
+      styleElement.textContent = `
+        [data-theme="${isDarkTheme ? darkThemeName : lightThemeName}"] {
+          ${Object.entries(themeVariables)
+            .map(([variable, value]) => `${variable}: ${value};`)
+            .join('\n')}
+        }
+      `;
+    
+      // Append the style element to the document head
+      document.head.appendChild(styleElement);
+    }
+  };
+
 
   // useEffect to load the theme from local storage on component mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Check if localStorage is available
       const savedTheme = localStorage.getItem("theme");
-      if (savedTheme) {
+
+      if (savedTheme && (savedTheme === darkThemeName || savedTheme === lightThemeName)) {
         document.documentElement.setAttribute("data-theme", savedTheme);
-        setIsDarkTheme(savedTheme === "mytheme");
-      }  else {
-      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const newTheme = prefersDarkMode ? 'mytheme' : 'light'
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme)
-      setIsDarkTheme(prefersDarkMode);
-    } 
+        setIsDarkTheme(savedTheme === darkThemeName);
+      } else {
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const newTheme = prefersDarkMode ? darkThemeName : lightThemeName;
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        setIsDarkTheme(prefersDarkMode);
+      }
+      //applyCustomTheme();
     }
-  }, []);
+  }, [darkThemeName, lightThemeName]);
+
 
   return (
     <span className="w-6 h-6 ">
