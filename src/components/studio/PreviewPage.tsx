@@ -5,9 +5,12 @@ import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
 import { pageQuery } from "@/pages/[...slug]";
 import Page from "../Page";
+import { useContext } from "react";
+import { PageContext } from "@/pages/_app";
 
 export default function PreviewPage({ page }: { page: SanityDocument }) {
-  const params = useRouter().query;
+  const context = useContext(PageContext);
+  const params = context.params;
   const [data] = useLiveQuery(page, pageQuery, params);
   if (data == null) {
     return null;

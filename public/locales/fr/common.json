@@ -6,5 +6,9 @@
         "previousPost": "Précédent",
         "nextPost": "Suivant"
     },
+    "related": {
+        "post": "Article",
+        "album": "Album"
+    },
     "featuredHeader": "Photo Préférées"
 }

@@ -1,4 +1,4 @@
-import { FaMoon, FaSun } from "react-icons/fa6";
+import { FaInfo, FaMoon, FaSun } from "react-icons/fa6";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 
@@ -201,6 +201,16 @@ export const siteSettings = defineType({
           { title: "cyberpunk", value: "cyberpunk" }
         ]
       }
+    }),
+    defineField({
+      title: 'Custom Theme Colors',
+      description: 'You can set custom theme colors. These will override the default colors of your selected themes. Note that you do not need to set all of the colors.',
+      name: 'myCustomNote',
+      type: 'note',
+      options: {
+        icon: () => FaInfo,
+        tone: 'positive',
+      },
     }),
     defineField({
       name: "customDarkTheme",

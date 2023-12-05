@@ -21,12 +21,11 @@ import {
   documentInternationalization
 } from "@sanity/document-internationalization";
 import { internationalizedArray } from "sanity-plugin-internationalized-array";
-import { dashboardTool } from "@sanity/dashboard";
-import { vercelWidget } from "sanity-plugin-dashboard-widget-vercel";
 import { defineConfig } from "sanity";
 
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
 import { MdOutlineArticle } from "react-icons/md";
+import { noteField } from 'sanity-plugin-note-field'
 
 export const config = defineConfig({
   theme,
@@ -135,13 +134,13 @@ export const config = defineConfig({
                   .title("Settings Documents")
                   .items([
                     S.listItem()
+                    .title("Metadata")
+                    .icon(FaCircleInfo)
+                    .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+                    S.listItem()
                       .title("Main Navigation")
                       .icon(FaHouse)
                       .child(S.document().schemaType("pageList").documentId("mainNavigation")),
-                    S.listItem()
-                      .title("Metadata")
-                      .icon(FaCircleInfo)
-                      .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
                       S.listItem()
                       .title("Custom Theme Colors")
                       .icon(FaPalette)
@@ -164,11 +163,6 @@ export const config = defineConfig({
             )
           ])
     }),
-    dashboardTool({
-      widgets: [vercelWidget()]
-    }),
-    // Vision is a tool that lets you query your content with GROQ in the studio
-    // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
     internationalizedArray({
       languages: [
@@ -184,10 +178,11 @@ export const config = defineConfig({
         { id: "fr", title: "French" },
         { id: "en", title: "English" }
       ],
-      schemaTypes: ["post", "page"]
+      schemaTypes: ["page"]
     }),
     colorInput(),
-    media()
+    media(),
+    noteField(),
   ],
   document: {
     actions: (prev: any, { schemaType }: any) => {

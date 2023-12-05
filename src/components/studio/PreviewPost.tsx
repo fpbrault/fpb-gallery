@@ -5,12 +5,15 @@ import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
 import { postQuery } from "@/pages/blog/[slug]";
 import Post from "../Post";
+import { useContext } from "react";
+import { PageContext } from "@/pages/_app";
 
 export default function PreviewPost({ post }: { post: SanityDocument }) {
-  const params = useRouter().query;
-  const [data] = useLiveQuery(null, postQuery, params);
+  const context = useContext(PageContext);
+  const params = context.params;
+  const [data] = useLiveQuery(post, postQuery, params);
   if (data == null) {
     return null;
   }
-  return <Post post={data} />;
+  return <Post post={data.current} />;
 } /*  */

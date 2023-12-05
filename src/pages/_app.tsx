@@ -5,6 +5,13 @@ import Layout from "@/components/Layout";
 import { NextPage } from "next";
 import { appWithTranslation } from 'next-i18next'
 
+
+import { createContext } from 'react';
+
+export const PageContext = createContext({params: {}});
+
+
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -52,7 +59,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     };
   }, [siteMetadata?.customThemeVariables, siteMetadata?.themes?.darkThemeName, siteMetadata?.themes?.lightThemeName]);
 
-  
   const getLayout =
     Component.getLayout ||
     ((page) => (
@@ -65,7 +71,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       </Layout>
     ));
 
-  return getLayout(<Component {...pageProps} />);
+  return getLayout(<PageContext.Provider value={pageProps.context}><Component {...pageProps} /></PageContext.Provider>);
 }
 
 

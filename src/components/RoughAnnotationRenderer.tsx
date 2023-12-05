@@ -1,4 +1,3 @@
-import { LinkIcon } from '@sanity/icons'
 import { Tooltip } from '@sanity/ui'
 import { RoughNotation } from 'react-rough-notation'
 

@@ -14,6 +14,13 @@ export const pageList = {
       initialValue: "Main Navigation"
     }),
     defineField({
+      name: "showHome",
+      type: "boolean",
+      description: "Set this to false to hide the default home page button",
+      title: "Show Home page",
+      initialValue: true
+    }),
+    defineField({
       name: "pages",
       type: "array",
       title: "Pages",
@@ -35,9 +42,19 @@ export const pageList = {
               title: "Page Title"
             },
             {
+              name: "title_fr",
+              type: "string",
+              title: "Page Title (fr)"
+            },
+            {
               name: "slug",
               type: "string",
               title: "Page slug"
+            },
+            {
+              name: "slug_fr",
+              type: "string",
+              title: "Page slug (fr)"
             }
           ]
         }

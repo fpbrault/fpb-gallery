@@ -74,18 +74,6 @@ export const album = {
       type: "internationalizedArrayBlockContent"
     }),
     defineField({
-      name: "description",
-      type: "array",
-      title: "Album Description",
-      group: "metadata",
-      of: [
-        defineArrayMember({ type: "block" }),
-        defineArrayMember({
-          type: "image"
-        })
-      ]
-    }),
-    defineField({
       name: "display",
       type: "string",
       group: "options",

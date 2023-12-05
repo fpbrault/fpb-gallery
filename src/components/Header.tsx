@@ -7,7 +7,9 @@ import { FaBars } from "react-icons/fa6";
 
 type HeaderLink = {
   title: string;
+  title_fr: string;
   slug: string;
+  slug_fr: string;
   _translations: any;
 };
 
@@ -16,7 +18,7 @@ type Props = {
   contactUrl: string;
   contactText: string;
   contactType: string;
-  headerData: Array<HeaderLink>;
+  headerData: { showHome: Boolean, pages: Array<HeaderLink> };
   context: any;
 };
 
@@ -28,48 +30,34 @@ export default function Header({
   headerData,
   context
 }: Props) {
-  const icon = getSocialIcon(contactType);
+  //const icon = getSocialIcon(contactType);
   return (
-    <header className="sticky top-0 z-50 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a lg:py-4 bg-base-200/70 backdrop-blur-lg">
-      <h1 className="justify-center hidden py-1 font-sans text-2xl font-light text-center lg:flex sm:text-4xl lg:text-5xl">
+    <header className="sticky top-0 z-50 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:py-4 bg-base-200/70 backdrop-blur-lg">
+      <h1 className="justify-center hidden py-1 font-sans text-2xl font-light text-center md:flex md:text-4xl lg:text-5xl">
         <Link className="link link-hover" href="/">
           {title}
         </Link>
       </h1>
 
       <nav className="font-bold uppercase navbar sm:justify-around">
-        <div className="w-full navbar-start lg:hidden">
+        <div className="w-full navbar-start md:hidden">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="text-3xl btn btn-square lg:hidden btn-ghost">
-             <FaBars/>
+            <div tabIndex={0} role="button" className="text-3xl btn btn-square md:hidden btn-ghost">
+              <FaBars />
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-xl w-48">
-              <li>
-                <Link className="mx-auto link link-hover link-primary" href={"/"}>
-                  {context?.locale == "en" ? "Home" : "Accueil"}
-                </Link>
-              </li>
-              {headerData ? (
-                headerData.map((headerLink) => {
-                  const translations = headerData.find((data) => data.slug == headerLink.slug)
-                    ?._translations._translations;
-                  const translatedHeaderLink =
-                    translations?.find(
-                      (translation: { language: any }) => translation.language == context?.locale
-                    ) ?? null;
-
-                  return (
-                    <li key={headerLink?.slug}>
-                      <Link
-                        className="mx-auto link link-hover link-primary"
-                        href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
-                      >
-                        {translatedHeaderLink?.title ?? headerLink?.title}
-                      </Link>
-                    </li>
-                  );
-                })
-              ) : (
+              {headerData?.showHome != false &&
+                <li>
+                  <Link className="mx-auto link link-hover link-primary" href={"/"}>
+                    {context?.locale == "en" ? "Home" : "Accueil"}
+                  </Link>
+                </li>
+              }
+             {headerData?.pages ? (
+              headerData?.pages.map((headerLink) => {
+                return CustomHeaderLink(headerLink);
+              })
+            ) : (
                 <li>
                   <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
                     Blog
@@ -78,16 +66,19 @@ export default function Header({
               )}
               {/*  <li><Link className='flex h-4 mx-auto link link-hover link-primary' href={contactUrl}>
                         <div className='w-4 mt-1 mr-1 '>{icon}</div>{contactText}</Link></li> */}
-              <li>
+
+              <div className="my-1 divider"></div>
+              <div className="flex justify-center gap-2">
                 <div className="flex justify-center "> <LanguageSwitcher context={context}></LanguageSwitcher>
-           
-                  </div>
-                  </li>
-                  <li>
-                <div className="flex justify-center "> 
+
+                </div>
+
+
+                <div className="flex justify-center ">
                   <ThemeSelector></ThemeSelector>
-                  </div>
-                  </li>
+                </div>
+              </div>
+
             </ul>
 
           </div>
@@ -95,32 +86,18 @@ export default function Header({
             {title}
           </Link>
         </div>
-        <div className="justify-center hidden w-full navbar-center lg:flex">
+        <div className="justify-center hidden w-full navbar-center md:flex">
           <ul className="flex gap-8 px-1 py-0 text-2xl font-bold">
-            <li>
-              <Link className="mx-auto link link-hover link-primary" href={"/"}>
-                {context?.locale == "en" ? "Home" : "Accueil"}
-              </Link>
-            </li>
-            {headerData ? (
-              headerData.map((headerLink) => {
-                const translations = headerData.find((data) => data.slug == headerLink.slug)
-                  ?._translations._translations;
-                const translatedHeaderLink =
-                  translations?.find(
-                    (translation: { language: any }) => translation.language == context?.locale
-                  ) ?? null;
-
-                return (
-                  <li key={headerLink?.slug}>
-                    <Link
-                      className="mx-auto link link-hover link-primary"
-                      href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
-                    >
-                      {translatedHeaderLink?.title ?? headerLink?.title}
-                    </Link>
-                  </li>
-                );
+            {headerData?.showHome != false &&
+              <li>
+                <Link className="mx-auto link link-hover link-primary" href={"/"}>
+                  {context?.locale == "en" ? "Home" : "Accueil"}
+                </Link>
+              </li>
+            }
+            {headerData?.pages ? (
+              headerData?.pages.map((headerLink) => {
+                return CustomHeaderLink(headerLink);
               })
             ) : (
               <li>
@@ -134,11 +111,31 @@ export default function Header({
 
           </ul>
         </div>
-        <div className="hidden lg:flex navbar-end">
+        <div className="hidden md:flex navbar-end">
         </div>
       </nav>
 
       <div className="flex justify-center mx-auto mt-1 sm:mt-0"></div>
     </header>
   );
+
+  function CustomHeaderLink(headerLink: HeaderLink) {
+    const translations = headerData.pages.find((data) => data.slug == headerLink.slug)
+      ?._translations._translations;
+    const translatedHeaderLink = translations?.find(
+      (translation: { language: any; }) => translation.language == context?.locale
+    ) ?? null;
+
+    const translatedHeaderText = (context?.locale == 'fr' ? headerLink.title_fr : headerLink.title) ?? null;
+    return (
+      <li key={headerLink?.slug}>
+        <Link
+          className="mx-auto link link-hover link-primary"
+          href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
+        >
+          {translatedHeaderLink?.title ?? translatedHeaderText ?? headerLink?.title ?? headerLink.slug}
+        </Link>
+      </li>
+    );
+  }
 }

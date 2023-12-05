@@ -24,7 +24,7 @@ export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata;
           Copyright © {new Date().getFullYear()} - {metadata.author}
         </span>
       </aside>
-      <div className="justify-center hidden gap-4 lg:flex sm:w-2/12">
+      <div className="justify-center hidden gap-4 md:flex sm:w-2/12">
 
         <LanguageSwitcher context={context}></LanguageSwitcher>
         <ThemeSelector></ThemeSelector>

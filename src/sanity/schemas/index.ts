@@ -23,6 +23,6 @@ export const schemaTypes = {
     innerblockContent,
     customTheme
   ],
-  templates: (prev: any[]) => prev.filter((template) => !["page", "post"].includes(template.id))
+  templates: (prev: any[]) => prev.filter((template) => !["page"].includes(template.id))
 };
 export default schemaTypes;
