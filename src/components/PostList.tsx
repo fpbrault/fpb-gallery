@@ -9,7 +9,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
   return (
     <div className="text-center text-base-content text-sans">
       <h2 className="pb-4 text-4xl font-bold"></h2>
-      {posts.map((post: any, index: number) => {
+      {posts.length > 0 && posts?.map((post: any, index: number) => {
         const imageUrl = post.coverImage
           ? urlForImage(post.coverImage).height(height).width(width).quality(80).url()
           : null;
@@ -24,7 +24,9 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                   placeholder={post.blurDataURL ? "blur" : "empty"}
                   width={width}
                   height={height}
-                  src={imageUrl ?? "https://placehold.co/1000x750/jpg"}
+                  src={imageUrl ?? "https://placehold.co/1000x750/orange/white/jpg?text=" + ( post.title ? (post.title[0].length >= 60
+                  ? post.title[0].substring(0, 60) + "..."
+                  : post.title[0]).replace(/ /g, '+') : "No+Image")}
                   alt="cover image placeholder"
                 />
               </Link>

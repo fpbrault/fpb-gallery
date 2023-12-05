@@ -2,7 +2,6 @@
 import * as React from "react";
 import PhotoAlbum from "react-photo-album";
 import { NextJsImageAlbum } from "./NextJsImage";
-import { useRouter } from "next/router";
 import { getResizedImage } from "@/sanity/lib/client";
 
 // Define the AlbumGallery component

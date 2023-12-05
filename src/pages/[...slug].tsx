@@ -8,18 +8,19 @@ import React from "react";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
+import Breadcrumbs from "@/components/BreadCrumbs";
 
 const queryLayoutPart = `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}
 ,leftCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")] | score(language == $locale)
-| order(_score desc)[0]{  
+| order(_score desc)[0]{
   ...{"_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{
     slug,
     title,
     language
-  }},content[]
+  }},title, content[]
   {...,
     ${queryLayoutPart},
     markDefs[]{
@@ -68,9 +69,11 @@ export default function CustomPage({
       </div>
     );
   }
-
   return (
     <div>
+       <Breadcrumbs
+        items={[ { name: data?.title }]}
+      ></Breadcrumbs>
       {preview && previewToken ? (
         <PreviewProvider previewToken={previewToken}>
           <PreviewPage page={data} />

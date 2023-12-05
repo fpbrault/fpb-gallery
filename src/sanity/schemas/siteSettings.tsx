@@ -159,6 +159,29 @@ export const siteSettings = defineType({
       of: [defineArrayMember({ type: "socialLink" })]
     }),
     defineField({
+      name: "customFont",
+      title: "Font Family",
+      type: "string",
+      initialValue: "raleway",
+      validation: (Rule) => Rule.required(),
+      options: {
+        list: [
+          { title: "Raleway", value: "raleway" },
+          { title: "Montserrat", value: "montserrat" },
+          { title: "Inter", value: "inter" },
+          { title: "Nunito", value: "nunito" },
+          { title: "Comfortaa", value: "comfortaa" },
+          { title: "Sarabun", value: "sarabun" },
+          { title: "Amatic SC", value: "amaticSC" },
+          { title: "DM Sans", value: "dmSans" },
+          { title: "Space Grotesk", value: "spaceGrotesk" },
+          { title: "Work Sans", value: "workSans" },
+          { title: "Libre Franklin", value: "libreFranklin" },
+          { title: "Roboto", value: "roboto" },
+        ]
+      }
+    }),
+    defineField({
       name: "darkThemeName",
       type: "string",
       icon: FaMoon,

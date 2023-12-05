@@ -1,11 +1,9 @@
-import { Tooltip } from "@sanity/ui";
 import { RoughNotation } from "react-rough-notation";
 
 const RoughAnnotationRenderer = (props: { value: any; renderDefault: any }) => {
   const { value, renderDefault } = props;
 
   return (
-    <Tooltip>
       <span className="text-primary-content">
         <RoughNotation
           animate={value?.animate ?? null}
@@ -17,7 +15,6 @@ const RoughAnnotationRenderer = (props: { value: any; renderDefault: any }) => {
           {renderDefault(props)}
         </RoughNotation>
       </span>
-    </Tooltip>
   );
 };
 

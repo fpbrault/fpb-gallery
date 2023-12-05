@@ -1,10 +1,9 @@
-import React, { ReactNode, ReactElement, useEffect } from "react";
+import React, { ReactNode, ReactElement, useEffect, useContext } from "react";
 import "styles/globals.css";
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { NextPage } from "next";
 import { appWithTranslation } from "next-i18next";
-import { AnimatePresence } from "framer-motion";
 
 import { createContext } from "react";
 
@@ -73,13 +72,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         {page}
       </Layout>
     ));
-
   return getLayout(
-    <PageContext.Provider value={pageProps.context}>
-      <AnimatePresence mode="wait" initial={false}>
         <Component {...pageProps} />
-      </AnimatePresence>
-    </PageContext.Provider>
   );
 }
 

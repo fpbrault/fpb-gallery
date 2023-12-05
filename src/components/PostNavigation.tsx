@@ -21,9 +21,11 @@ function PostNavigationItem(props: any) {
                 unoptimized
                 className="w-1/3 max-w-[100px] shadow-md group-[&>:nth-of-type(even)]:rounded-r-2xl group-[&>:nth-of-type(odd)]:rounded-l-2xl"
                 alt="Previous post"
-                src={props.relatedPostImage.imageUrl ?? ""}
-                height={props.relatedPostImage.imageHeight}
-                width={props.relatedPostImage.imageWidth}
+                src={props.relatedPostImage?.imageUrl ?? "https://placehold.co/200x200/orange/white/jpg?text=" + (props.data.title.length >= 60
+                ? props.data.title.substring(0, 60) + "..."
+                : props.data.title).replace(/ /g, '+')}
+                height={props.relatedPostImage?.imageHeight?? 200}
+                width={props.relatedPostImage?.imageWidth ?? 200}
               ></Image>
               <span className="flex flex-col justify-center w-full px-2 text-sm font-bold">
                 {props.data.title.length >= 60

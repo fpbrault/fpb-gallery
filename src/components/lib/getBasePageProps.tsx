@@ -4,13 +4,15 @@ import { getHeaderData } from "@/hooks/getHeaderData";
 import { parse, converter } from "culori";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const siteMetadataQuery = q("*", { isArray: true })
+export const siteMetadataQuery = q("*", { isArray: true })
   .filter("_type == 'siteSettings'")
   .slice(0)
   .grab({
     siteTitle: q.string(),
     author: q.string(),
     description: q.string(),
+    customFont: q.string(),
+
     themes: q("").grab({
       darkThemeName: q.string(),
       lightThemeName: q.string()

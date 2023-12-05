@@ -11,7 +11,7 @@ export function PTRelatedPost(value: any) {
       {(t, { i18n }) => (
         <div className="w-full max-w-sm mx-auto shadow-xl">
           <span className="text-sm">{t("related.post")}:</span>
-          <Link className="link link-primary link-hover" href={"/album/" + value.albumId}>
+          <Link className="link link-primary link-hover" href={"/blog/" + value.slug}>
             <div className="flex justify-between w-full max-w-sm mx-auto transition-all border rounded-xl bg-primary text-primary-content border-primary hover:bg-primary-content hover:text-primary">
               <Image
                 unoptimized

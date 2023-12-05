@@ -1,15 +1,12 @@
 // ./nextjs-pages/src/components/PreviewPost.tsx
-
-import { useRouter } from "next/router";
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
 import { postQuery } from "@/pages/blog/[slug]";
 import Post from "../Post";
-import { useContext } from "react";
-import { PageContext } from "@/pages/_app";
+import { usePageProps } from "../lib/PagePropsContext";
 
 export default function PreviewPost({ post }: { post: SanityDocument }) {
-  const context = useContext(PageContext);
+  const context = usePageProps();
   const params = context.params;
   const [data] = useLiveQuery(post, postQuery, params);
   if (data == null) {

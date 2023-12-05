@@ -1,4 +1,3 @@
-import { FaLink } from "react-icons/fa6";
 const LinkRenderer = (props: any) => {
   return (
     <>

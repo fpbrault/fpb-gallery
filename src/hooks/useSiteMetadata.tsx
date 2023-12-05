@@ -2,34 +2,14 @@
 import { client } from "@/sanity/lib/client";
 import { useEffect, useState } from "react";
 import { q, makeSafeQueryRunner, InferType } from "groqd";
+import { SiteMetadata, siteMetadataQuery } from "@/components/lib/getBasePageProps";
 
 export const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
 
-const siteMetadataQuery = q("*", { isArray: true })
-  .filter("_type == 'siteSettings'")
-  .slice(0)
-  .grab({
-    siteTitle: q.string(),
-    author: q.string(),
-    description: q.string(),
-    siteColors: q("siteColors")
-      .deref()
-      .grab({
-        primary: q.object({
-          hex: q.string(),
-          rgb: q.object({
-            r: q.number(),
-            g: q.number(),
-            b: q.number()
-          })
-        })
-      }),
-    socialLinks: q("socialLinks")
-  });
-type SanitySiteMetadata = InferType<typeof siteMetadataQuery>;
 
-export function useSiteMetadata(): { siteMetadata: SanitySiteMetadata | undefined } {
-  const [siteMetadata, setSiteMetadata] = useState<SanitySiteMetadata>();
+
+export function useSiteMetadata(): { siteMetadata: SiteMetadata | undefined } {
+  const [siteMetadata, setSiteMetadata] = useState<SiteMetadata>();
 
   useEffect(() => {
     const fetchData = async () => {

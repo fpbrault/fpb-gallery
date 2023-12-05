@@ -32,8 +32,8 @@ export default function Header({
 }: Props) {
   //const icon = getSocialIcon(contactType);
   return (
-    <header className="sticky top-0 z-50 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:py-4 bg-base-200/70 backdrop-blur-lg">
-      <h1 className="justify-center hidden py-1 font-sans text-2xl font-light text-center md:flex md:text-4xl lg:text-5xl">
+    <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:py-4 bg-base-200/70 backdrop-blur-lg ">
+      <h1 className="justify-center hidden py-1 font-sans text-2xl font-light text-center md:flex md:text-4xl lg:text-5xl ">
         <Link className="link link-hover" href="/">
           {title}
         </Link>
@@ -41,10 +41,10 @@ export default function Header({
 
       <nav className="font-bold uppercase navbar sm:justify-around">
         <div className="w-full navbar-start md:hidden">
+          <label htmlFor="my-drawer-3" aria-label="open sidebar" className="text-3xl btn btn-square md:hidden btn-ghost">
+            <FaBars />
+          </label>
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="text-3xl btn btn-square md:hidden btn-ghost">
-              <FaBars />
-            </div>
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-xl w-48"
@@ -58,7 +58,7 @@ export default function Header({
               )}
               {headerData?.pages ? (
                 headerData?.pages.map((headerLink) => {
-                  return CustomHeaderLink(headerLink);
+                  return CustomHeaderLink(headerData, headerLink, context);
                 })
               ) : (
                 <li>
@@ -101,7 +101,7 @@ export default function Header({
             )}
             {headerData?.pages ? (
               headerData?.pages.map((headerLink) => {
-                return CustomHeaderLink(headerLink);
+                return CustomHeaderLink(headerData, headerLink, context);
               })
             ) : (
               <li>
@@ -121,28 +121,81 @@ export default function Header({
     </header>
   );
 
-  function CustomHeaderLink(headerLink: HeaderLink) {
-    const translations = headerData.pages.find((data) => data.slug == headerLink.slug)
-      ?._translations._translations;
-    const translatedHeaderLink =
-      translations?.find(
-        (translation: { language: any }) => translation.language == context?.locale
-      ) ?? null;
 
-    const translatedHeaderText =
-      (context?.locale == "fr" ? headerLink.title_fr : headerLink.title) ?? null;
-    return (
-      <li key={headerLink?.slug}>
-        <Link
-          className="mx-auto link link-hover link-primary"
-          href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
-        >
-          {translatedHeaderLink?.title ??
-            translatedHeaderText ??
-            headerLink?.title ??
-            headerLink.slug}
-        </Link>
-      </li>
-    );
-  }
+
+}
+
+
+export function HeaderSideBar({
+  headerData,
+  context
+}: {
+  headerData : { showHome: Boolean; pages: Array<HeaderLink> },
+  context: any
+}) {
+  //const icon = getSocialIcon(contactType);
+  return (
+    <div className="z-50 drawer-side md:hidden">
+      <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay !bg-transparent"></label>
+      <ul className="min-h-full p-4 text-3xl font-bold font-black text-left uppercase w-60 menu bg-base-100/80 backdrop-blur-xl">
+        {/* Sidebar content here */}
+        {headerData?.showHome != false && (
+          <li>
+            <Link className="mx-auto link link-hover link-primary" href={"/"}>
+              {context?.locale == "en" ? "Home" : "Accueil"}
+            </Link>
+          </li>
+        )}
+        {headerData?.pages ? (
+          headerData?.pages.map((headerLink) => {
+            return CustomHeaderLink(headerData, headerLink, context);
+          })
+        ) : (
+          <li>
+            <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
+              Blog
+            </Link>
+          </li>
+        )}
+        <div className="my-1 divider"></div>
+        <div className="flex justify-center gap-2">
+          <div className="flex justify-center ">
+            {" "}
+            <LanguageSwitcher ></LanguageSwitcher>
+          </div>
+
+          <div className="flex justify-center ">
+            <ThemeSelector></ThemeSelector>
+          </div>
+        </div>
+      </ul>
+    </div>
+  );
+}
+
+
+
+function CustomHeaderLink(headerData: any, headerLink: HeaderLink, context: any) {
+  const translations = headerData.pages.find((data: { slug: string; }) => data.slug == headerLink.slug)
+    ?._translations._translations;
+  const translatedHeaderLink =
+    translations?.find(
+      (translation: { language: any }) => translation.language == context?.locale
+    ) ?? null;
+
+  const translatedHeaderText =
+    (context?.locale == "fr" ? headerLink.title_fr : headerLink.title) ?? null;
+  return (
+    <li key={headerLink?.slug}>
+      <Link
+        className="link link-hover link-primary"
+        href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
+      >
+        {translatedHeaderLink?.title ??
+          translatedHeaderText ??
+          headerLink?.title ??
+          headerLink.slug}
+      </Link>
+    </li>
+  );
 }
