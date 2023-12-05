@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     
     return {
       props: { ..._nextI18Next,data: newData, preview, previewToken, siteMetadata, headerData, context: ctx },
-      revalidate: 10
+      revalidate: 30
     };
   } catch (error) {
     return handlePageFetchError(error);

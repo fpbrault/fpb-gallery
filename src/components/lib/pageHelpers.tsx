@@ -82,7 +82,7 @@ export async function getLocalizedPageProps(query: any, context: any, isSlug: bo
         ]))
         , data, preview, previewToken, siteMetadata, headerData, context: ctx
       },
-      revalidate: 10
+      revalidate: 30
     };
   }
   catch (error) {
@@ -105,7 +105,7 @@ export async function getPageProps(query: any, context: any) {
 
   return {
     props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
-    revalidate: 10
+    revalidate: 30
   };
 
 }
