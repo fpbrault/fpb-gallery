@@ -41,7 +41,7 @@ export const styledBlock = defineType({
         icon: FaPen,
         title: 'Hand Drawn annotation',
         components:
-        {  annotation: RoughAnnotationRenderer} ,
+          { annotation: RoughAnnotationRenderer },
         fields: [
           {
             name: 'type',
@@ -72,6 +72,14 @@ export const styledBlock = defineType({
             title: 'Animate',
             initialValue: true,
           },
+          {
+            name: 'order',
+            type: 'number',
+            description: 'Order in which the animation appear.',
+            title: 'Order',
+            initialValue: 1,
+            validation: (Rule) => Rule.required().integer(),
+          },
         ],
       },
       {
@@ -80,7 +88,7 @@ export const styledBlock = defineType({
         title: 'Link',
         icon: FaLink,
         components:
-        {  annotation: LinkRenderer} ,
+          { annotation: LinkRenderer },
         fields: [
           {
             name: 'href',
@@ -99,13 +107,13 @@ export const styledBlock = defineType({
         title: "Internal link",
         icon: FaLink,
         components:
-      {  annotation: LinkRenderer} ,
+          { annotation: LinkRenderer },
         fields: [
           {
             name: "reference",
             type: "reference",
             title: "Reference",
-            to: [{ type: "post" as const }, {type: "page" as const}, {type: "album" as const}]
+            to: [{ type: "post" as const }, { type: "page" as const }, { type: "album" as const }]
           }
         ]
       }
@@ -164,6 +172,7 @@ export const blockContent = defineType({
     }),
 
     defineArrayMember({ type: "image" }),
+    defineArrayMember({ type: "youtube" }),
     { type: "reference", name: "Post", to: { type: "post" as const } },
     { type: "reference", name: "album", to: { type: "album" as const } },
     {
