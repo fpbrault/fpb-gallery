@@ -1,4 +1,4 @@
-import PicoSanity from 'picosanity'
+import PicoSanity from "picosanity";
 
 import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
 export function getClient(previewToken?: string): any {

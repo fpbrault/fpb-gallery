@@ -177,7 +177,7 @@ export const siteSettings = defineType({
           { title: "Space Grotesk", value: "spaceGrotesk" },
           { title: "Work Sans", value: "workSans" },
           { title: "Libre Franklin", value: "libreFranklin" },
-          { title: "Roboto", value: "roboto" },
+          { title: "Roboto", value: "roboto" }
         ]
       }
     }),

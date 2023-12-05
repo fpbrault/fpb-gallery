@@ -41,7 +41,11 @@ export default function Header({
 
       <nav className="font-bold uppercase navbar sm:justify-around">
         <div className="w-full navbar-start md:hidden">
-          <label htmlFor="my-drawer-3" aria-label="open sidebar" className="text-3xl btn btn-square md:hidden btn-ghost">
+          <label
+            htmlFor="my-drawer-3"
+            aria-label="open sidebar"
+            className="text-3xl btn btn-square md:hidden btn-ghost"
+          >
             <FaBars />
           </label>
           <div className="dropdown">
@@ -120,23 +124,23 @@ export default function Header({
       <div className="flex justify-center mx-auto mt-1 sm:mt-0"></div>
     </header>
   );
-
-
-
 }
-
 
 export function HeaderSideBar({
   headerData,
   context
 }: {
-  headerData : { showHome: Boolean; pages: Array<HeaderLink> },
-  context: any
+  headerData: { showHome: Boolean; pages: Array<HeaderLink> };
+  context: any;
 }) {
   //const icon = getSocialIcon(contactType);
   return (
     <div className="z-50 drawer-side md:hidden">
-      <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay !bg-transparent"></label>
+      <label
+        htmlFor="my-drawer-3"
+        aria-label="close sidebar"
+        className="drawer-overlay !bg-transparent"
+      ></label>
       <ul className="min-h-full p-4 text-3xl font-bold font-black text-left uppercase w-60 menu bg-base-100/80 backdrop-blur-xl">
         {/* Sidebar content here */}
         {headerData?.showHome != false && (
@@ -161,7 +165,7 @@ export function HeaderSideBar({
         <div className="flex justify-center gap-2">
           <div className="flex justify-center ">
             {" "}
-            <LanguageSwitcher ></LanguageSwitcher>
+            <LanguageSwitcher></LanguageSwitcher>
           </div>
 
           <div className="flex justify-center ">
@@ -173,11 +177,10 @@ export function HeaderSideBar({
   );
 }
 
-
-
 function CustomHeaderLink(headerData: any, headerLink: HeaderLink, context: any) {
-  const translations = headerData.pages.find((data: { slug: string; }) => data.slug == headerLink.slug)
-    ?._translations._translations;
+  const translations = headerData.pages.find(
+    (data: { slug: string }) => data.slug == headerLink.slug
+  )?._translations._translations;
   const translatedHeaderLink =
     translations?.find(
       (translation: { language: any }) => translation.language == context?.locale

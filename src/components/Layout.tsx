@@ -16,18 +16,17 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = (props) => {
-
   const metadata: Layout.LayoutMetadata = {
     title: props.siteMetadata?.siteTitle ?? "My Site",
     author: props.siteMetadata?.author ?? "Unknown Author",
     description: props.siteMetadata?.description ?? "Description",
     socialLinks: props.siteMetadata?.socialLinks
       ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => {
-        return { name: socialLink.name, url: socialLink.url, type: socialLink.type };
-      })
+          return { name: socialLink.name, url: socialLink.url, type: socialLink.type };
+        })
       : {}
   };
-  const fontFamily = getFontFamily(props?.siteMetadata?.customFont)
+  const fontFamily = getFontFamily(props?.siteMetadata?.customFont);
 
   return (
     <>
@@ -65,7 +64,6 @@ const Layout: React.FC<Props> = (props) => {
               </div>
               <HeaderSideBar headerData={props.headerData} context={props.context}></HeaderSideBar>
             </div>
-
 
             <ScrollToTopButton></ScrollToTopButton>
 

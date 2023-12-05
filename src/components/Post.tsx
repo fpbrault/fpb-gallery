@@ -11,18 +11,18 @@ export default function Post({ post }: { post: SanityDocument }) {
     <div className="max-w-6xl mx-auto font-sans text-center text-base-content">
       <article key={post?.slug}>
         <div className="max-w-4xl mx-auto">
-        {image ? (
-          <Image
-            unoptimized
-            className="mx-auto rounded shadow-2xl max-h-[750px] object-contain max-w-fit"
-            blurDataURL={post?.blurDataURL ?? ""}
-            placeholder="blur"
-            height={image?.imageHeight ?? ""}
-            width={image?.imageWidth ?? ""}
-            alt="alt"
-            src={image?.imageUrl ?? ""}
-          ></Image>
-        ) : null}
+          {image ? (
+            <Image
+              unoptimized
+              className="mx-auto rounded shadow-2xl max-h-[750px] object-contain max-w-fit"
+              blurDataURL={post?.blurDataURL ?? ""}
+              placeholder="blur"
+              height={image?.imageHeight ?? ""}
+              width={image?.imageWidth ?? ""}
+              alt="alt"
+              src={image?.imageUrl ?? ""}
+            ></Image>
+          ) : null}
         </div>
 
         <h2 className="p-4 text-4xl font-bold text-primary">{post?.title}</h2>

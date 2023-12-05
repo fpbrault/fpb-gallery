@@ -6,8 +6,6 @@ import { SiteMetadata, siteMetadataQuery } from "@/components/lib/getBasePagePro
 
 export const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
 
-
-
 export function useSiteMetadata(): { siteMetadata: SiteMetadata | undefined } {
   const [siteMetadata, setSiteMetadata] = useState<SiteMetadata>();
 

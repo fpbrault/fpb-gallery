@@ -1,4 +1,17 @@
-import { Raleway, Montserrat, Inter, Nunito, Comfortaa, Sarabun, Amatic_SC, DM_Sans, Space_Grotesk, Work_Sans, Libre_Franklin, Roboto, } from "next/font/google";
+import {
+  Raleway,
+  Montserrat,
+  Inter,
+  Nunito,
+  Comfortaa,
+  Sarabun,
+  Amatic_SC,
+  DM_Sans,
+  Space_Grotesk,
+  Work_Sans,
+  Libre_Franklin,
+  Roboto
+} from "next/font/google";
 
 export const raleway = Raleway({
   subsets: ["latin"],
@@ -13,61 +26,59 @@ export const montserrat = Montserrat({
 export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const nunito = Nunito({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const comfortaa = Comfortaa({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const sarabun = Sarabun({
-  weight: '600',
+  weight: "600",
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const amaticSC = Amatic_SC({
-  weight: '700',
+  weight: "700",
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const workSans = Work_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const libreFranklin = Libre_Franklin({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
 export const roboto = Roboto({
-  weight: '400',
+  weight: "400",
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-sans"
 });
-
 
 export function getFontFamily(fontName: string): any {
   let selectedFont = null;
-
 
   if (fontName === "raleway") {
     selectedFont = raleway;
@@ -96,5 +107,5 @@ export function getFontFamily(fontName: string): any {
   } else {
     selectedFont = raleway;
   }
-  return selectedFont
+  return selectedFont;
 }

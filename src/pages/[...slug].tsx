@@ -71,9 +71,7 @@ export default function CustomPage({
   }
   return (
     <div>
-       <Breadcrumbs
-        items={[ { name: data?.title }]}
-      ></Breadcrumbs>
+      <Breadcrumbs items={[{ name: data?.title }]}></Breadcrumbs>
       {preview && previewToken ? (
         <PreviewProvider previewToken={previewToken}>
           <PreviewPage page={data} />

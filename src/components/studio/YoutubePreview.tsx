@@ -10,9 +10,5 @@ interface PreviewYouTubeProps extends PreviewProps {
 export function YouTubePreview(props: PreviewYouTubeProps) {
   const { selection } = props;
   const url = selection?.url;
-  return (
-    <>
-      {url ? <YouTubePlayer url={url} /> : <span>Add a YouTube URL</span>}
-    </>
-  );
+  return <>{url ? <YouTubePlayer url={url} /> : <span>Add a YouTube URL</span>}</>;
 }

@@ -72,9 +72,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         {page}
       </Layout>
     ));
-  return getLayout(
-        <Component {...pageProps} />
-  );
+  return getLayout(<Component {...pageProps} />);
 }
 
 export default appWithTranslation(App);
