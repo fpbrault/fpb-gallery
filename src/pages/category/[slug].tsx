@@ -26,7 +26,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getPageProps(categoryQuery, context)
+    return getPageProps(categoryQuery, context);
   } catch (error) {
     return handlePageFetchError(error);
   }

@@ -1,6 +1,4 @@
-import {
-  FaImages, FaLink, FaPen,
-} from "react-icons/fa6";
+import { FaImages, FaLink, FaPen } from "react-icons/fa6";
 import { defineType, defineArrayMember, defineField } from "sanity";
 import LinkRenderer from "@/components/LinkRenderer";
 import RoughAnnotationRenderer from "@/components/RoughAnnotationRenderer";
@@ -32,21 +30,20 @@ export const styledBlock = defineType({
   marks: {
     decorators: [
       { title: "Strong", value: "strong" },
-      { title: "Emphasis", value: "em" },
+      { title: "Emphasis", value: "em" }
     ],
     annotations: [
       {
-        name: 'rough',
-        type: 'object',
+        name: "rough",
+        type: "object",
         icon: FaPen,
-        title: 'Hand Drawn annotation',
-        components:
-          { annotation: RoughAnnotationRenderer },
+        title: "Hand Drawn annotation",
+        components: { annotation: RoughAnnotationRenderer },
         fields: [
           {
-            name: 'type',
-            type: 'string',
-            title: 'Type',
+            name: "type",
+            type: "string",
+            title: "Type",
             initialValue: "underline",
             options: {
               list: [
@@ -62,52 +59,50 @@ export const styledBlock = defineType({
             }
           },
           {
-            name: 'color',
-            type: 'color',
-            title: 'Color',
+            name: "color",
+            type: "color",
+            title: "Color"
           },
           {
-            name: 'animate',
-            type: 'boolean',
-            title: 'Animate',
-            initialValue: true,
+            name: "animate",
+            type: "boolean",
+            title: "Animate",
+            initialValue: true
           },
           {
-            name: 'order',
-            type: 'number',
-            description: 'Order in which the animation appear.',
-            title: 'Order',
+            name: "order",
+            type: "number",
+            description: "Order in which the animation appear.",
+            title: "Order",
             initialValue: 1,
-            validation: (Rule) => Rule.required().integer(),
-          },
-        ],
+            validation: (Rule) => Rule.required().integer()
+          }
+        ]
       },
       {
-        name: 'link',
-        type: 'object',
-        title: 'Link',
+        name: "link",
+        type: "object",
+        title: "Link",
         icon: FaLink,
-        components:
-          { annotation: LinkRenderer },
+        components: { annotation: LinkRenderer },
         fields: [
           {
-            name: 'href',
-            type: 'url',
+            name: "href",
+            type: "url",
             validation: (Rule) =>
               Rule.uri({
                 allowRelative: false,
-                scheme: ['http', 'https', 'mailto', 'tel'],
-              }),
-          },
-        ],
+                scheme: ["http", "https", "mailto", "tel"]
+              })
+          }
+        ]
       },
       {
         name: "internalLink",
         type: "object",
         title: "Internal link",
         icon: FaLink,
-        components:
-          { annotation: LinkRenderer },
+        components: { annotation: LinkRenderer },
         fields: [
           {
             name: "reference",

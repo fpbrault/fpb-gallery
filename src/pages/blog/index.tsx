@@ -6,13 +6,12 @@ import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPostList from "@/components/studio/PreviewPostList";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
-import { useState } from 'react';
+import { useState } from "react";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 const PostList = dynamic(() => import("@/components/PostList"));
 
 const postsPerPage = 3;
-
 
 export const postListQuery = groq`*[_type == "post" && defined(slug.current) || defined(slug_fr.current)]  {
   "posts": *[_type == "post" && defined(slug.current) || defined(slug_fr.current)] {
@@ -35,13 +34,15 @@ export const postListQuery = groq`*[_type == "post" && defined(slug.current) || 
 }[0]
 `;
 
-
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    const initialData = await getPageProps(postListQuery, {...context, params: {...context.params, start: 0, end: postsPerPage - 1}});
+    const initialData = await getPageProps(postListQuery, {
+      ...context,
+      params: { ...context.params, start: 0, end: postsPerPage - 1 }
+    });
 
     return {
-      ...initialData,
+      ...initialData
     };
   } catch (error) {
     return handlePageFetchError(error);
@@ -52,7 +53,7 @@ export default function BlogPage({
   data,
   context,
   preview,
-  previewToken,
+  previewToken
 }: {
   data: SanityDocument;
   context: any;
@@ -63,10 +64,14 @@ export default function BlogPage({
   const [nextPage, setNextPage] = useState<any>(2);
   const loadMore = async () => {
     // Fetch the next set of posts dynamically
-    try {;
-      const response = await fetch(`/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? 'en'}&postsPerPage=${postsPerPage ?? 4}`);
+    try {
+      const response = await fetch(
+        `/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? "en"}&postsPerPage=${
+          postsPerPage ?? 4
+        }`
+      );
       const additionalData = await response.json();
-      setNextPage(nextPage + 1)
+      setNextPage(nextPage + 1);
       setPosts([...posts, ...additionalData]);
     } catch (error) {
       // Handle error when fetching additional data
@@ -86,10 +91,12 @@ export default function BlogPage({
         posts && <PostList posts={posts} />
       )}
 
-        {/* Load More button */}
-        {posts?.length < data?.totalCount && (
-         <button className="mx-auto mt-12 mb-2 btn btn-primary" onClick={loadMore}>Load More</button>
-         )}
-         </div>
+      {/* Load More button */}
+      {posts?.length < data?.totalCount && (
+        <button className="mx-auto mt-12 mb-2 btn btn-primary" onClick={loadMore}>
+          Load More
+        </button>
+      )}
+    </div>
   );
 }

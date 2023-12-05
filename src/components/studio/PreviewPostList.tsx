@@ -13,6 +13,6 @@ export default function PreviewPost({ posts }: { posts: SanityDocument }) {
   if (data == null) {
     return null;
   }
-  
+
   return <PostList posts={data} />;
 } /*  */

@@ -4,7 +4,6 @@ import { SanityDocument } from "next-sanity";
 import { RoughNotationGroup } from "react-rough-notation";
 
 export default function Page({ page }: { page: SanityDocument }) {
-  
   return (
     <div className="mx-auto font-sans text-center text-base-content">
       <div
@@ -12,7 +11,7 @@ export default function Page({ page }: { page: SanityDocument }) {
         key={page?.slug}
       >
         <RoughNotationGroup show>
-          <PortableText value={page?.content}  components={myPortableTextComponents as any} />
+          <PortableText value={page?.content} components={myPortableTextComponents as any} />
         </RoughNotationGroup>
       </div>
     </div>

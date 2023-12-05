@@ -17,5 +17,4 @@ export async function getPageProps(query: any, context: any) {
     props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
     revalidate: 30
   };
-
 }

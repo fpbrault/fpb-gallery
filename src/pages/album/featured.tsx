@@ -19,9 +19,7 @@ export const albumQuery = groq`*[_type == "album"]{...,category->,images[feature
   {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  
   try {
-
     if (context.params) {
       context.params.locale = context?.locale;
     }
@@ -40,10 +38,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const newData = shuffleArray(data);
 
- 
-    
     return {
-      props: { ..._nextI18Next,data: newData, preview, previewToken, siteMetadata, headerData, context: ctx },
+      props: {
+        ..._nextI18Next,
+        data: newData,
+        preview,
+        previewToken,
+        siteMetadata,
+        headerData,
+        context: ctx
+      },
       revalidate: 30
     };
   } catch (error) {
@@ -60,7 +64,7 @@ export default function AlbumPage({
   preview: boolean;
   previewToken?: string;
 }) {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation("common");
   const router = useRouter();
   if (router.isFallback) {
     return (
@@ -73,7 +77,7 @@ export default function AlbumPage({
     <div>
       <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
       <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-        <h2>{t('featuredHeader')}</h2>
+        <h2>{t("featuredHeader")}</h2>
         <PortableText value={data.description} components={myPortableTextComponents as any} />
       </div>
       {preview && previewToken ? (

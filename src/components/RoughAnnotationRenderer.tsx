@@ -1,13 +1,12 @@
-import { Tooltip } from '@sanity/ui'
-import { RoughNotation } from 'react-rough-notation'
+import { Tooltip } from "@sanity/ui";
+import { RoughNotation } from "react-rough-notation";
 
-const RoughAnnotationRenderer = (props: { value: any; renderDefault: any; }) => {
+const RoughAnnotationRenderer = (props: { value: any; renderDefault: any }) => {
   const { value, renderDefault } = props;
 
   return (
-    <Tooltip
-    >
-      <span className='text-primary-content'>
+    <Tooltip>
+      <span className="text-primary-content">
         <RoughNotation
           animate={value?.animate ?? null}
           multiline={true}
@@ -19,7 +18,7 @@ const RoughAnnotationRenderer = (props: { value: any; renderDefault: any; }) => 
         </RoughNotation>
       </span>
     </Tooltip>
-  )
-}
+  );
+};
 
-export default RoughAnnotationRenderer
+export default RoughAnnotationRenderer;

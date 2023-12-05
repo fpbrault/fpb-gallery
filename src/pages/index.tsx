@@ -36,17 +36,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const customContext = { params: { slug: "home", locale: context.locale }, ...context };
     const customHomePageData = await client.fetch(pageQuery, customContext.params);
 
-    const postListData = await client.fetch(postListQuery, context)
-    
-    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context);
-    const { data } = await getPageData(indexAlbumQuery, ctx, previewToken);
+    const postListData = await client.fetch(postListQuery, context);
 
+    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } =
+      await getBasePageProps(context);
+    const { data } = await getPageData(indexAlbumQuery, ctx, previewToken);
 
     const { currentLocale, otherLocale } = getPageLocaleVersions(data, ctx);
     handleLocaleRedirect(currentLocale, ctx);
     ctx.otherLocale = otherLocale;
-    const dataWithPosts = { albumData: data, posts: postListData }
-    
+    const dataWithPosts = { albumData: data, posts: postListData };
+
     return {
       props: {
         ..._nextI18Next,
@@ -54,7 +54,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         preview,
         previewToken,
         siteMetadata,
-        context: {...context, params: {...context.params, start: 0, end: 1}},
+        context: { ...context, params: { ...context.params, start: 0, end: 1 } },
         headerData
       },
       revalidate: 30
@@ -77,7 +77,7 @@ export default function IndexPage({
   preview: boolean;
   previewToken?: string;
 }) {
-  const post = data.posts[0] ?? null
+  const post = data.posts[0] ?? null;
   return (
     <div>
       {preview && previewToken ? (
@@ -96,7 +96,7 @@ export default function IndexPage({
         <Page page={data} />
       ) : (
         <div className="my-4 font-sans text-sm text-center">
-          {post && <HomePostMessage post={post}/>}
+          {post && <HomePostMessage post={post} />}
           <AlbumGallery categories={true} albums={data.albumData} />
         </div>
       )}

@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
 import React from "react";
 
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
-
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 export function PTYoutube(value: any) {
   return (

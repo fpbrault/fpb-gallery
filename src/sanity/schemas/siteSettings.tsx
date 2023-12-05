@@ -1,7 +1,6 @@
 import { FaInfo, FaMoon, FaSun } from "react-icons/fa6";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-
 export const colors = defineType({
   name: "colors",
   title: "Site Colors",
@@ -22,7 +21,7 @@ export const colors = defineType({
       name: "secondary",
       title: "Secondary",
       type: "color"
-    }),
+    })
   ]
 });
 
@@ -116,7 +115,7 @@ export const customTheme = defineType({
       name: "er",
       title: "error",
       type: "color"
-    }),
+    })
   ]
 });
 
@@ -136,7 +135,7 @@ export const siteSettings = defineType({
       name: "siteTitle",
       initialValue: "My portfolio",
       title: "Site Title",
-      description:"50 characters maximum",
+      description: "50 characters maximum",
       validation: (Rule) => Rule.max(50).required(),
       type: "string"
     }),
@@ -148,7 +147,7 @@ export const siteSettings = defineType({
     defineField({
       name: "author",
       title: "Site Author",
-      description:"32 characters maximum",
+      description: "32 characters maximum",
       validation: (Rule) => Rule.max(32).required(),
       type: "string"
     }),
@@ -164,7 +163,7 @@ export const siteSettings = defineType({
       type: "string",
       icon: FaMoon,
       title: "Dark Theme Name",
-      initialValue: 'mytheme',
+      initialValue: "mytheme",
       validation: (Rule) => Rule.required(),
       options: {
         list: [
@@ -185,7 +184,7 @@ export const siteSettings = defineType({
       type: "string",
       icon: FaSun,
       title: "Light Theme Name",
-      initialValue: 'mytheme',
+      initialValue: "mytheme",
       validation: (Rule) => Rule.required(),
       options: {
         list: [
@@ -203,14 +202,15 @@ export const siteSettings = defineType({
       }
     }),
     defineField({
-      title: 'Custom Theme Colors',
-      description: 'You can set custom theme colors. These will override the default colors of your selected themes. Note that you do not need to set all of the colors.',
-      name: 'myCustomNote',
-      type: 'note',
+      title: "Custom Theme Colors",
+      description:
+        "You can set custom theme colors. These will override the default colors of your selected themes. Note that you do not need to set all of the colors.",
+      name: "myCustomNote",
+      type: "note",
       options: {
         icon: () => FaInfo,
-        tone: 'positive',
-      },
+        tone: "positive"
+      }
     }),
     defineField({
       name: "customDarkTheme",
@@ -225,7 +225,7 @@ export const siteSettings = defineType({
       title: "Custom Light Theme Colors",
       weak: false,
       to: [{ type: "customTheme" } as const]
-    }),
+    })
   ]
 });
 
@@ -262,7 +262,7 @@ export const socialLink = defineType({
           { title: "SoundCloud", value: "soundcloud" },
           { title: "Spotify", value: "spotify" },
           { title: "Behance", value: "behance" },
-          { title: "Dribbble", value: "dribbble" },
+          { title: "Dribbble", value: "dribbble" }
         ],
         layout: "radio" // <-- defaults to 'dropdown'
       }

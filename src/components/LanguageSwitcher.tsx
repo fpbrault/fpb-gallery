@@ -17,7 +17,7 @@ export function LanguageSwitcher(props: any) {
         );
       }}
     >
-   {/*    <span className="w-6 h-6 mt-0.5">
+      {/*    <span className="w-6 h-6 mt-0.5">
         <FontAwesomeIcon icon={faEarth}></FontAwesomeIcon>{" "}
       </span> */}
       {props.context?.locales?.find((locale: string) => locale != props.context?.locale)}

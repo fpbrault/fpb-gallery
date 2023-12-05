@@ -5,6 +5,7 @@ import Header from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
 import { Layout } from "@/types/layout";
+import { motion } from "framer-motion";
 import { SiteMetadataProvider } from "./lib/SiteMetadataContext";
 
 const raleway = Raleway({
@@ -44,24 +45,36 @@ const Layout: React.FC<Props> = (props) => {
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <SiteMetadataProvider siteMetadata={props.siteMetadata}>
-      <div
-        className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}
-      >
-        <Header
-          title={metadata.title}
-          contactText={metadata?.socialLinks[0]?.name ?? ""}
-          contactType={metadata?.socialLinks[0]?.type ?? ""}
-          contactUrl={metadata?.socialLinks[0]?.url ?? ""}
-          headerData={props && props.headerData}
-          context={props.context}
-        />
-        <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
-          {props.children}
-        </main>
-        <ScrollToTopButton></ScrollToTopButton>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 3,
+            type: "spring",
+            stiffness: 260,
+            damping: 20
+          }}
+        >
+          <div
+            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${raleway.variable}`}
+          >
+            <Header
+              title={metadata.title}
+              contactText={metadata?.socialLinks[0]?.name ?? ""}
+              contactType={metadata?.socialLinks[0]?.type ?? ""}
+              contactUrl={metadata?.socialLinks[0]?.url ?? ""}
+              headerData={props && props.headerData}
+              context={props.context}
+            />
+            <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
+              {props.children}
+            </main>
+            <ScrollToTopButton></ScrollToTopButton>
 
-        <Footer context={props.context} metadata={metadata}></Footer>
-      </div>
+            <Footer context={props.context} metadata={metadata}></Footer>
+          </div>
+        </motion.div>
       </SiteMetadataProvider>
     </>
   );

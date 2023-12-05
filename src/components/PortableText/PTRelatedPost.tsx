@@ -21,7 +21,8 @@ export function PTRelatedPost(value: any) {
                 height={64}
                 alt=""
                 quality={75}
-                src={src ?? ""} />{" "}
+                src={src ?? ""}
+              />{" "}
               <span className="self-center flex-grow px-2 text-base font-bold text-center max-h-12 line-clamp-2 ">
                 {" "}
                 {value.title[0]?.value?.slice(0, 100) ?? "Article"}

@@ -21,7 +21,7 @@ import {
   faSpotify,
   faBehance,
   faDribbble,
-  faTwitch,
+  faTwitch
 } from "@fortawesome/free-brands-svg-icons";
 
 export function getSocialIcon(type: string) {

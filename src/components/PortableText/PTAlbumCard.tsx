@@ -33,7 +33,7 @@ export function PTAlbumCard(value: any) {
             //sizes={sizes}
             unoptimized
             alt={value.albumName}
-          //{...{ alt, title, onClick }}
+            //{...{ alt, title, onClick }}
           />
         </Link>
       </div>

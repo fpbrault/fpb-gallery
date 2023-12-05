@@ -25,7 +25,7 @@ import { defineConfig } from "sanity";
 
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
 import { MdOutlineArticle } from "react-icons/md";
-import { noteField } from 'sanity-plugin-note-field'
+import { noteField } from "sanity-plugin-note-field";
 
 export const config = defineConfig({
   theme,
@@ -134,14 +134,14 @@ export const config = defineConfig({
                   .title("Settings Documents")
                   .items([
                     S.listItem()
-                    .title("Metadata")
-                    .icon(FaCircleInfo)
-                    .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+                      .title("Metadata")
+                      .icon(FaCircleInfo)
+                      .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
                     S.listItem()
                       .title("Main Navigation")
                       .icon(FaHouse)
                       .child(S.document().schemaType("pageList").documentId("mainNavigation")),
-                      S.listItem()
+                    S.listItem()
                       .title("Custom Theme Colors")
                       .icon(FaPalette)
                       .child(S.documentTypeList("customTheme").title("Custom Themes Colors"))
@@ -182,7 +182,7 @@ export const config = defineConfig({
     }),
     colorInput(),
     media(),
-    noteField(),
+    noteField()
   ],
   document: {
     actions: (prev: any, { schemaType }: any) => {

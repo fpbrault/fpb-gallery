@@ -3,14 +3,12 @@ import "styles/globals.css";
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { NextPage } from "next";
-import { appWithTranslation } from 'next-i18next'
-import { AnimatePresence } from 'framer-motion'
+import { appWithTranslation } from "next-i18next";
+import { AnimatePresence } from "framer-motion";
 
-import { createContext } from 'react';
+import { createContext } from "react";
 
-export const PageContext = createContext({params: {}});
-
-
+export const PageContext = createContext({ params: {} });
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -24,31 +22,32 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const siteMetadata = pageProps.siteMetadata;
   useEffect(() => {
     const darkThemeVariables = siteMetadata?.customThemeVariables?.customDarkThemeVariables ?? null;
-    const lightThemeVariables = siteMetadata?.customThemeVariables?.customLightThemeVariables ?? null;
-    const lightThemeName = siteMetadata?.themes?.lightThemeName ?? 'light';
-    const darkThemeName = siteMetadata?.themes?.darkThemeName ?? 'mytheme';
+    const lightThemeVariables =
+      siteMetadata?.customThemeVariables?.customLightThemeVariables ?? null;
+    const lightThemeName = siteMetadata?.themes?.lightThemeName ?? "light";
+    const darkThemeName = siteMetadata?.themes?.darkThemeName ?? "mytheme";
 
     // Create a style element
-    const styleElement = document.createElement('style');
-    styleElement.textContent = ""
+    const styleElement = document.createElement("style");
+    styleElement.textContent = "";
     if (darkThemeVariables) {
       styleElement.textContent = styleElement.textContent.concat(`
       [data-theme="${darkThemeName}"] {
         ${Object.entries(darkThemeVariables)
           .map(([variable, value]) => `${variable}: ${value};`)
-          .join('\n')}
+          .join("\n")}
       }
-    `)
+    `);
     }
 
     if (lightThemeVariables) {
       styleElement.textContent = styleElement.textContent.concat(`
     [data-theme="${lightThemeName}"] {
       ${Object.entries(lightThemeVariables)
-          .map(([variable, value]) => `${variable}: ${value};`)
-          .join('\n')}
+        .map(([variable, value]) => `${variable}: ${value};`)
+        .join("\n")}
       }
-    `)
+    `);
     }
     // Append the style element to the document head
     document.head.appendChild(styleElement);
@@ -57,7 +56,11 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       // Clean up the style element when the component is unmounted
       document.head.removeChild(styleElement);
     };
-  }, [siteMetadata?.customThemeVariables, siteMetadata?.themes?.darkThemeName, siteMetadata?.themes?.lightThemeName]);
+  }, [
+    siteMetadata?.customThemeVariables,
+    siteMetadata?.themes?.darkThemeName,
+    siteMetadata?.themes?.lightThemeName
+  ]);
 
   const getLayout =
     Component.getLayout ||
@@ -71,8 +74,13 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       </Layout>
     ));
 
-  return getLayout(   <AnimatePresence mode="wait" initial={false}><PageContext.Provider value={pageProps.context}><Component {...pageProps} /></PageContext.Provider>  </AnimatePresence>);
+  return getLayout(
+    <PageContext.Provider value={pageProps.context}>
+      <AnimatePresence mode="wait" initial={false}>
+        <Component {...pageProps} />
+      </AnimatePresence>
+    </PageContext.Provider>
+  );
 }
-
 
 export default appWithTranslation(App);

@@ -11,18 +11,20 @@ export function PTRoughNotation(props: any) {
 
   return (
     <span ref={ref}>
-     {inView ?( <RoughNotation
-        animate={props?.value?.animate ?? false}
-        multiline={true}
-
-        order={props?.value?.order ?? 1}
-        color={props?.value?.color?.hex ?? null}
-        type={props?.value?.type || "underline"}
-        show={false}
-      >
-        {props.children}
-      </RoughNotation>): (<>{props.children}</>)
-    }
+      {inView ? (
+        <RoughNotation
+          animate={props?.value?.animate ?? false}
+          multiline={true}
+          order={props?.value?.order ?? 1}
+          color={props?.value?.color?.hex ?? null}
+          type={props?.value?.type || "underline"}
+          show={false}
+        >
+          {props.children}
+        </RoughNotation>
+      ) : (
+        <>{props.children}</>
+      )}
     </span>
   );
 }

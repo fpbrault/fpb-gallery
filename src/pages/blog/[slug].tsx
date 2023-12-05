@@ -61,8 +61,7 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getLocalizedPageProps(postQuery, context,true,'blog')
-    
+    return getLocalizedPageProps(postQuery, context, true, "blog");
   } catch (error) {
     return handlePageFetchError(error, "/blog");
   }

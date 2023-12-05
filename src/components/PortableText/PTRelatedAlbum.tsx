@@ -24,7 +24,8 @@ export function PTRelatedAlbum(value: any) {
                 height={64}
                 alt=""
                 quality={75}
-                src={src} />
+                src={src}
+              />
             </div>
           </Link>
         </div>

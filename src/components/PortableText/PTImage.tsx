@@ -14,7 +14,8 @@ export function PTImage(value: any) {
         alt=""
         quality={75}
         {...value}
-        src={src} />
+        src={src}
+      />
     </div>
   );
 }

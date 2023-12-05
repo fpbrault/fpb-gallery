@@ -63,31 +63,37 @@ export function handlePageFetchError(error: unknown, redirectPath?: string) {
  * @param {string | undefined} redirectPath - Optional. The path to redirect to if needed.
  * @returns {Promise<{ props: { data: any, preview: any, previewToken: any, siteMetadata: any, headerData: any, context: any }, revalidate: number }>} The page properties with context.
  */
-export async function getLocalizedPageProps(query: any, context: any, isSlug: boolean, redirectPath?: string | undefined) {
+export async function getLocalizedPageProps(
+  query: any,
+  context: any,
+  isSlug: boolean,
+  redirectPath?: string | undefined
+) {
   try {
     const { ctx, preview, previewToken, siteMetadata, headerData } =
       await getBasePageProps(context);
     const { data } = await getPageData(query, ctx, previewToken);
 
-
-    const { currentLocale, otherLocale } = isSlug ? getPageLocaleVersions(data, ctx, true) : getPageLocaleVersions(data, ctx, false)
+    const { currentLocale, otherLocale } = isSlug
+      ? getPageLocaleVersions(data, ctx, true)
+      : getPageLocaleVersions(data, ctx, false);
     handleLocaleRedirect(currentLocale, ctx, redirectPath);
     ctx.otherLocale = otherLocale;
 
     return {
       props: {
-        ...(await serverSideTranslations(context.locale ?? "en", [
-          'common',
-          'footer',
-        ]))
-        , data, preview, previewToken, siteMetadata, headerData, context: ctx
+        ...(await serverSideTranslations(context.locale ?? "en", ["common", "footer"])),
+        data,
+        preview,
+        previewToken,
+        siteMetadata,
+        headerData,
+        context: ctx
       },
       revalidate: 30
     };
-  }
-  catch (error) {
-    console.error(error)
+  } catch (error) {
+    console.error(error);
     return handlePageFetchError(error, "/");
   }
 }
-

@@ -33,7 +33,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getLocalizedPageProps(albumQuery, context,false)
+    return getLocalizedPageProps(albumQuery, context, false);
   } catch (error) {
     return handlePageFetchError(error);
   }

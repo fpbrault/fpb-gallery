@@ -21,7 +21,7 @@ export const albumQuery = groq`*[_type == "album"]{...,category->,images[]
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getPageProps(albumQuery, context)
+    return getPageProps(albumQuery, context);
   } catch (error) {
     return handlePageFetchError(error);
   }

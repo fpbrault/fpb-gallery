@@ -7,10 +7,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
-import {
-  getLocalizedPageProps,
-  handlePageFetchError
-} from "@/components/lib/pageHelpers";
+import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 
 const queryLayoutPart = `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}
 ,leftCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
@@ -47,8 +44,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getLocalizedPageProps(pageQuery, context, false)
-    
+    return getLocalizedPageProps(pageQuery, context, false);
   } catch (error) {
     return handlePageFetchError(error);
   }

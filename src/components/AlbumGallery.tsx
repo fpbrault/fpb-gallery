@@ -12,7 +12,6 @@ type AlbumGalleryProps = {
 };
 
 const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
-
   const photos = !categories
     ? albums.map((album: any) => {
         const { imageUrl, imageWidth, imageHeight } = getResizedImage(album.images[0], 75, 600);
