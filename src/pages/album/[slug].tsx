@@ -10,7 +10,7 @@ import { client } from "@/sanity/lib/client";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
-import { myPortableTextComponents } from "@/components/myPortableTextComponents";
+import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album" && slug.current == $slug][0]{...,

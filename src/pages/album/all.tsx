@@ -11,8 +11,9 @@ import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
 import { getBasePageProps } from "@/components/lib/getBasePageProps";
 import { getPageData } from "@/components/lib/getPageData";
-import { getPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
-import { myPortableTextComponents } from "@/components/myPortableTextComponents";
+import { handlePageFetchError } from "@/components/lib/pageHelpers";
+import { getPageProps } from "@/components/lib/getPageProps";
+import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album"]{...,category->,images[]

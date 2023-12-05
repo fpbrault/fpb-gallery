@@ -62,5 +62,5 @@ daisyui: {
     ],
   },
 
-  plugins: [require('@tailwindcss/typography'), require("daisyui")],
+  plugins: [require('@tailwindcss/typography'), require('tailwindcss-neumorphism'), require("daisyui")],
 }

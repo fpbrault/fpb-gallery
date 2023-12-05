@@ -12,7 +12,8 @@ import { useRouter } from "next/router";
 import { getResizedImage } from "@/sanity/lib/client";
 import PhotoAlbum from "react-photo-album";
 import { PortableText } from "@portabletext/react";
-import { myPortableTextComponents } from "@/components/myPortableTextComponents";
+import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import { RoughNotationGroup } from "react-rough-notation";
 
 type Props = {
   images: any[];
@@ -31,31 +32,33 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
   const [theImages] = React.useState(
     images
       ? images.map((image) => {
-          const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
-          return {
-            ...image,
-            src: imageUrl,
-            height: imageHeight,
-            width: imageWidth,
-            title: (
-              <>
-                <div className="mt-6">{image.title}</div>
-              </>
-            ),
-            description: (
-              <>
-                <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                  {" "}
+        const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
+        return {
+          ...image,
+          src: imageUrl,
+          height: imageHeight,
+          width: imageWidth,
+          title: (
+            <>
+              <div className="mt-6">{image.title}</div>
+            </>
+          ),
+          description: (
+            <>
+              <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
+                {" "}
+                <RoughNotationGroup>
                   <PortableText
                     components={myPortableTextComponents as any}
                     value={image.description}
                   />
-                </div>
-              </>
-            ),
-            type: "image"
-          };
-        })
+                </RoughNotationGroup>
+              </div>
+            </>
+          ),
+          type: "image"
+        };
+      })
       : []
   );
 

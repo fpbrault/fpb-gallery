@@ -8,7 +8,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { client } from "@/sanity/lib/client";
 import PreviewAlbumGallery from "@/components/studio/PreviewAlbumGallery";
 import { PreviewBar } from "@/components/studio/PreviewBar";
-import { getPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
+import { handlePageFetchError } from "@/components/lib/pageHelpers";
+import { getPageProps } from "@/components/lib/getPageProps";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const categoryQuery = groq`*[_type == "album" && category->.slug.current == $slug]{...,"category": category->categoryName,images[]{...,"placeholders" : asset->{metadata{lqip}}}}|

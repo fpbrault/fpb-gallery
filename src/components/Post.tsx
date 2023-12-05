@@ -1,6 +1,6 @@
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
-import { myPortableTextComponents } from "@/components/myPortableTextComponents";
+import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { SanityDocument } from "next-sanity";
 import { getResizedImage } from "@/sanity/lib/client";
 

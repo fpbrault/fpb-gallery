@@ -4,7 +4,7 @@ import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { NextPage } from "next";
 import { appWithTranslation } from 'next-i18next'
-
+import { AnimatePresence } from 'framer-motion'
 
 import { createContext } from 'react';
 
@@ -71,7 +71,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       </Layout>
     ));
 
-  return getLayout(<PageContext.Provider value={pageProps.context}><Component {...pageProps} /></PageContext.Provider>);
+  return getLayout(   <AnimatePresence mode="wait" initial={false}><PageContext.Provider value={pageProps.context}><Component {...pageProps} /></PageContext.Provider>  </AnimatePresence>);
 }
 
 

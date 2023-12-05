@@ -11,7 +11,7 @@ import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
 import { getBasePageProps } from "@/components/lib/getBasePageProps";
 import { getPageData } from "@/components/lib/getPageData";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
-import { myPortableTextComponents } from "@/components/myPortableTextComponents";
+import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { useTranslation } from "next-i18next";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
