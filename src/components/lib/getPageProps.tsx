@@ -13,6 +13,7 @@ export async function getPageProps(query: any, context: any) {
   const { ctx, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context);
   const { data } = await getPageData(query, ctx, previewToken);
 
+  
   return {
     props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
     revalidate: 30

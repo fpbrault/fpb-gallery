@@ -19,7 +19,7 @@ export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slu
   $locale == 'fr' => coalesce(slug_fr, slug)
 ), 
   "postContent": postContent[_key == $locale]{value[]
-    {...,
+    {...,_type == "image" =>{asset, "blurDataURL": asset->.metadata.lqip},
       _type == "Post"=>{...}->{"slug": select(
         $locale == 'en' => coalesce(slug, slug_fr).current,
         $locale == 'fr' => coalesce(slug_fr, slug).current

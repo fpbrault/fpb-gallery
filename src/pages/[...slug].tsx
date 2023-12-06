@@ -11,8 +11,8 @@ import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pa
 import Breadcrumbs from "@/components/BreadCrumbs";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
-const queryLayoutPart = `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}
-,leftCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
+const queryLayoutPart = `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "image" =>{asset, "blurDataURL": asset->.metadata.lqip},_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}
+,leftCol[]{...,_type == "image" =>{asset, "blurDataURL": asset->.metadata.lqip},_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")] | score(language == $locale)
@@ -30,6 +30,7 @@ export const pageQuery = groq`*[_type == "page" && slug.current == $slug && (lan
         "slug": @.reference->slug
       }
     },
+    _type == "image" =>{asset, "blurDataURL": asset->.metadata.lqip},
     _type == "album" || _type == "albumCard" =>{...}->{albumName,albumId,images[0]{...,asset->}}},
     "blurDataURL": coverImage.asset->.metadata.lqip
 }`;
