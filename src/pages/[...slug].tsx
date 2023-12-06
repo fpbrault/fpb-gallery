@@ -72,21 +72,23 @@ export default function CustomPage({
     );
   }
   return (
-    <><OpenGraphMetadata title={data?.title} ></OpenGraphMetadata>
-    <div>
-      <Breadcrumbs items={[{ name: data?.title }]}></Breadcrumbs>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewPage page={data} />
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        data && (
-          <>
-            <Page page={data} />
-          </>
-        )
-      )}
-    </div></>
+    <>
+      <OpenGraphMetadata title={data?.title}></OpenGraphMetadata>
+      <div>
+        <Breadcrumbs items={[{ name: data?.title }]}></Breadcrumbs>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewPage page={data} />
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          data && (
+            <>
+              <Page page={data} />
+            </>
+          )
+        )}
+      </div>
+    </>
   );
 }

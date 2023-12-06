@@ -1,4 +1,12 @@
-import { FaImages, FaFile, FaUsers, FaGear, FaCircleInfo, FaHouse, FaPalette } from "react-icons/fa6";
+import {
+  FaImages,
+  FaFile,
+  FaUsers,
+  FaGear,
+  FaCircleInfo,
+  FaHouse,
+  FaPalette
+} from "react-icons/fa6";
 import { MdOutlineArticle } from "react-icons/md";
 
 export const structure = (S: any) =>
@@ -68,9 +76,7 @@ export const structure = (S: any) =>
                 ),
               S.listItem()
                 .title("All Pages")
-                .child(
-                  S.documentTypeList("page").title("All Pages").filter('_type == "page"')
-                ),
+                .child(S.documentTypeList("page").title("All Pages").filter('_type == "page"')),
               S.listItem()
                 .title("English Pages")
                 .child(
@@ -113,7 +119,7 @@ export const structure = (S: any) =>
             ])
         ),
       ...S.documentTypeListItems().filter(
-        (listItem: { getId: () => any; }) =>
+        (listItem: { getId: () => any }) =>
           ![
             "siteSettings",
             "album",
@@ -126,6 +132,6 @@ export const structure = (S: any) =>
             "customTheme"
           ].includes(listItem.getId() ?? "")
       )
-    ])
+    ]);
 
-    export default structure;
+export default structure;

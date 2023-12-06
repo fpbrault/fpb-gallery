@@ -46,21 +46,23 @@ export default function AlbumPage({
     );
   }
   return (
-    <><OpenGraphMetadata title="All Images" ></OpenGraphMetadata>
-    <div>
-      <Breadcrumbs items={[{ name: "everything" }]}></Breadcrumbs>
-      <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-        <h2>All Photos</h2>
-        <PortableText value={data.description} components={myPortableTextComponents as any} />
+    <>
+      <OpenGraphMetadata title="All Images"></OpenGraphMetadata>
+      <div>
+        <Breadcrumbs items={[{ name: "everything" }]}></Breadcrumbs>
+        <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
+          <h2>All Photos</h2>
+          <PortableText value={data.description} components={myPortableTextComponents as any} />
+        </div>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewPhotoGallery album={data} />
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          data && <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="all" />
+        )}
       </div>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewPhotoGallery album={data} />
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        data && <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="all" />
-      )}
-    </div></>
+    </>
   );
 }

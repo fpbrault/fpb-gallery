@@ -15,7 +15,7 @@ const OpenGraphMetadata = ({ title, slug }: any) => {
   const { asPath } = router;
   const ogImageUrl = constructOgImageUrl(title, slug);
 
-  const ogTitle = `Felix Perron-Brault Photographe${title && (" - " + title)}`
+  const ogTitle = `Felix Perron-Brault Photographe${title && " - " + title}`;
   return (
     <Head>
       <meta property="og:image" content={ogImageUrl} />
@@ -30,11 +30,13 @@ const OpenGraphMetadata = ({ title, slug }: any) => {
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta property="twitter:domain" content={process.env.NEXT_PUBLIC_VERCEL_URL} />
-      <meta property="twitter:url" content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}${asPath}`} />
+      <meta
+        property="twitter:url"
+        content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}${asPath}`}
+      />
       <meta name="twitter:title" content={ogTitle} />
       <meta name="twitter:description" content="Portfolio photo" />
       <meta name="twitter:image" content={ogImageUrl} />
-
     </Head>
   );
 };

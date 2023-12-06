@@ -58,7 +58,8 @@ export default function AlbumPage({
     );
   }
   return (
-    <><OpenGraphMetadata title={data?.albumName} ></OpenGraphMetadata>
+    <>
+      <OpenGraphMetadata title={data?.albumName}></OpenGraphMetadata>
       <div>
         <Breadcrumbs
           items={[
@@ -85,6 +86,7 @@ export default function AlbumPage({
             />
           )
         )}
-      </div></>
+      </div>
+    </>
   );
 }

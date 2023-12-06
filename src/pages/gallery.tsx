@@ -67,29 +67,30 @@ export default function IndexPage({
 }) {
   const post = data.posts[0] ?? null;
   return (
-    <><OpenGraphMetadata title="Gallery" ></OpenGraphMetadata>
-    <div>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          {data.type == "customPage" ? (
-            <PreviewPage page={data} />
-          ) : (
-            <div className="my-4 font-sans text-sm text-center">
-              <AlbumGallery categories={true} albums={data.albumData} />
-            </div>
-          )}
+    <>
+      <OpenGraphMetadata title="Gallery"></OpenGraphMetadata>
+      <div>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            {data.type == "customPage" ? (
+              <PreviewPage page={data} />
+            ) : (
+              <div className="my-4 font-sans text-sm text-center">
+                <AlbumGallery categories={true} albums={data.albumData} />
+              </div>
+            )}
 
-          <PreviewBar />
-        </PreviewProvider>
-      ) : data && data.type == "customPage" ? (
-        <Page page={data} />
-      ) : (
-        <div className="my-4 font-sans text-sm text-center">
-          {post && <HomePostMessage post={post} />}
-          <AlbumGallery categories={true} albums={data.albumData} />
-        </div>
-      )}
-    </div>
+            <PreviewBar />
+          </PreviewProvider>
+        ) : data && data.type == "customPage" ? (
+          <Page page={data} />
+        ) : (
+          <div className="my-4 font-sans text-sm text-center">
+            {post && <HomePostMessage post={post} />}
+            <AlbumGallery categories={true} albums={data.albumData} />
+          </div>
+        )}
+      </div>
     </>
   );
 }

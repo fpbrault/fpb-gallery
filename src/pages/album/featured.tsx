@@ -75,23 +75,25 @@ export default function AlbumPage({
     );
   }
   return (
-    <><OpenGraphMetadata title="Featured Images" ></OpenGraphMetadata>
-    <div>
-      <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
-      <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-        <h2>{t("featuredHeader")}</h2>
-        <PortableText value={data.description} components={myPortableTextComponents as any} />
+    <>
+      <OpenGraphMetadata title="Featured Images"></OpenGraphMetadata>
+      <div>
+        <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
+        <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
+          <h2>{t("featuredHeader")}</h2>
+          <PortableText value={data.description} components={myPortableTextComponents as any} />
+        </div>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewPhotoGallery album={data} />
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          data && (
+            <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="featured" />
+          )
+        )}
       </div>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewPhotoGallery album={data} />
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        data && (
-          <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="featured" />
-        )
-      )}
-    </div></>
+    </>
   );
 }

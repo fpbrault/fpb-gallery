@@ -53,17 +53,20 @@ export default function AlbumsPage({
   }
 
   return (
-   <> <OpenGraphMetadata title={data[0]?.category} ></OpenGraphMetadata>
-    <div>
-      <Breadcrumbs items={[{ name: data[0].category }]}></Breadcrumbs>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewAlbumGallery albums={data} />
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        data && <AlbumGallery albums={data} />
-      )}
-    </div></>
+    <>
+      {" "}
+      <OpenGraphMetadata title={data[0]?.category}></OpenGraphMetadata>
+      <div>
+        <Breadcrumbs items={[{ name: data[0].category }]}></Breadcrumbs>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewAlbumGallery albums={data} />
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          data && <AlbumGallery albums={data} />
+        )}
+      </div>
+    </>
   );
 }

@@ -93,7 +93,10 @@ export default function Page({
 
   return (
     <>
-    <OpenGraphMetadata title={data.current.title} slug={data.current.slug.current}></OpenGraphMetadata>
+      <OpenGraphMetadata
+        title={data.current.title}
+        slug={data.current.slug.current}
+      ></OpenGraphMetadata>
       <div>
         <Breadcrumbs
           items={[{ name: "blog", url: "/blog" }, { name: data.current.title }]}

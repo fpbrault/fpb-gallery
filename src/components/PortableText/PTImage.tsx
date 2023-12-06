@@ -1,19 +1,17 @@
 import React, { useState, useContext } from "react";
 import Image from "next/image";
 import { urlForImage } from "@/sanity/lib/image";
-import Lightbox from 'react-spring-lightbox';
+import Lightbox from "react-spring-lightbox";
 import ImageContext from "./ImageContext";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 export function PTImage(value: any) {
-
   const [isOpen, setIsOpen] = useState(false);
   const imageUrls = useContext(ImageContext);
-  const src = urlForImage(value).width(1000).quality(75).format('webp').url(); // Thumbnail image
-  const lightboxSrc = urlForImage(value).width(2048).quality(80).format('webp').url(); // Lightbox image
+  const src = urlForImage(value).width(1000).quality(75).format("webp").url(); // Thumbnail image
+  const lightboxSrc = urlForImage(value).width(2048).quality(80).format("webp").url(); // Lightbox image
   const [currentIndex, setCurrentIndex] = useState(imageUrls.indexOf(lightboxSrc));
 
-  const gotoPrevious = () =>
-    currentIndex > 0 && setCurrentIndex(currentIndex - 1);
+  const gotoPrevious = () => currentIndex > 0 && setCurrentIndex(currentIndex - 1);
 
   const gotoNext = () => {
     if (currentIndex + 1 < imageUrls.length) {

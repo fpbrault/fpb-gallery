@@ -67,7 +67,8 @@ export default function BlogPage({
     // Fetch the next set of posts dynamically
     try {
       const response = await fetch(
-        `/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? "en"}&postsPerPage=${postsPerPage ?? 4
+        `/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? "en"}&postsPerPage=${
+          postsPerPage ?? 4
         }`
       );
       const additionalData = await response.json();
@@ -80,7 +81,9 @@ export default function BlogPage({
   };
 
   return (
-    <> <OpenGraphMetadata title="Blog"></OpenGraphMetadata>
+    <>
+      {" "}
+      <OpenGraphMetadata title="Blog"></OpenGraphMetadata>
       <div className="flex flex-col justify-center">
         <Breadcrumbs items={[{ name: "blog", url: "/blog" }]} />
         {preview && previewToken ? (

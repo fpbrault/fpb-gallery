@@ -81,7 +81,7 @@ export default function IndexPage({
   const post = data.posts[0] ?? null;
   return (
     <>
-    <OpenGraphMetadata title="Home"></OpenGraphMetadata>
+      <OpenGraphMetadata title="Home"></OpenGraphMetadata>
       <div>
         {preview && previewToken ? (
           <PreviewProvider previewToken={previewToken}>

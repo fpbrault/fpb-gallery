@@ -14,7 +14,7 @@ import { defineConfig } from "sanity";
 
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
 import { noteField } from "sanity-plugin-note-field";
-import structure from './deskStructure'
+import structure from "./deskStructure";
 
 export const config = defineConfig({
   theme,
@@ -74,13 +74,13 @@ export const config = defineConfig({
 
 export const getDefaultDocumentNode = (
   S: {
-    document: () => { (): any; new(): any; views: { (arg0: any[]): any; new(): any } };
+    document: () => { (): any; new (): any; views: { (arg0: any[]): any; new (): any } };
     view: {
       form: () => any;
       component: (arg0: any) => {
         (): any;
-        new(): any;
-        title: { (arg0: string): any; new(): any };
+        new (): any;
+        title: { (arg0: string): any; new (): any };
       };
     };
   },
