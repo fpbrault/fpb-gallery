@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import { PostNavigation } from "../../components/PostNavigation";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
-import Head from "next/head";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));

@@ -32,21 +32,21 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
   const [theImages] = React.useState(
     images
       ? images.map((image) => {
-          const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
-          return {
-            ...image,
-            src: imageUrl,
-            height: imageHeight,
-            width: imageWidth,
-            title: (
-              <>
-                <div className="mt-6">{image.title}</div>
-              </>
-            ),
-            description: (
-              <>
+        const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
+        return {
+          ...image,
+          src: imageUrl,
+          height: imageHeight,
+          width: imageWidth,
+          title: (
+            <>
+              <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">{image.title}</div>
+            </>
+          ),
+          description: (
+            <>
+              {image.description && (
                 <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                  {" "}
                   <RoughNotationGroup>
                     <PortableText
                       components={myPortableTextComponents as any}
@@ -54,11 +54,12 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
                     />
                   </RoughNotationGroup>
                 </div>
-              </>
-            ),
-            type: "image"
-          };
-        })
+              )}
+            </>
+          ),
+          type: "image"
+        };
+      })
       : []
   );
 
@@ -132,7 +133,7 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
         slides={theImages}
         plugins={[Fullscreen, Captions, Zoom, Counter, ({ remove }) => remove("no-scroll")]}
         captions={{ showToggle: true, descriptionTextAlign: "start", descriptionMaxLines: 50 }}
-        styles={{ captionsDescription: { backgroundColor: "rgba(0,0,0,0" } }}
+        styles={{ captionsDescription: { backgroundColor: "rgba(0,0,0,0" }, captionsTitle: { backgroundColor: "rgba(0,0,0,0" } }}
         render={{
           buttonPrev: images.length <= 1 ? () => null : undefined,
           buttonZoom: isMobile ? () => null : undefined,
