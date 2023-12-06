@@ -7,6 +7,7 @@ import PreviewPostList from "@/components/studio/PreviewPostList";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
 import { useState } from "react";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 const PostList = dynamic(() => import("@/components/PostList"));
@@ -66,8 +67,7 @@ export default function BlogPage({
     // Fetch the next set of posts dynamically
     try {
       const response = await fetch(
-        `/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? "en"}&postsPerPage=${
-          postsPerPage ?? 4
+        `/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? "en"}&postsPerPage=${postsPerPage ?? 4
         }`
       );
       const additionalData = await response.json();
@@ -80,23 +80,25 @@ export default function BlogPage({
   };
 
   return (
-    <div className="flex flex-col justify-center">
-      <Breadcrumbs items={[{ name: "blog", url: "/blog" }]} />
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewPostList posts={posts} />
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        posts && <PostList posts={posts} />
-      )}
+    <> <OpenGraphMetadata title="Blog"></OpenGraphMetadata>
+      <div className="flex flex-col justify-center">
+        <Breadcrumbs items={[{ name: "blog", url: "/blog" }]} />
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewPostList posts={posts} />
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          posts && <PostList posts={posts} />
+        )}
 
-      {/* Load More button */}
-      {posts?.length < data?.totalCount && (
-        <button className="mx-auto mt-12 mb-2 btn btn-primary" onClick={loadMore}>
-          Load More
-        </button>
-      )}
-    </div>
+        {/* Load More button */}
+        {posts?.length < data?.totalCount && (
+          <button className="mx-auto mt-12 mb-2 btn btn-primary" onClick={loadMore}>
+            Load More
+          </button>
+        )}
+      </div>
+    </>
   );
 }

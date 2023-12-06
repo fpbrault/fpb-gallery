@@ -1,17 +1,6 @@
 import { visionTool } from "@sanity/vision";
 import { deskTool } from "sanity/desk";
 import { media } from "sanity-plugin-media";
-
-import {
-  FaCircleInfo,
-  FaPalette,
-  FaHouse,
-  FaGear,
-  FaFile,
-  FaImages,
-  FaUsers
-} from "react-icons/fa6";
-
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { schemaTypes } from "@/sanity/schemas";
 import { defaultDocumentNode } from "./defaultDocumentNode";
@@ -24,8 +13,8 @@ import { internationalizedArray } from "sanity-plugin-internationalized-array";
 import { defineConfig } from "sanity";
 
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
-import { MdOutlineArticle } from "react-icons/md";
 import { noteField } from "sanity-plugin-note-field";
+import structure from './deskStructure'
 
 export const config = defineConfig({
   theme,
@@ -36,132 +25,7 @@ export const config = defineConfig({
   plugins: [
     deskTool({
       defaultDocumentNode,
-      structure: (S) =>
-        S.list()
-          .title("Content")
-          .items([
-            S.listItem()
-              .title("Posts")
-              .icon(MdOutlineArticle)
-              .child(S.documentTypeList("post").title("posts")),
-
-            S.listItem()
-              .title("Albums")
-              .icon(FaImages)
-              .child(
-                S.list()
-                  .title("Filters")
-                  .items([
-                    S.listItem()
-                      .title("All Albums")
-                      .child(S.documentTypeList("album").title("All Albums")),
-                    S.listItem()
-                      .title("Categories")
-                      .child(S.documentTypeList("category").title("Categorie")),
-                    S.listItem()
-                      .title("Albums By Category")
-                      .child(
-                        S.documentTypeList("category")
-                          .title("Albums By Category")
-                          .child((categoryId) =>
-                            S.documentList()
-                              .title("Albums")
-                              .filter('_type == "album" && $categoryId == category._ref')
-                              .params({ categoryId })
-                          )
-                      ),
-                    S.listItem()
-                      .title("Albums with no Category")
-                      .child(
-                        S.documentTypeList("album")
-                          .title("Albums By Category")
-                          .filter('_type == "album" && (!defined(category))')
-                      )
-                  ])
-              ),
-            S.listItem()
-              .title("Pages")
-              .icon(FaFile)
-              .child(
-                S.list()
-                  .title("Pages")
-                  .items([
-                    S.listItem()
-                      .title("Translations")
-                      .child(
-                        S.documentList()
-                          .title("Translations")
-                          .filter('_type == "translation.metadata"')
-                          .defaultLayout("default")
-
-                          .child((documentId) =>
-                            S.document()
-                              .title(documentId)
-                              .documentId(documentId)
-                              .schemaType("translation.metadata")
-                          )
-                      ),
-                    S.listItem()
-                      .title("All Pages")
-                      .child(
-                        S.documentTypeList("page").title("All Pages").filter('_type == "page"')
-                      ),
-                    S.listItem()
-                      .title("English Pages")
-                      .child(
-                        S.documentTypeList("page")
-                          .title("English Pages")
-                          .filter('_type == "page" && language == "en"')
-                      ),
-                    S.listItem()
-                      .title("French Pages")
-                      .child(
-                        S.documentTypeList("page")
-                          .title("French Pages")
-                          .filter('_type == "page" && language == "fr"')
-                      )
-                  ])
-              ),
-            S.listItem()
-              .title("Authors")
-              .icon(FaUsers)
-              .child(S.documentTypeList("author").title("Authors")),
-            S.listItem()
-              .title("Settings")
-              .icon(FaGear)
-              .child(
-                S.list()
-                  .title("Settings Documents")
-                  .items([
-                    S.listItem()
-                      .title("Metadata")
-                      .icon(FaCircleInfo)
-                      .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
-                    S.listItem()
-                      .title("Main Navigation")
-                      .icon(FaHouse)
-                      .child(S.document().schemaType("pageList").documentId("mainNavigation")),
-                    S.listItem()
-                      .title("Custom Theme Colors")
-                      .icon(FaPalette)
-                      .child(S.documentTypeList("customTheme").title("Custom Themes Colors"))
-                  ])
-              ),
-            ...S.documentTypeListItems().filter(
-              (listItem) =>
-                ![
-                  "siteSettings",
-                  "album",
-                  "page",
-                  "post",
-                  "category",
-                  "pageList",
-                  "author",
-                  "translation.metadata",
-                  "customTheme"
-                ].includes(listItem.getId() ?? "")
-            )
-          ])
+      structure
     }),
     visionTool({ defaultApiVersion: apiVersion }),
     internationalizedArray({
@@ -210,13 +74,13 @@ export const config = defineConfig({
 
 export const getDefaultDocumentNode = (
   S: {
-    document: () => { (): any; new (): any; views: { (arg0: any[]): any; new (): any } };
+    document: () => { (): any; new(): any; views: { (arg0: any[]): any; new(): any } };
     view: {
       form: () => any;
       component: (arg0: any) => {
         (): any;
-        new (): any;
-        title: { (arg0: string): any; new (): any };
+        new(): any;
+        title: { (arg0: string): any; new(): any };
       };
     };
   },

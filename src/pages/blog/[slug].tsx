@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import { PostNavigation } from "../../components/PostNavigation";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
+import Head from "next/head";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)] {"current": {...,"slug": select(
@@ -90,24 +92,27 @@ export default function Page({
   }
 
   return (
-    <div>
-      <Breadcrumbs
-        items={[{ name: "blog", url: "/blog" }, { name: data.current.title }]}
-      ></Breadcrumbs>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewPost post={data.current} />
-          <PostNavigation data={data}></PostNavigation>
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        data && (
-          <>
-            <Post post={data.current} />
+    <>
+    <OpenGraphMetadata title={data.current.title} slug={data.current.slug.current}></OpenGraphMetadata>
+      <div>
+        <Breadcrumbs
+          items={[{ name: "blog", url: "/blog" }, { name: data.current.title }]}
+        ></Breadcrumbs>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewPost post={data.current} />
             <PostNavigation data={data}></PostNavigation>
-          </>
-        )
-      )}
-    </div>
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          data && (
+            <>
+              <Post post={data.current} />
+              <PostNavigation data={data}></PostNavigation>
+            </>
+          )
+        )}
+      </div>
+    </>
   );
 }

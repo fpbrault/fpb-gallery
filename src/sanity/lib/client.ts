@@ -32,6 +32,14 @@ export const client = createClient({
   perspective: "published"
 });
 
+export const cdnClient = createClient({
+  apiVersion,
+  dataset,
+  projectId,
+  useCdn : true,
+});
+
+
 export function getImageDimensions(id: string): UseNextSanityImageDimensions {
   const dimensions = id.split("-")[2];
 

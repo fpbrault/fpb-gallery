@@ -14,6 +14,7 @@ import { getPageData } from "@/components/lib/getPageData";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album"]{...,category->,images[]
@@ -45,6 +46,7 @@ export default function AlbumPage({
     );
   }
   return (
+    <><OpenGraphMetadata title="All Images" ></OpenGraphMetadata>
     <div>
       <Breadcrumbs items={[{ name: "everything" }]}></Breadcrumbs>
       <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
@@ -59,6 +61,6 @@ export default function AlbumPage({
       ) : (
         data && <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="all" />
       )}
-    </div>
+    </div></>
   );
 }

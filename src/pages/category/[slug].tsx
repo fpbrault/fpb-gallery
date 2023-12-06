@@ -10,6 +10,7 @@ import PreviewAlbumGallery from "@/components/studio/PreviewAlbumGallery";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const categoryQuery = groq`*[_type == "album" && category->.slug.current == $slug]{...,"category": category->categoryName,images[]{...,"placeholders" : asset->{metadata{lqip}}}}|
@@ -52,6 +53,7 @@ export default function AlbumsPage({
   }
 
   return (
+   <> <OpenGraphMetadata title={data[0]?.category} ></OpenGraphMetadata>
     <div>
       <Breadcrumbs items={[{ name: data[0].category }]}></Breadcrumbs>
       {preview && previewToken ? (
@@ -62,6 +64,6 @@ export default function AlbumsPage({
       ) : (
         data && <AlbumGallery albums={data} />
       )}
-    </div>
+    </div></>
   );
 }

@@ -11,6 +11,7 @@ import { pageQuery } from "./[...slug]";
 import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
 import HomePostMessage from "@/components/HomePostMessage";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const indexAlbumQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
@@ -79,27 +80,30 @@ export default function IndexPage({
 }) {
   const post = data.posts[0] ?? null;
   return (
-    <div>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          {data.type == "customPage" ? (
-            <PreviewPage page={data} />
-          ) : (
-            <div className="my-4 font-sans text-sm text-center">
-              <AlbumGallery categories={true} albums={data.albumData} />
-            </div>
-          )}
+    <>
+    <OpenGraphMetadata title="Home"></OpenGraphMetadata>
+      <div>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            {data.type == "customPage" ? (
+              <PreviewPage page={data} />
+            ) : (
+              <div className="my-4 font-sans text-sm text-center">
+                <AlbumGallery categories={true} albums={data.albumData} />
+              </div>
+            )}
 
-          <PreviewBar />
-        </PreviewProvider>
-      ) : data && data.type == "customPage" ? (
-        <Page page={data} />
-      ) : (
-        <div className="my-4 font-sans text-sm text-center">
-          {post && <HomePostMessage post={post} />}
-          <AlbumGallery categories={true} albums={data.albumData} />
-        </div>
-      )}
-    </div>
+            <PreviewBar />
+          </PreviewProvider>
+        ) : data && data.type == "customPage" ? (
+          <Page page={data} />
+        ) : (
+          <div className="my-4 font-sans text-sm text-center">
+            {post && <HomePostMessage post={post} />}
+            <AlbumGallery categories={true} albums={data.albumData} />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

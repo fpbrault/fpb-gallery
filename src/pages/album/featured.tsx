@@ -13,6 +13,7 @@ import { getPageData } from "@/components/lib/getPageData";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { useTranslation } from "next-i18next";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album"]{...,category->,images[featured == true]
@@ -74,6 +75,7 @@ export default function AlbumPage({
     );
   }
   return (
+    <><OpenGraphMetadata title="Featured Images" ></OpenGraphMetadata>
     <div>
       <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
       <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
@@ -90,6 +92,6 @@ export default function AlbumPage({
           <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="featured" />
         )
       )}
-    </div>
+    </div></>
   );
 }

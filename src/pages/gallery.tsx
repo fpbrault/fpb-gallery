@@ -12,6 +12,7 @@ import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
 import { postListQuery } from "./blog";
 import HomePostMessage from "@/components/HomePostMessage";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const indexAlbumQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
@@ -66,6 +67,7 @@ export default function IndexPage({
 }) {
   const post = data.posts[0] ?? null;
   return (
+    <><OpenGraphMetadata title="Gallery" ></OpenGraphMetadata>
     <div>
       {preview && previewToken ? (
         <PreviewProvider previewToken={previewToken}>
@@ -88,5 +90,6 @@ export default function IndexPage({
         </div>
       )}
     </div>
+    </>
   );
 }

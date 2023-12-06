@@ -11,6 +11,7 @@ import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 export const albumQuery = groq`*[_type == "album" && slug.current == $slug][0]{...,
@@ -57,32 +58,33 @@ export default function AlbumPage({
     );
   }
   return (
-    <div>
-      <Breadcrumbs
-        items={[
-          { name: data.category.categoryName, url: "/category/" + data.category.categoryName },
-          { name: data.albumName }
-        ]}
-      ></Breadcrumbs>
-      <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-        <h2>{data.albumName}</h2>
-        <PortableText value={data.description} components={myPortableTextComponents as any} />
-      </div>
-      {preview && previewToken ? (
-        <PreviewProvider previewToken={previewToken}>
-          <PreviewPhotoGallery album={data} />
-          <PreviewBar />
-        </PreviewProvider>
-      ) : (
-        data && (
-          <PhotoGallery
-            mode={data.display}
-            columns={data.columns}
-            images={data.images}
-            albumId={data.slug.current}
-          />
-        )
-      )}
-    </div>
+    <><OpenGraphMetadata title={data?.albumName} ></OpenGraphMetadata>
+      <div>
+        <Breadcrumbs
+          items={[
+            { name: data.category.categoryName, url: "/category/" + data.category.categoryName },
+            { name: data.albumName }
+          ]}
+        ></Breadcrumbs>
+        <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
+          <h2>{data.albumName}</h2>
+          <PortableText value={data.description} components={myPortableTextComponents as any} />
+        </div>
+        {preview && previewToken ? (
+          <PreviewProvider previewToken={previewToken}>
+            <PreviewPhotoGallery album={data} />
+            <PreviewBar />
+          </PreviewProvider>
+        ) : (
+          data && (
+            <PhotoGallery
+              mode={data.display}
+              columns={data.columns}
+              images={data.images}
+              albumId={data.slug.current}
+            />
+          )
+        )}
+      </div></>
   );
 }

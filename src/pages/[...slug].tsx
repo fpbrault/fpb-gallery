@@ -9,6 +9,7 @@ import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 import Breadcrumbs from "@/components/BreadCrumbs";
+import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const queryLayoutPart = `_type == "layout-col-2"=>{...,rightCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}
 ,leftCol[]{...,_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
@@ -70,6 +71,7 @@ export default function CustomPage({
     );
   }
   return (
+    <><OpenGraphMetadata title={data?.title} ></OpenGraphMetadata>
     <div>
       <Breadcrumbs items={[{ name: data?.title }]}></Breadcrumbs>
       {preview && previewToken ? (
@@ -84,6 +86,6 @@ export default function CustomPage({
           </>
         )
       )}
-    </div>
+    </div></>
   );
 }

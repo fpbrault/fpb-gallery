@@ -141,7 +141,7 @@ export function HeaderSideBar({
         aria-label="close sidebar"
         className="drawer-overlay !bg-transparent"
       ></label>
-      <ul className="min-h-full p-4 text-3xl font-bold font-black text-left uppercase w-60 menu bg-base-100/80 backdrop-blur-xl">
+      <ul className="min-h-full p-4 text-3xl font-black text-left uppercase w-60 menu bg-base-100/80 backdrop-blur-xl">
         {/* Sidebar content here */}
         {headerData?.showHome != false && (
           <li>
