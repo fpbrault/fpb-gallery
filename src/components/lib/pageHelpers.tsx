@@ -90,7 +90,7 @@ export async function getLocalizedPageProps(
         headerData,
         context: ctx
       },
-      revalidate: 30
+      revalidate: 3600
     };
   } catch (error) {
     console.error(error);

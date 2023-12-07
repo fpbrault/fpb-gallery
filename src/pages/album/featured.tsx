@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         headerData,
         context: ctx
       },
-      revalidate: 30
+      revalidate: 3600
     };
   } catch (error) {
     return handlePageFetchError(error);

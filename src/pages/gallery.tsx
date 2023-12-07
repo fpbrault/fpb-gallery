@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         context: ctx,
         headerData
       },
-      revalidate: 30
+      revalidate: 3600
     };
   } catch (error) {
     console.error("Error fetching data:", error);

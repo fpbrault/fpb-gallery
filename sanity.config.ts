@@ -15,6 +15,8 @@ import { defineConfig } from "sanity";
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
 import { noteField } from "sanity-plugin-note-field";
 import structure from "./deskStructure";
+import { PostUpdate, UpdateAlbumPath, UpdateAllPaths, UpdateCategoryPath, UpdatePagePath } from "@/sanity/lib/actions";
+import { secretsToolbar } from "@/sanity/plugins/secrets-toolbar";
 
 export const config = defineConfig({
   theme,
@@ -23,6 +25,7 @@ export const config = defineConfig({
   dataset,
   schema: schemaTypes,
   plugins: [
+    secretsToolbar(),
     deskTool({
       defaultDocumentNode,
       structure
@@ -50,10 +53,23 @@ export const config = defineConfig({
   ],
   document: {
     actions: (prev: any, { schemaType }: any) => {
+      let actions = [...prev];
       // Add to the same schema types you use for internationalization
       if (["page"].includes(schemaType)) {
         // You might also like to filter out the built-in "delete" action
-        return [...prev, DeleteTranslationAction];
+        actions = [...actions, DeleteTranslationAction, UpdatePagePath ];
+      }
+      if (["post"].includes(schemaType)) {
+        // You might also like to filter out the built-in "delete" action
+        actions =  [...actions, PostUpdate, ];
+      }
+      if (["album"].includes(schemaType)) {
+        // You might also like to filter out the built-in "delete" action
+        actions =  [...actions, UpdateAlbumPath, ];
+      }
+      if (["category"].includes(schemaType)) {
+        // You might also like to filter out the built-in "delete" action
+        actions =  [...actions, UpdateCategoryPath  , ];
       }
       if (["pageList", "siteSettings"].includes(schemaType)) {
         // You might also like to filter out the built-in "delete" action
@@ -64,10 +80,12 @@ export const config = defineConfig({
             originalAction.action !== "duplicate" &&
             originalAction.action !== "unpublish"
         );
-        return [...newActions];
+        return [...newActions, UpdateAllPaths];
       }
 
-      return prev;
+      actions = [...actions, UpdateAllPaths]
+
+      return actions;
     }
   }
 });

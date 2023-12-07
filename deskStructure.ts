@@ -17,7 +17,6 @@ export const structure = (S: any) =>
         .title("Posts")
         .icon(MdOutlineArticle)
         .child(S.documentTypeList("post").title("posts")),
-
       S.listItem()
         .title("Albums")
         .icon(FaImages)
@@ -107,7 +106,8 @@ export const structure = (S: any) =>
               S.listItem()
                 .title("Metadata")
                 .icon(FaCircleInfo)
-                .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+                .child(S.document().schemaType("siteSettings").documentId("siteSettings")
+                ),
               S.listItem()
                 .title("Main Navigation")
                 .icon(FaHouse)
