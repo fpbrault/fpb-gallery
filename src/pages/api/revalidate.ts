@@ -6,9 +6,7 @@ export default async function handler(req: any, res: any) {
 
   const signature = req.headers[SIGNATURE_HEADER_NAME];
   const secret = req.query.secret;
-  console.log(secret)
-
-  console.log(SANITY_WEBHOOK_SECRET)
+  
   const isValid = SANITY_WEBHOOK_SECRET == secret;
   console.log(`===== Is the webhook request valid? ${isValid}`);
 

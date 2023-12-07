@@ -21,7 +21,6 @@ export async function getPageProps(query: any, context: any) {
     };
   }
   catch (error) {
-    console.log("error")
     return {
       props: { data: null, preview, previewToken, siteMetadata, headerData, context: ctx },
       revalidate: 3600

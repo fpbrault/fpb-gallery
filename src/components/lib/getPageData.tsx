@@ -18,7 +18,6 @@ export async function getPageData(query: any, context: any, previewToken: string
     return { data };
   }
   catch (error) {
-    console.log("error")
     throw new Error("Could not get data")
   }
 }

@@ -88,7 +88,6 @@ export async function getBasePageProps(context: any) {
     },
   }
   try {
-    console.log("hello")
     siteMetadata = {
       ...await runQuery(siteMetadataQuery),
       customThemeVariables: null,
