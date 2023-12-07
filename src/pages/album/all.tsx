@@ -9,8 +9,6 @@ import { GetStaticProps } from "next";
 
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
-import { getBasePageProps } from "@/components/lib/getBasePageProps";
-import { getPageData } from "@/components/lib/getPageData";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";

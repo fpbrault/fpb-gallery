@@ -78,7 +78,7 @@ export default function IndexPage({
   preview: boolean;
   previewToken?: string;
 }) {
-  const post = data.posts[0] ?? null;
+  const post = data?.posts?.length > 0 ? data?.posts[0] ?? null : null;
   return (
     <>
       <OpenGraphMetadata title="Home"></OpenGraphMetadata>

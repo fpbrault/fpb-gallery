@@ -10,10 +10,15 @@ export async function getPageData(query: any, context: any, previewToken: string
       context.params.slug = context.params.slug.join("/");
     }
   }
-
-  const data = await client.fetch(query, context.params);
-  if (!data) {
-    throw new Error("Could not get data");
+  try {
+    const data = await client.fetch(query, context.params);
+    if (!data) {
+      throw new Error("Could not get data");
+    }
+    return { data };
   }
-  return { data };
+  catch (error) {
+    console.log("error")
+    throw new Error("Could not get data")
+  }
 }

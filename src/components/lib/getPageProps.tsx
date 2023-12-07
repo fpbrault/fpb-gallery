@@ -11,10 +11,20 @@ import { getPageData } from "./getPageData";
 
 export async function getPageProps(query: any, context: any) {
   const { ctx, preview, previewToken, siteMetadata, headerData } = await getBasePageProps(context);
-  const { data } = await getPageData(query, ctx, previewToken);
+  try {
+    const { data } = await getPageData(query, ctx, previewToken);
 
-  return {
-    props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
-    revalidate: 3600
-  };
+
+    return {
+      props: { data, preview, previewToken, siteMetadata, headerData, context: ctx },
+      revalidate: 3600
+    };
+  }
+  catch (error) {
+    console.log("error")
+    return {
+      props: { data: null, preview, previewToken, siteMetadata, headerData, context: ctx },
+      revalidate: 3600
+    };
+  }
 }

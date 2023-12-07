@@ -41,7 +41,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
       ...context,
       params: { ...context.params, start: 0, end: postsPerPage - 1 }
     });
-
     return {
       ...initialData
     };
@@ -61,7 +60,7 @@ export default function BlogPage({
   preview: boolean;
   previewToken?: string;
 }) {
-  const [posts, setPosts] = useState<any>(data.posts);
+  const [posts, setPosts] = useState<any>(data?.posts);
   const [nextPage, setNextPage] = useState<any>(2);
   const loadMore = async () => {
     // Fetch the next set of posts dynamically

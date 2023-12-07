@@ -10,7 +10,6 @@ export const siteMetadataQuery = q("*", { isArray: true })
   .grab({
     siteTitle: q.string(),
     author: q.string(),
-    description: q.string(),
     customFont: q.string(),
 
     themes: q("").grab({
@@ -27,10 +26,10 @@ export const siteMetadataQuery = q("*", { isArray: true })
 export type SiteMetadata = InferType<typeof siteMetadataQuery>;
 
 export interface CustomSiteMetadata extends SiteMetadata {
-  customThemeVariables: {
+  customThemeVariables?: {
     customDarkThemeVariables?: any;
     customLightThemeVariables?: any;
-  };
+  } | null;
 }
 interface Theme {
   [key: string]: string; // This is a string index signature
@@ -73,9 +72,30 @@ export async function getBasePageProps(context: any) {
   const client = getClient(previewToken);
 
   const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
-
   const headerData = await getHeaderData();
-  const siteMetadata = (await runQuery(siteMetadataQuery)) as CustomSiteMetadata;
+  let siteMetadata: CustomSiteMetadata = {
+    customThemeVariables: null,
+    siteTitle: "",
+    author: "",
+    customFont: "",
+    themes: {
+      darkThemeName: "",
+      lightThemeName: ""
+    },
+    customThemes: {
+      darkTheme: {},
+      lightTheme: {}
+    },
+  }
+  try {
+    console.log("hello")
+    siteMetadata = {
+      ...await runQuery(siteMetadataQuery),
+      customThemeVariables: null,
+    };
+  } catch (error) {
+    console.error(error)
+  }
 
   try {
     const customDarkThemeVariables =

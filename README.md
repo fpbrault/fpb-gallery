@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffpbrault%2Ffpb-gallery%2Ftree%2Fsanity-rework&env=SANITY_WEBHOOK_SECRET,SANITY_READ_TOKEN&project-name=test-fpb-starter&repository-name=test-fpb-starter&integration-ids=icfg_13LPVtLqivnH7YKpHs8Uwccd)
+
 ## Getting Started
 
 First, run the development server:
