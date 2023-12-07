@@ -6,6 +6,7 @@ export default async function handler(req: any, res: any) {
 
   const signature = req.headers[SIGNATURE_HEADER_NAME];
   const secret = req.query.secret;
+  console.log(secret, SANITY_WEBHOOK_SECRET)
   const isValid = SANITY_WEBHOOK_SECRET == secret;
   console.log(`===== Is the webhook request valid? ${isValid}`);
 
@@ -22,7 +23,7 @@ export default async function handler(req: any, res: any) {
     //console.log(`===== Revalidating: ${pathToRevalidate}`);
 
     for(let i = 0; i < paths.length; i++) {
-      console.log("Revalidating " + paths[i])
+      console.log("Revalidating " + paths[])
         await res.revalidate(paths[i]);
       }
 
