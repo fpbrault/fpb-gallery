@@ -15,7 +15,7 @@ import { defineConfig } from "sanity";
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
 import { noteField } from "sanity-plugin-note-field";
 import structure from "./deskStructure";
-import { PostUpdate, UpdateAlbumPath, UpdateAllPaths, UpdateCategoryPath, UpdatePagePath } from "@/sanity/lib/actions";
+import { DeleteAndRevalidate, PublishAndRevalidate } from "@/sanity/lib/actions";
 import { secretsToolbar } from "@/sanity/plugins/secrets-toolbar";
 
 export const config = defineConfig({
@@ -53,38 +53,49 @@ export const config = defineConfig({
   ],
   document: {
     actions: (prev: any, { schemaType }: any) => {
-      let actions = [...prev];
-      // Add to the same schema types you use for internationalization
-      if (["page"].includes(schemaType)) {
-        // You might also like to filter out the built-in "delete" action
-        actions = [...actions, DeleteTranslationAction, UpdatePagePath ];
-      }
-      if (["post"].includes(schemaType)) {
-        // You might also like to filter out the built-in "delete" action
-        actions =  [...actions, PostUpdate, ];
-      }
-      if (["album"].includes(schemaType)) {
-        // You might also like to filter out the built-in "delete" action
-        actions =  [...actions, UpdateAlbumPath, ];
-      }
-      if (["category"].includes(schemaType)) {
-        // You might also like to filter out the built-in "delete" action
-        actions =  [...actions, UpdateCategoryPath  , ];
-      }
-      if (["pageList", "siteSettings"].includes(schemaType)) {
-        // You might also like to filter out the built-in "delete" action
+      const actionMapping: { [key: string]: any[] } ={
+        'page': [DeleteTranslationAction],
+        'post': [],
+        'album': [],
+        'category': []
+      };
+  
+      let actions = prev.filter((action: any) => action.name !== 'delete');
 
+  
+      Object.keys(actionMapping).forEach(key => {
+        if (schemaType === key) {
+          actions = actions.map((originalAction: { action: string; }) => {
+            if (originalAction.action === 'delete') {
+              return DeleteAndRevalidate;
+            }
+            return originalAction;
+          });
+          actions = [
+            ...actions.map((originalAction: { action: string; }) => {
+              if (originalAction.action === 'publish') {
+                return PublishAndRevalidate;
+              }
+              if (originalAction.action === 'delete') {
+                return DeleteAndRevalidate;
+              }
+              return originalAction;
+            }),
+            ...actionMapping[key]
+          ];
+        }
+      });
+  
+      if (["pageList", "siteSettings"].includes(schemaType)) {
         const newActions = prev.filter(
           (originalAction: any) =>
             originalAction.action !== "delete" &&
             originalAction.action !== "duplicate" &&
             originalAction.action !== "unpublish"
         );
-        return [...newActions, UpdateAllPaths];
+        return [...newActions];
       }
-
-      actions = [...actions, UpdateAllPaths]
-
+  
       return actions;
     }
   }
@@ -92,13 +103,13 @@ export const config = defineConfig({
 
 export const getDefaultDocumentNode = (
   S: {
-    document: () => { (): any; new (): any; views: { (arg0: any[]): any; new (): any } };
+    document: () => { (): any; new(): any; views: { (arg0: any[]): any; new(): any } };
     view: {
       form: () => any;
       component: (arg0: any) => {
         (): any;
-        new (): any;
-        title: { (arg0: string): any; new (): any };
+        new(): any;
+        title: { (arg0: string): any; new(): any };
       };
     };
   },

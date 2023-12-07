@@ -8,11 +8,13 @@ export const category = {
     defineField({
       name: "categoryName",
       type: "string",
-      title: "Category Name"
+      title: "Category Name",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "slug",
       type: "slug",
+      validation: (Rule) => Rule.required(),
       title: "Category slug",
       options: {
         source: "categoryName",

@@ -67,6 +67,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   try {
     return getLocalizedPageProps(postQuery, context, true, "blog");
   } catch (error) {
+    console.log("error here")
+    console.error(error)
     return handlePageFetchError(error, "/blog");
   }
 };
@@ -93,23 +95,23 @@ export default function Page({
   return (
     <>
       <OpenGraphMetadata
-        title={data.current.title}
-        slug={data.current.slug.current}
+        title={data?.current?.title}
+        slug={data?.current?.slug?.current}
       ></OpenGraphMetadata>
       <div>
         <Breadcrumbs
-          items={[{ name: "blog", url: "/blog" }, { name: data.current.title }]}
+          items={[{ name: "blog", url: "/blog" }, { name: data?.current?.title }]}
         ></Breadcrumbs>
         {preview && previewToken ? (
           <PreviewProvider previewToken={previewToken}>
-            <PreviewPost post={data.current} />
+            <PreviewPost post={data?.current} />
             <PostNavigation data={data}></PostNavigation>
             <PreviewBar />
           </PreviewProvider>
         ) : (
           data && (
             <>
-              <Post post={data.current} />
+              <Post post={data?.current} />
               <PostNavigation data={data}></PostNavigation>
             </>
           )

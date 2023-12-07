@@ -81,7 +81,7 @@ export default function AlbumPage({
         <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
         <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
           <h2>{t("featuredHeader")}</h2>
-          <PortableText value={data.description} components={myPortableTextComponents as any} />
+          <PortableText value={data?.description} components={myPortableTextComponents as any} />
         </div>
         {preview && previewToken ? (
           <PreviewProvider previewToken={previewToken}>
@@ -90,7 +90,7 @@ export default function AlbumPage({
           </PreviewProvider>
         ) : (
           data && (
-            <PhotoGallery mode="masonry" columns={data.columns} images={data} albumId="featured" />
+            <PhotoGallery mode="masonry" columns={data?.columns} images={data} albumId="featured" />
           )
         )}
       </div>

@@ -57,7 +57,7 @@ export default function AlbumsPage({
       {" "}
       <OpenGraphMetadata title={data[0]?.category}></OpenGraphMetadata>
       <div>
-        <Breadcrumbs items={[{ name: data[0].category }]}></Breadcrumbs>
+        <Breadcrumbs items={[{ name: data[0]?.category }]}></Breadcrumbs>
         {preview && previewToken ? (
           <PreviewProvider previewToken={previewToken}>
             <PreviewAlbumGallery albums={data} />

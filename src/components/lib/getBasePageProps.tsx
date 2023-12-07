@@ -68,7 +68,7 @@ function generateCustomTheme(themeData: any) {
 
 export async function getBasePageProps(context: any) {
   const preview = context.draftMode || false;
-  const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
+  const previewToken = (preview && process.env.SANITY_API_READ_TOKEN) ?? "";
   const client = getClient(previewToken);
 
   const runQuery = makeSafeQueryRunner((query) => client.fetch(query));

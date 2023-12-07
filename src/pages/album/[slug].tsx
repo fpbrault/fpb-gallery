@@ -63,13 +63,13 @@ export default function AlbumPage({
       <div>
         <Breadcrumbs
           items={[
-            { name: data.category.categoryName, url: "/category/" + data.category.categoryName },
-            { name: data.albumName }
+            { name: data?.category?.categoryName, url: "/category/" + data?.category?.categoryName },
+            { name: data?.albumName }
           ]}
         ></Breadcrumbs>
         <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-          <h2>{data.albumName}</h2>
-          <PortableText value={data.description} components={myPortableTextComponents as any} />
+          <h2>{data?.albumName}</h2>
+          <PortableText value={data?.description} components={myPortableTextComponents as any} />
         </div>
         {preview && previewToken ? (
           <PreviewProvider previewToken={previewToken}>
@@ -79,10 +79,10 @@ export default function AlbumPage({
         ) : (
           data && (
             <PhotoGallery
-              mode={data.display}
-              columns={data.columns}
-              images={data.images}
-              albumId={data.slug.current}
+              mode={data?.display}
+              columns={data?.columns}
+              images={data?.images}
+              albumId={data?.slug?.current}
             />
           )
         )}

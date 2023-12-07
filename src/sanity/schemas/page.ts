@@ -16,12 +16,14 @@ export const page = {
     defineField({
       name: "title",
       type: "string",
-      title: "Page Title"
+      title: "Page Title",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "slug",
       type: "slug",
       title: "Page slug",
+      validation: (Rule) => Rule.required(),
       options: {
         source: "title",
         maxLength: 96,

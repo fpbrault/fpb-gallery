@@ -29,13 +29,14 @@ export const SecretManager: React.FC<SecretManagerProps> = ({ open, onClose }) =
     return null;
   }
   return (
+    <>
     <SettingsView
-      title={"sdfds"}
+      title={"Sanity Read API Token"}
       namespace={namespace}
       keys={pluginConfigKeys}
       onClose={() => {
         setShowSettings(false);
       }}
-    />
+    /></>
   );
 };

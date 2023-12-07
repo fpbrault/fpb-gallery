@@ -26,13 +26,15 @@ export const album = {
       name: "albumName",
       type: "string",
       title: "Album Name",
-      group: "metadata"
+      group: "metadata",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "albumId",
       type: "string",
       title: "Album Id",
-      group: "metadata"
+      group: "metadata",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "publishDate",
@@ -48,6 +50,7 @@ export const album = {
       name: "slug",
       type: "slug",
       title: "Album slug",
+      validation: (Rule) => Rule.required(),
       group: "metadata",
       options: {
         source: "albumName",
@@ -64,6 +67,7 @@ export const album = {
       name: "category",
       type: "reference",
       group: "metadata",
+      validation: (Rule) => Rule.required(),
       title: "Category",
       to: [{ type: "category" as any }]
     }),
