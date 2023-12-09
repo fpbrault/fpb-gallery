@@ -1,8 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { UrlObject } from "url";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaHouse } from "react-icons/fa6";
 
 const Breadcrumbs = ({ items }: any) => {
   return (
@@ -11,7 +10,7 @@ const Breadcrumbs = ({ items }: any) => {
         <ul aria-label="Breadcrumb">
           <li className="inline-flex items-center">
             <Link className="flex items-center w-4 h-4 text-sm link-secondary " href="/">
-              <FontAwesomeIcon icon={faHome} />
+            <FaHouse></FaHouse>
             </Link>
           </li>
           {items.map(

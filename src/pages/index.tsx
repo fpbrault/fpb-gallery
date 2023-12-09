@@ -88,7 +88,7 @@ export default function IndexPage({
             {data.type == "customPage" ? (
               <PreviewPage page={data} />
             ) : (
-              <div className="my-4 font-sans text-sm text-center">
+              <div className="mb-4 font-sans text-sm text-center">
                 <AlbumGallery categories={true} albums={data.albumData} />
               </div>
             )}
@@ -98,7 +98,7 @@ export default function IndexPage({
         ) : data && data.type == "customPage" ? (
           <Page page={data} />
         ) : (
-          <div className="my-4 font-sans text-sm text-center">
+          <div className="mb-4 font-sans text-sm text-center">
             {post && <HomePostMessage post={post} />}
             <AlbumGallery categories={true} albums={data.albumData} />
           </div>

@@ -7,7 +7,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata; context: any }) {
   return (
-    <footer className="flex flex-col-reverse items-center justify-between gap-3 px-8 py-4 font-sans text-xs sm:flex-row sm:text-sm footer bg-neutral text-neutral-content">
+    <footer className="relative bottom-0 z-50 flex flex-col-reverse items-center justify-between gap-3 px-8 py-4 font-sans text-xs sm:flex-row sm:text-sm footer bg-neutral text-neutral-content">
       <aside className="flex items-center lg:w-5/12 ">
         <svg
           className="fill-neutral-content"

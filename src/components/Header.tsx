@@ -32,7 +32,7 @@ export default function Header({
 }: Props) {
   //const icon = getSocialIcon(contactType);
   return (
-    <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:py-4 bg-base-200/70 backdrop-blur-lg ">
+    <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:pt-4 bg-base-200/70 backdrop-blur-lg ">
       <h1 className="justify-center hidden py-1 font-sans text-2xl font-light text-center md:flex md:text-4xl lg:text-5xl ">
         <Link className="link link-hover" href="/">
           {title}

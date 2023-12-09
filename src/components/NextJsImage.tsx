@@ -19,12 +19,12 @@ export function NextJsImageAlbum({
   const limitHeightStyle = limitHeight
     ? {
         width: photo.width,
-        height: photo.height
+        maxHeight: photo.height
       }
     : {};
   return (
     <div
-      className={"mx-auto rounded" + (limitHeight ? " max-h-[600px] " : "") + " cover group"}
+      className={"mx-auto rounded" + (limitHeight ? " max-h-[600px]" : "") + " cover group"}
       style={{ ...wrapperStyle, ...limitHeightStyle, position: "relative" }}
     >
       <Link href={photo.href ?? "/"}>
