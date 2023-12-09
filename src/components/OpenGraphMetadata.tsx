@@ -19,7 +19,7 @@ const OpenGraphMetadata = ({ title, slug }: any) => {
   return (
     <Head>
       <meta property="og:image" content={ogImageUrl} />
-      <title>{ogTitle}</title>
+      {/* <title>{ogTitle}</title> */}
       <meta name="description" content="Portfolio photo" />
 
       <meta property="og:url" content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}${asPath}`} />
