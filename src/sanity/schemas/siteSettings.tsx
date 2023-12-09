@@ -212,6 +212,7 @@ export const siteSettings = defineType({
       options: {
         list: [
           { title: "Default Theme", value: "light" },
+          { title: "Autumn", value: "autumn" },
           { title: "retro", value: "retro" },
           { title: "cupcake", value: "cupcake" },
           { title: "emerald", value: "emerald" },

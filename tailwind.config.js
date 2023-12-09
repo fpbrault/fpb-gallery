@@ -19,6 +19,7 @@ daisyui: {
     themes: 
     [
       'light',
+      'autumn',
       'retro',
       'cupcake',
       'emerald',
