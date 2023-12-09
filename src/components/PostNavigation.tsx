@@ -23,7 +23,7 @@ function PostNavigationItem(props: any) {
                 alt="Previous post"
                 src={
                   props.relatedPostImage?.imageUrl ??
-                  "https://placehold.co/200x200/orange/white/jpg?text=" +
+                  "https://placehold.co/200x200/jpg?text=" +
                     (props.data.title.length >= 60
                       ? props.data.title.substring(0, 60) + "..."
                       : props.data.title

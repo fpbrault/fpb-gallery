@@ -158,7 +158,7 @@ export const post = defineType({
       return {
         title: value.title[0].value,
         subtitle: publishDate && `${new Date(publishDate).toLocaleString()}`,
-        media: value.coverImage ?? <Image unoptimized width={100} height={100} alt="no image" src="https://placehold.co/100x100/orange/white/jpg?text=no-image"></Image>,
+        media: value.coverImage ?? <Image unoptimized width={100} height={100} alt="no image" src="https://placehold.co/100x100/jpg?text=no-image"></Image>,
       };
     }
   }

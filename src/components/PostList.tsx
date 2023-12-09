@@ -27,7 +27,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                     height={height}
                     src={
                       imageUrl ??
-                      "https://placehold.co/1000x750/orange/white/jpg?text=" +
+                      "https://placehold.co/1000x750/jpg?text=" +
                         (post.title
                           ? (post.title[0].length >= 60
                               ? post.title[0].substring(0, 60) + "..."
