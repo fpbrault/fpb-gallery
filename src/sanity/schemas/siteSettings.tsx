@@ -299,7 +299,7 @@ export const socialLink = defineType({
     }),
     defineField({
       name: "url",
-      title: "Link",
+      title: "url",
       validation: (Rule) => Rule.required(),
       type: "string"
     })
