@@ -13,7 +13,7 @@ import { getPageProps } from "@/components/lib/getPageProps";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const categoryQuery = groq`*[_type == "album" && category->.slug.current == $slug]{...,"category": category->categoryName,images[]{...,"placeholders" : asset->{metadata{lqip}}}}|
+export const categoryQuery = groq`*[_type == "album" && category->.slug.current == lower($slug)]{...,"category": category->categoryName,images[]{...,"placeholders" : asset->{metadata{lqip}}}}|
 order(coalesce(publishDate, -1) desc)`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
