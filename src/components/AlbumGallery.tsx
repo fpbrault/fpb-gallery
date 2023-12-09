@@ -28,7 +28,7 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
         const { imageUrl, imageWidth, imageHeight } = getResizedImage(
           category.albums[0].cover,
           75,
-          800
+          600
         );
 
         return {
