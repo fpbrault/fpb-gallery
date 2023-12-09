@@ -20,12 +20,12 @@ const OpenGraphMetadata = ({ title, slug }: any) => {
     <Head>
       <meta property="og:image" content={ogImageUrl} />
       {/* <title>{ogTitle}</title> */}
-      <meta name="description" content="Portfolio photo" />
+      <meta name="description" content="Portfolio" />
 
       <meta property="og:url" content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}${asPath}`} />
       <meta property="og:type" content="website" />
       <meta property="og:title" content={ogTitle} />
-      <meta property="og:description" content="Portfolio photo" />
+      <meta property="og:description" content="Portfolio" />
       <meta property="og:image" content={ogImageUrl} />
 
       <meta name="twitter:card" content="summary_large_image" />
@@ -35,7 +35,7 @@ const OpenGraphMetadata = ({ title, slug }: any) => {
         content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}${asPath}`}
       />
       <meta name="twitter:title" content={ogTitle} />
-      <meta name="twitter:description" content="Portfolio photo" />
+      <meta name="twitter:description" content="Portfolio" />
       <meta name="twitter:image" content={ogImageUrl} />
     </Head>
   );
