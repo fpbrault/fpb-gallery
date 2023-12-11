@@ -11,16 +11,13 @@ import { PreviewBar } from "@/components/studio/PreviewBar";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { categoryParamsQuery, categoryQuery } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const categoryQuery = groq`*[_type == "album" && category->.slug.current == lower($slug)]{...,"category": category->categoryName,images[]{...,"placeholders" : asset->{metadata{lqip}}}}|
-order(coalesce(publishDate, -1) desc)`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await client.fetch(
-    groq`*[_type == "category" && defined(slug.current)][]{
-      "params": { "slug": slug.current }
-    }`
+    categoryParamsQuery,
   );
   return { paths, fallback: true };
 };

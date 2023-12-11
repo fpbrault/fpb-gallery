@@ -11,7 +11,7 @@ export function PTRelatedAlbum(value: any) {
       {(t, { i18n }) => (
         <div className="w-full max-w-sm mx-auto shadow-xl">
           <span className="text-sm">{t("related.album")}:</span>
-          <Link className="link link-secondary link-hover" href={"/album/" + value.albumId}>
+          <Link className="link link-secondary link-hover" href={"/album/" + value.slug}>
             <div className="flex w-full max-w-sm mx-auto transition-all border justify-evenly rounded-xl bg-secondary text-secondary-content border-secondary hover:bg-secondary-content hover:text-secondary">
               <span className="self-center flex-grow px-2 font-bold text-center ">
                 {value.albumName}

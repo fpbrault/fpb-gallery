@@ -1,3 +1,4 @@
+import { SanityDocument } from "next-sanity";
 import {
   FaImages,
   FaFile,
@@ -8,6 +9,12 @@ import {
   FaPalette
 } from "react-icons/fa6";
 import { MdOutlineArticle } from "react-icons/md";
+import Iframe from "sanity-plugin-iframe-pane";
+
+
+function getPreviewUrl(doc: any) {
+  return `${window.location.origin}/api/preview/?slug=test`;
+}
 
 export const structure = (S: any) =>
   S.list()
@@ -106,7 +113,15 @@ export const structure = (S: any) =>
               S.listItem()
                 .title("Metadata")
                 .icon(FaCircleInfo)
-                .child(S.document().schemaType("siteSettings").documentId("siteSettings")
+                .child(S.document().schemaType("siteSettings").documentId("siteSettings") .views([
+                  S.view.form(),
+                  S.view
+                    .component(Iframe)
+                    .options({
+                      url: (doc: SanityDocument) => getPreviewUrl(doc),
+                    })
+                    .title('Preview')
+                ])
                 ),
               S.listItem()
                 .title("Main Navigation")

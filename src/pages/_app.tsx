@@ -6,6 +6,8 @@ import { NextPage } from "next";
 import { appWithTranslation } from "next-i18next";
 
 import { createContext } from "react";
+import { getClient } from "@/sanity/lib/client";
+import { SanityClientProvider } from "@/components/lib/SanityClientContext";
 
 export const PageContext = createContext({ params: {} });
 
@@ -18,6 +20,10 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
+  const preview = pageProps?.context?.draftMode || false;
+  const previewToken = (preview && process.env.SANITY_API_READ_TOKEN) ?? "";
+  const client = getClient(previewToken);
+
   const siteMetadata = pageProps.siteMetadata;
   useEffect(() => {
     const darkThemeVariables = siteMetadata?.customThemeVariables?.customDarkThemeVariables ?? null;
@@ -72,7 +78,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         {page}
       </Layout>
     ));
-  return getLayout(<Component {...pageProps} />);
+  return getLayout(<SanityClientProvider value={client}><Component {...pageProps} /></SanityClientProvider>);
 }
 
 export default appWithTranslation(App);

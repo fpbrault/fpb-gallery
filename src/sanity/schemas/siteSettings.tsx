@@ -1,5 +1,6 @@
 import { FaInfo, FaMoon, FaSun } from "react-icons/fa6";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import FontPreview from "../components/FontPreview";
 
 export const colors = defineType({
   name: "colors",
@@ -163,6 +164,9 @@ export const siteSettings = defineType({
       title: "Font Family",
       type: "string",
       initialValue: "raleway",
+      components: {
+        input: FontPreview
+      },
       validation: (Rule) => Rule.required(),
       options: {
         list: [
@@ -288,7 +292,7 @@ export const socialLink = defineType({
           { title: "Behance", value: "behance" },
           { title: "Dribbble", value: "dribbble" }
         ],
-        layout: "radio" // <-- defaults to 'dropdown'
+        layout: "radio"
       }
     }),
     defineField({
@@ -300,8 +304,12 @@ export const socialLink = defineType({
     defineField({
       name: "url",
       title: "url",
-      validation: (Rule) => Rule.required(),
-      type: "string"
+      validation: (Rule) =>
+      Rule.uri({
+        allowRelative: false,
+        scheme: ["http", "https", "mailto", "tel"]
+      }),
+      type: "url"
     })
   ]
 });

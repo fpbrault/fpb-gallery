@@ -13,10 +13,9 @@ import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { albumQuery } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const albumQuery = groq`*[_type == "album"]{...,category->,images[]
-  {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
@@ -58,7 +57,7 @@ export default function AlbumPage({
             <PreviewBar />
           </PreviewProvider>
         ) : (
-          data && <PhotoGallery mode="masonry" columns={data?.columns} images={data} albumId="all" />
+          data && <PhotoGallery mode="masonry" columns={data?.columns} images={data} slug="all" />
         )}
       </div>
     </>

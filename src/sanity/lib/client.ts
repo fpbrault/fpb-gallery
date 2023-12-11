@@ -5,6 +5,7 @@ import { urlForImage } from "./image";
 import { UseNextSanityImageDimensions } from "next-sanity-image";
 import { marked } from "marked";
 import { Image } from "sanity";
+import { pageQuery, postListQuery2 } from "../queries";
 
 export function getClient(previewToken?: string): SanityClient {
   const client = createClient({
@@ -257,27 +258,30 @@ export async function getFeaturedImagesAlbum() {
   return albumsWithComputedURLs[0];
 }
 
-export async function getAllPosts() {
-  const query =
-    '*[_type == "post"] {...,"blurDataURL": coverImage.asset->.metadata.lqip,"excerpt": array::join(string::split((pt::text(content)), "")[0..255], "") + "..."}';
+export async function getAllPosts(context: any) {
+  const postsPerPage = 3;
+  
+  if (context.params) {
+    context.params.locale = context?.locale;
+    // Check if context.params.slug is an array and then join it
+    if (Array.isArray(context.params.slug)) {
+      context.params.slug = context.params.slug.join("/");
+    }
+  } else {
+    context.params = { locale: context?.locale };
+  }
+  const posts = await client.fetch(postListQuery2, { ...context.params, start: 0, end: postsPerPage - 1 });
 
-  const posts = await client.fetch(query);
 
-  const postsWithImages = posts.map((post: any) => {
-    const width = 600;
-    const height = 300;
-    const imageUrl = urlForImage(post.coverImage).height(height).width(width).quality(80).url();
+  return posts;
+}
 
-    return {
-      ...post,
-      imageUrl: imageUrl,
-      imageWidth: width,
-      imageHeight: height,
-      blurDataUrl: post.blurDataURL
-    };
-  });
 
-  return postsWithImages;
+export async function getCustomPageContent(slug: string, locale: string) {
+
+  const pageContent = await client.fetch(pageQuery, { slug: slug, locale: locale });
+  
+  return pageContent;
 }
 
 export async function getPostBySlug(slug: string) {

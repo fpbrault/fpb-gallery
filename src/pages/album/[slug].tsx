@@ -12,16 +12,10 @@ import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { albumQueryWithSlug } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const albumQuery = groq`*[_type == "album" && slug.current == $slug][0]{...,
-  "description": albumContent[_key == $locale][0]{value[]
-    {...,
-      _type == "Post"=>{...}->{coverImage{...,asset->}, title[_key == $locale]},
-      _type == "album" || _type == "albumCard" =>{...}->{albumName,albumId,images[0]{...,asset->}}}}.value
 
-,
-  category->,images[]{...,"placeholders" : asset->{metadata{lqip}}}}`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await client.fetch(
@@ -34,7 +28,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getLocalizedPageProps(albumQuery, context, false);
+    return getLocalizedPageProps(albumQueryWithSlug, context, false);
   } catch (error) {
     return handlePageFetchError(error);
   }
@@ -63,7 +57,7 @@ export default function AlbumPage({
       <div>
         <Breadcrumbs
           items={[
-            { name: data?.category?.categoryName, url: "/category/" + data?.category?.categoryName },
+            { name: data?.category?.categoryName, url: "/category/" + data?.category?.slug.current },
             { name: data?.albumName }
           ]}
         ></Breadcrumbs>
@@ -82,7 +76,7 @@ export default function AlbumPage({
               mode={data?.display}
               columns={data?.columns}
               images={data?.images}
-              albumId={data?.slug?.current}
+              slug={data?.slug?.current}
             />
           )
         )}

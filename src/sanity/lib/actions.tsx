@@ -60,11 +60,9 @@ async function generatePathsForPost(props: any) {
 }
 
 async function generatePathsForPage(props: any) {
-  console.log(props)
   const currentPage = props.action == 'delete' ? props.published : props.draft
   const language = currentPage?.language
   const slug = currentPage?.slug?.current
-  console.log(slug, language)
   const prefix = language === 'en' ? '' : '/fr';
   let paths = [
     `${prefix}/${slug}`,
@@ -74,13 +72,11 @@ async function generatePathsForPage(props: any) {
   if (props.action !== 'delete' && props.draft?.slug?.current !== props.published?.slug?.current && props.published?.slug?.current) {
     paths.push(`${prefix}/${props.published?.slug?.current}`);
   }
-  console.log(paths)
   return paths;
 }
 
 async function generatePathsForCategory(props: any) {
   const currentCategory = await client.fetch('*[_id == $id][0]', { id: props.id });
-  console.log(props)
   let paths = [
     `/category/${currentCategory?.slug?.current}`,
     `/fr/category/${currentCategory?.slug?.current}`,
@@ -115,7 +111,6 @@ async function generatePathsForAlbum(props: any) {
 
 export function DeleteAndRevalidate(props: { id: string; type: string; published: unknown; }) {
   const { delete: deleteOperation } = useDocumentOperation(props.id, props.type)
-  console.log(props)
   const [isDeleting, setIsDeleting] = useState(false)
   const { secrets }: { secrets?: Secrets } = useSecrets('myPlugin');
   let paths: string[] = [];

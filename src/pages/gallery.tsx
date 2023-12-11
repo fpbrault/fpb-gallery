@@ -7,16 +7,13 @@ import dynamic from "next/dynamic";
 import { getBasePageProps } from "../components/lib/getBasePageProps";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
-import { pageQuery } from "./[...slug]";
 import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
-import { postListQuery } from "./blog";
 import HomePostMessage from "@/components/HomePostMessage";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { indexAlbumQuery, pageQuery, postListQuery } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const indexAlbumQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
-order(coalesce(publishDate, -1) desc){...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {

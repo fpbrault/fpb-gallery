@@ -7,29 +7,14 @@ import dynamic from "next/dynamic";
 import { getBasePageProps } from "../components/lib/getBasePageProps";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
-import { pageQuery } from "./[...slug]";
 import { getPageData } from "@/components/lib/getPageData";
 import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
 import HomePostMessage from "@/components/HomePostMessage";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { indexAlbumQuery, pageQuery, postListQuery } from "@/sanity/queries";
+import { getTranslations } from "@/components/lib/newHelpers";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const indexAlbumQuery = groq`*[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0] {...,"albums": *[_type=="album" && references(^._id)]|
-order(coalesce(publishDate, -1) desc){...,"cover": images[0]{asset, "placeholders" : asset->{metadata{lqip}}}}}`;
-
-export const postListQuery = groq`*[_type == "post" && defined(slug.current) || defined(slug_fr.current)]{...,"slug": select(
-  $locale == 'en' => coalesce(slug, slug_fr),
-  $locale == 'fr' => coalesce(slug_fr, slug)
-),
-  
-  "title": title[_key == $locale].value,"blurDataURL": coverImage.asset->.metadata.lqip,"excerpt":array::join(
-  string::split(
-    (pt::text(
-      postContent[_key == $locale].value[]
-    )
-  )
-, ""
-  )[0..255], "") + "..."}| order(publishDate desc)[0..1]`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
@@ -39,8 +24,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const postListData = await client.fetch(postListQuery, context);
 
-    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } =
+    const { ctx, preview, previewToken, siteMetadata, headerData } =
       await getBasePageProps(context);
+      
     const { data } = await getPageData(indexAlbumQuery, ctx, previewToken);
 
     const { currentLocale, otherLocale } = getPageLocaleVersions(data, ctx);
@@ -50,7 +36,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
       props: {
-        ..._nextI18Next,
+        ...getTranslations(ctx),
         data: customHomePageData ? { ...customHomePageData, type: "customPage" } : dataWithPosts,
         preview,
         previewToken,
@@ -89,6 +75,7 @@ export default function IndexPage({
               <PreviewPage page={data} />
             ) : (
               <div className="mb-4 font-sans text-sm text-center">
+                  {post && <HomePostMessage post={post} />}
                 <AlbumGallery categories={true} albums={data.albumData} />
               </div>
             )}

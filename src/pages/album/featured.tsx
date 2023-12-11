@@ -14,10 +14,9 @@ import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { useTranslation } from "next-i18next";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { featuredAlbumQuery } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const albumQuery = groq`*[_type == "album"]{...,category->,images[featured == true]
-  {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
@@ -27,22 +26,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } =
       await getBasePageProps(context);
 
-    const { data } = await getPageData(albumQuery, ctx, previewToken);
+    const { data } = await getPageData(featuredAlbumQuery, ctx, previewToken);
 
-    function shuffleArray(array: any) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
 
-    const newData = shuffleArray(data);
 
     return {
       props: {
         ..._nextI18Next,
-        data: newData,
+        data,
         preview,
         previewToken,
         siteMetadata,
@@ -55,6 +46,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return handlePageFetchError(error);
   }
 };
+
+
+function shuffleArray(array: any) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
 export default function AlbumPage({
   data,
@@ -74,6 +74,7 @@ export default function AlbumPage({
       </div>
     );
   }
+  const shuffledData = shuffleArray(data);
   return (
     <>
       <OpenGraphMetadata title="Featured Images"></OpenGraphMetadata>
@@ -90,7 +91,7 @@ export default function AlbumPage({
           </PreviewProvider>
         ) : (
           data && (
-            <PhotoGallery mode="masonry" columns={data?.columns} images={data} albumId="featured" />
+            <PhotoGallery mode="masonry" columns={data?.columns} images={shuffledData} slug="featured" />
           )
         )}
       </div>

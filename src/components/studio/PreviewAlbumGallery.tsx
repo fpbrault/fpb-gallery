@@ -1,13 +1,13 @@
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
-import { categoryQuery } from "@/pages/category/[slug]";
 import AlbumGallery from "../AlbumGallery";
 import { usePageProps } from "../lib/PagePropsContext";
+import { categoryQuery } from "@/sanity/queries";
 
 export default function PreviewAlbumGallery({ albums }: { albums: SanityDocument }) {
   const context = usePageProps();
   const params = context.params;
-  const [data] = useLiveQuery(null, categoryQuery, params);
+  const [data] = useLiveQuery(albums, categoryQuery, params);
   if (data == null) {
     return null;
   }

@@ -8,41 +8,28 @@ import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { getPageProps } from "@/components/lib/getPageProps";
 import { useState } from "react";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { postListQuery2 } from "@/sanity/queries";
+import { getAllPosts } from "@/sanity/lib/client";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 const PostList = dynamic(() => import("@/components/PostList"));
 
-const postsPerPage = 3;
 
-export const postListQuery = groq`*[_type == "post" && defined(slug.current) || defined(slug_fr.current)]  {
-  "posts": *[_type == "post" && defined(slug.current) || defined(slug_fr.current)] {
-    ...,
-    "slug": select(
-      $locale == 'en' => coalesce(slug, slug_fr),
-      $locale == 'fr' => coalesce(slug_fr, slug)
-    ),
-    "title": title[_key == $locale].value,
-    "blurDataURL": coverImage.asset->.metadata.lqip,
-    "excerpt": array::join(
-      string::split(
-        (pt::text(
-          postContent[_key == $locale].value[]
-        ))
-      , ""
-      )[0..255], "") + "..."
-  } | order(publishDate desc)[$start..$end],
-  "totalCount": count(*[_type == "post" && defined(slug.current) || defined(slug_fr.current)])
-}[0]
-`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    const initialData = await getPageProps(postListQuery, {
+    /* const initialData = await getPageProps(postListQuery2, {
       ...context,
       params: { ...context.params, start: 0, end: postsPerPage - 1 }
     });
+ */
+    const initialData = await getAllPosts(context)
+    const pageProps = await getPageProps(postListQuery2, {
+      ...context,
+    });
     return {
-      ...initialData
+      props: {...pageProps.props, data: {...initialData}},
     };
   } catch (error) {
     return handlePageFetchError(error);
@@ -65,6 +52,7 @@ export default function BlogPage({
   const loadMore = async () => {
     // Fetch the next set of posts dynamically
     try {
+      const postsPerPage = 3
       const response = await fetch(
         `/api/blog/posts?page=${nextPage}&locale=${context?.locale ?? "en"}&postsPerPage=${
           postsPerPage ?? 4

@@ -2,14 +2,13 @@
 
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
-import { pageQuery } from "@/pages/[...slug]";
 import Page from "../Page";
 import { usePageProps } from "../lib/PagePropsContext";
+import { pageQuery } from "@/sanity/queries";
 
 export default function PreviewPage({ page }: { page: SanityDocument }) {
   const context = usePageProps();
-  const params = context.params;
-  const [data] = useLiveQuery(page, pageQuery, params);
+  const [data] = useLiveQuery(page, pageQuery, context.params);
   if (data == null) {
     return null;
   }

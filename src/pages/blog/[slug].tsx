@@ -11,34 +11,10 @@ import React from "react";
 import { PostNavigation } from "../../components/PostNavigation";
 import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
+import { postQuery } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)] {"current": {...,"slug": select(
-  $locale == 'en' => coalesce(slug, slug_fr),
-  $locale == 'fr' => coalesce(slug_fr, slug)
-), 
-  "postContent": postContent[_key == $locale]{value[]
-    {...,_type == "image" =>{asset, "blurDataURL": asset->.metadata.lqip},
-      _type == "Post"=>{...}->{"slug": select(
-        $locale == 'en' => coalesce(slug, slug_fr).current,
-        $locale == 'fr' => coalesce(slug_fr, slug).current
-      ),coverImage{...,asset->}, title[_key == $locale]},
-      (_type == "album" || _type == "albumCard") =>{...}->{albumName,albumId,images[0]{...,asset->}}}}
-  ,"title": title[_key == $locale][0].value,
-    "blurDataURL": coverImage.asset->.metadata.lqip
-}
-,"previous": *[_type == "post" && ^.publishDate > publishDate]|order(publishDate desc)[0]{ 
-  "slug": select(
-    $locale == 'en' => coalesce(slug, slug_fr),
-    $locale == 'fr' => coalesce(slug_fr, slug)
-  ), "title": title[_key == $locale][0].value, publishDate, tags[], coverImage
-},"next": *[_type == "post" && ^.publishDate < publishDate]|order(publishDate asc)[0]{ 
-"slug": select(
-    $locale == 'en' => coalesce(slug, slug_fr),
-    $locale == 'fr' => coalesce(slug_fr, slug)
-  ), "title": title[_key == $locale][0].value, publishDate, tags[], coverImage
-}
-} [0]`;
+
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
   const paths = await client.fetch(
@@ -67,7 +43,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   try {
     return getLocalizedPageProps(postQuery, context, true, "blog");
   } catch (error) {
-    console.log("error here")
     console.error(error)
     return handlePageFetchError(error, "/blog");
   }

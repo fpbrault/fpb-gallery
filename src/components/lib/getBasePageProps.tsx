@@ -9,6 +9,7 @@ export const siteMetadataQuery = q("*", { isArray: true })
   .slice(0)
   .grab({
     siteTitle: q.string(),
+    description: q.string(),
     author: q.string(),
     customFont: q.string(),
 
@@ -67,14 +68,16 @@ function generateCustomTheme(themeData: any) {
 }
 
 export async function getBasePageProps(context: any) {
+
   const preview = context.draftMode || false;
   const previewToken = (preview && process.env.SANITY_API_READ_TOKEN) ?? "";
   const client = getClient(previewToken);
-
+  
   const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
   const headerData = await getHeaderData();
   let siteMetadata: CustomSiteMetadata = {
     customThemeVariables: null,
+    description: "",
     siteTitle: "",
     author: "",
     customFont: "",

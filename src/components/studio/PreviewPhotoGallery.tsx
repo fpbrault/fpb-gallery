@@ -2,14 +2,14 @@
 
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
-import { albumQuery } from "@/pages/album/[slug]";
 import PhotoGallery from "../PhotoGallery";
 import { usePageProps } from "../lib/PagePropsContext";
+import { albumQueryWithSlug } from "@/sanity/queries";
 
 export default function PreviewPhotoGallery({ album }: { album: SanityDocument }) {
   const context = usePageProps();
   const params = context.params;
-  const [data] = useLiveQuery(album, albumQuery, params) as any;
+  const [data] = useLiveQuery(album, albumQueryWithSlug, params) as any;
   if (data == null) {
     return null;
   }
@@ -19,7 +19,7 @@ export default function PreviewPhotoGallery({ album }: { album: SanityDocument }
       mode={data.display}
       columns={data.columns}
       images={data.images}
-      albumId={data.albumId}
+      slug={data.albumId}
     />
   );
 } /*  */

@@ -18,11 +18,11 @@ import { RoughNotationGroup } from "react-rough-notation";
 type Props = {
   images: any[];
   mode: "rows" | "columns" | "masonry";
-  albumId: string;
+  slug: string;
   columns: number | undefined;
 };
 
-function PhotoGallery({ images, mode, albumId, columns }: Props) {
+function PhotoGallery({ images, mode, slug, columns }: Props) {
   const router = useRouter();
   const imageId = router.query.imageId;
   const [index, setIndex] = React.useState(-1);
@@ -88,7 +88,7 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
     const selectedImageId = images[current]._key;
 
     // Update the URL with the selected image id in the query parameter
-    router.push(`${albumId}?imageId=${selectedImageId}`, undefined, { shallow: true });
+    router.push(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
   };
 
   React.useEffect(() => {
@@ -148,7 +148,7 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
           const currentUrl = window.location.href;
           if (currentUrl.includes("imageId")) {
             // Update the URL without the imageId parameter
-            router.push("/album/" + albumId, undefined, { shallow: true });
+            router.push("/album/" + slug, undefined, { shallow: true });
           }
         }}
         on={{
@@ -156,7 +156,7 @@ function PhotoGallery({ images, mode, albumId, columns }: Props) {
             // Extract the image id from the src URL
             const selectedImageId = images[currentIndex]._key;
             // Update the URL with the selected image id in the query parameter
-            router.push(`${albumId}?imageId=${selectedImageId}`, undefined, { shallow: true });
+            router.push(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
           }
         }}
       />
