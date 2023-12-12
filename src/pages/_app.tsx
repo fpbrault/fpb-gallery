@@ -1,13 +1,13 @@
-import React, { ReactNode, ReactElement, useEffect, useContext } from "react";
+import React, { ReactNode, ReactElement, useEffect } from "react";
 import "styles/globals.css";
 import { AppProps } from "next/app";
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout/Layout";
 import { NextPage } from "next";
 import { appWithTranslation } from "next-i18next";
 
 import { createContext } from "react";
 import { getClient } from "@/sanity/lib/client";
-import { SanityClientProvider } from "@/components/lib/SanityClientContext";
+import { SanityClientProvider } from "@/components/context/SanityClientContext";
 
 export const PageContext = createContext({ params: {} });
 

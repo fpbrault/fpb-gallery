@@ -2,7 +2,7 @@ import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { SanityDocument } from "next-sanity";
-import { getResizedImage } from "@/sanity/lib/client";
+import { getResizedImage } from "@/sanity/lib/image";
 
 export default function Post({ post }: { post: SanityDocument }) {
   const height = 1000;
@@ -25,7 +25,7 @@ export default function Post({ post }: { post: SanityDocument }) {
           ) : null}
         </div>
 
-        <h2 className="p-4 text-4xl font-bold text-primary">{post?.title}</h2>
+        <h2 className="p-4 text-4xl font-bold font-display text-primary">{post?.title}</h2>
         <div className="font-mono text-sm ">{new Date(post?.publishDate).toDateString()}</div>
         <div className="divider"></div>
 

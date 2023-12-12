@@ -1,13 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { Layout } from "@/types/layout";
-import { getSocialIcon } from "./lib/getSocialIcon";
-import ThemeSelector from "./ThemeSelector";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { getSocialIcon } from "../lib/getSocialIcon";
+import ThemeSelector from "../Layout/ThemeSelector";
+import { LanguageSwitcher } from "../Layout/LanguageSwitcher";
 
 export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata; context: any }) {
   return (
-    <footer className="relative bottom-0 z-50 flex flex-col-reverse items-center justify-between gap-3 px-8 py-4 font-sans text-xs sm:flex-row sm:text-sm footer bg-neutral text-neutral-content">
+    <footer className="relative bottom-0 z-40 flex flex-col-reverse items-center justify-between gap-3 px-8 py-4 font-sans text-xs sm:flex-row sm:text-sm footer bg-neutral text-neutral-content">
       <aside className="flex items-center lg:w-5/12 ">
         <svg
           className="fill-neutral-content"

@@ -3,7 +3,7 @@
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
 import Page from "../Page";
-import { usePageProps } from "../lib/PagePropsContext";
+import { usePageProps } from "../context/PagePropsContext";
 import { pageQuery } from "@/sanity/queries";
 
 export default function PreviewPage({ page }: { page: SanityDocument }) {

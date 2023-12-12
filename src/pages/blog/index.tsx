@@ -1,35 +1,23 @@
-import Breadcrumbs from "@/components/BreadCrumbs";
+import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import dynamic from "next/dynamic";
-import { SanityDocument, groq } from "next-sanity";
+import { SanityDocument } from "next-sanity";
 import { GetStaticProps } from "next";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPostList from "@/components/studio/PreviewPostList";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
-import { getPageProps } from "@/components/lib/getPageProps";
 import { useState } from "react";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
-import { postListQuery2 } from "@/sanity/queries";
 import { getAllPosts } from "@/sanity/lib/client";
-import { init } from "next/dist/compiled/webpack/webpack";
+import { getBasePageProps } from "@/components/lib/pageHelpers";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
-const PostList = dynamic(() => import("@/components/PostList"));
-
-
+const PostList = dynamic(() => import("@/components/Blog/PostList"));
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    /* const initialData = await getPageProps(postListQuery2, {
-      ...context,
-      params: { ...context.params, start: 0, end: postsPerPage - 1 }
-    });
- */
-    const initialData = await getAllPosts(context)
-    const pageProps = await getPageProps(postListQuery2, {
-      ...context,
-    });
+    const initialData = await getAllPosts(context);
     return {
-      props: {...pageProps.props, data: {...initialData}},
+      props: {...await getBasePageProps(context), data: {...initialData}},
     };
   } catch (error) {
     return handlePageFetchError(error);

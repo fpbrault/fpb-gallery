@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Card, Select, Tooltip, Text, Stack } from '@sanity/ui'
 import schemaTypes from '../schemas/index';
 import { TextInput, set, unset } from 'sanity';
-import { getFontFamily } from '@/components/FontLoader';
+import { getFontFamily } from '@/components/Layout/FontLoader';
 
 const FontPreview = (props: any) => {
     const { elementProps, onChange, value = '' } = props

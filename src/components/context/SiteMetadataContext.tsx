@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { CustomSiteMetadata, SiteMetadata } from "./getBasePageProps";
+import { CustomSiteMetadata } from "../lib/pageHelpers";
 
 const SiteMetadataContext = createContext<CustomSiteMetadata>({} as CustomSiteMetadata);
 

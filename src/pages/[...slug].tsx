@@ -7,11 +7,11 @@ import { useRouter } from "next/router";
 import React from "react";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
-import {  handlePageFetchError } from "@/components/lib/pageHelpers";
-import Breadcrumbs from "@/components/BreadCrumbs";
+import { handleLocaleRedirect, handlePageFetchError } from "@/components/lib/pageHelpers";
+import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
-import { getBasePageProps } from "@/components/lib/getBasePageProps";
-import { getTranslations } from '../components/lib/newHelpers';
+import { getBasePageProps } from "@/components/lib/pageHelpers";
+import { getSlugFromContext } from "@/components/lib/utils";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 
@@ -27,23 +27,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    const { ctx, preview, previewToken, siteMetadata, headerData } =
-    await getBasePageProps(context);
     
-    const pageContent = await getCustomPageContent(ctx.params?.slug, ctx.locale);
+    const pageContent = await getCustomPageContent(getSlugFromContext(context), context.locale);
 
+    const redirect = await handleLocaleRedirect(pageContent, context, "");
+    if (redirect !== null) {
+      return redirect;
+    }
     if (!pageContent) {
       throw new Error("Page not found");
     }
 
     return { props: { 
-      ...getTranslations(ctx),
        data: {...pageContent },
-       preview,
-       previewToken,
-       siteMetadata,
-       headerData,
-       context: ctx
+       ...await getBasePageProps(context)
       }};
   } catch (error) {
     return handlePageFetchError(error);

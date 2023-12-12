@@ -56,7 +56,7 @@ const queryLayoutPart = groq`_type == "layout-col-2"=>{...,rightCol[]{...,_type 
 ,leftCol[]{...,_type == "image" =>{asset, "blurDataURL": asset->.metadata.lqip},_type == "album" || _type == "albumCard" =>{...}->{...,images[0]{...,asset->}}}}`;
 
 export const pageQuery = groq`
-*[_type == "page" && slug.current in $slug && (language == $locale || language == "en" || language == "fr")] | score(language == $locale) | order(_score desc)[0]{
+*[_type == "page" && slug.current == $slug && (language == $locale || language == "en" || language == "fr")] | score(language == $locale) | order(_score desc)[0]{
     ...{
         "_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{
             slug,
@@ -104,6 +104,13 @@ export const categoryParamsQuery = groq`
 *[_type == "category" && defined(slug.current)][]{
     "params": { "slug": slug.current }
     }`
+
+export const postPathsquery = groq`*[_type == "post" && defined(slug.current)][]{
+  "params": { "slug": slug.current,"slug_fr": slug_fr.current }
+}`
+export const albumPathsquery = groq`*[_type == "album" && defined(slug.current)][]{
+  "params": { "slug": slug.current }
+}`
 
 export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)] {"current": {...,"slug": select(
     $locale == 'en' => coalesce(slug, slug_fr),

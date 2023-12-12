@@ -1,47 +1,44 @@
-import Breadcrumbs from "@/components/BreadCrumbs";
-import Post from "../../components/Post";
+import Breadcrumbs from "@/components/Layout/BreadCrumbs";
+import Post from "../../components/Blog/Post";
 import PreviewPost from "../../components/studio/PreviewPost";
-import { SanityDocument, groq } from "next-sanity";
+import { SanityDocument } from "next-sanity";
 import dynamic from "next/dynamic";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { client } from "@/sanity/lib/client";
+import { getPostBySlug, getPostPaths } from "@/sanity/lib/client";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import { useRouter } from "next/router";
 import React from "react";
-import { PostNavigation } from "../../components/PostNavigation";
-import { getLocalizedPageProps, handlePageFetchError } from "@/components/lib/pageHelpers";
+import { PostNavigation } from "../../components/Blog/PostNavigation";
+import { handleLocaleRedirect, handlePageFetchError } from "@/components/lib/pageHelpers";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
-import { postQuery } from "@/sanity/queries";
+import { getBasePageProps } from "@/components/lib/pageHelpers";
+import { getSlugFromContext } from "@/components/lib/utils";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 
 
 export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-  const paths = await client.fetch(
-    groq`*[_type == "post" && defined(slug.current)][]{
-      "params": { "slug": slug.current,"slug_fr": slug_fr.current }
-    }`
-  );
-  const pathLocales: any[] = [];
-
-  paths.map((element: { params: { slug: string; slug_fr: string } }) => {
-    return locales?.map((locale) => {
-      const slugName = locale == "en" ? "slug" : "slug_fr";
-      const slugForLocale = slugName ? element.params[slugName] : null;
-      if (slugForLocale) {
-        return pathLocales.push({
-          params: { slug: `${slugForLocale}` },
-          locale
-        });
-      }
-    });
-  });
-  return { paths: pathLocales, fallback: "blocking" };
+  const pathsForLocales = await getPostPaths(locales);
+  
+  return { paths: pathsForLocales, fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getLocalizedPageProps(postQuery, context, true, "blog");
+    const post = await getPostBySlug(getSlugFromContext(context), context.locale ?? "en");
+
+    const redirect = await handleLocaleRedirect(post, context, "blog/");
+    if (redirect !== null) {
+      return redirect;
+    }
+    if (!post) {
+      throw new Error("Page not found");
+    }
+    
+    return { props: { 
+      data: post ,
+      ...await getBasePageProps(context)
+     }};
   } catch (error) {
     console.error(error)
     return handlePageFetchError(error, "/blog");

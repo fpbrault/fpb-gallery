@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import Head from "next/head";
 import Header, { HeaderSideBar } from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
 import { Layout } from "@/types/layout";
-import { SiteMetadataProvider } from "./lib/SiteMetadataContext";
-import { PagePropsProvider } from "./lib/PagePropsContext";
+import { SiteMetadataProvider } from "../context/SiteMetadataContext";
+import { PagePropsProvider } from "../context/PagePropsContext";
 import { getFontFamily } from "./FontLoader";
 
 type Props = {
@@ -27,6 +27,18 @@ const Layout: React.FC<Props> = (props) => {
       : {}
   };
   const fontFamily = getFontFamily(props?.siteMetadata?.customFont);
+
+  useEffect(() => {
+    // Get the value of the variable
+    const fontFamilyObj = getFontFamily(props?.siteMetadata?.customDisplayFont ?? 'raleway');
+    const variableValue = fontFamilyObj.style.fontFamily;
+  
+    // Select the HTML element
+    const element = document.body; // or any other element
+  
+    // Set the CSS variable
+    element.style.setProperty('--font-display', variableValue);
+  }, []);
   return (
     <>
       <Head>
@@ -43,7 +55,7 @@ const Layout: React.FC<Props> = (props) => {
       <SiteMetadataProvider siteMetadata={props.siteMetadata}>
         <PagePropsProvider pageProps={props.context}>
           <div
-            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col ${fontFamily.variable}`}
+            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col $ ${fontFamily.variable}`}
           >
             <div className="flex-grow h-full drawer ">
               <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />

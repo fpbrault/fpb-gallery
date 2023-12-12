@@ -1,7 +1,7 @@
 import { FaImages, FaLink, FaPen } from "react-icons/fa6";
 import { defineType, defineArrayMember, defineField } from "sanity";
-import LinkRenderer from "@/components/LinkRenderer";
-import RoughAnnotationRenderer from "@/components/RoughAnnotationRenderer";
+import LinkRenderer from "@/components/PortableText/LinkRenderer";
+import RoughAnnotationRenderer from "@/components/PortableText/RoughAnnotationRenderer";
 
 const JustifyStyle = (props: any) => <div className="text-justify">{props.children} </div>;
 const CenterStyle = (props: any) => <div className="text-center">{props.children} </div>;

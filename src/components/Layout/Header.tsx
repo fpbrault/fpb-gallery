@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import ThemeSelector from "./ThemeSelector";
-import { getSocialIcon } from "./lib/getSocialIcon";
+import { getSocialIcon } from "../lib/getSocialIcon";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { FaBars } from "react-icons/fa6";
 
@@ -33,7 +33,7 @@ export default function Header({
   //const icon = getSocialIcon(contactType);
   return (
     <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:pt-4 bg-base-200/70 backdrop-blur-lg ">
-      <h1 className="justify-center hidden py-1 font-sans text-2xl font-light text-center md:flex md:text-4xl lg:text-5xl ">
+      <h1 className="justify-center hidden py-1 text-2xl font-light text-center font-display md:flex md:text-4xl lg:text-5xl ">
         <Link className="link link-hover" href="/">
           {title}
         </Link>
@@ -88,14 +88,14 @@ export default function Header({
             </ul>
           </div>
           <Link
-            className="w-full font-sans text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3"
+            className="w-full text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3 font-display"
             href="/"
           >
             {title}
           </Link>
         </div>
         <div className="justify-center hidden w-full navbar-center md:flex">
-          <ul className="flex gap-8 px-1 py-0 text-2xl font-bold">
+          <ul className="flex gap-8 px-1 py-0 text-2xl font-bold font-display">
             {headerData?.showHome != false && (
               <li>
                 <Link className="mx-auto link link-hover link-primary" href={"/"}>
@@ -141,7 +141,7 @@ export function HeaderSideBar({
         aria-label="close sidebar"
         className="drawer-overlay !bg-transparent"
       ></label>
-      <ul className="min-h-full p-4 text-3xl font-black text-left uppercase w-60 menu bg-base-100/80 backdrop-blur-xl">
+      <ul className="min-h-full p-4 text-3xl font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
         {/* Sidebar content here */}
         {headerData?.showHome != false && (
           <li>

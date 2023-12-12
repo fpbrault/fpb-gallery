@@ -2,7 +2,7 @@ import Image from "next/image";
 import { isImageFitCover, isImageSlide, useLightboxProps } from "yet-another-react-lightbox";
 
 import type { RenderPhotoProps } from "react-photo-album";
-import { getResizedImage } from "@/sanity/lib/client";
+import { getResizedImage } from "@/sanity/lib/image";
 import Link from "next/link";
 
 interface CustomRenderPhotoProps extends RenderPhotoProps {
@@ -30,7 +30,7 @@ export function NextJsImageAlbum({
       <Link href={photo.href ?? "/"}>
         <div className="absolute bottom-0 left-0 right-0 z-20 flex transition duration-300 ">
           <div className="max-w-full px-3 mx-auto mb-5 transition duration-300 rounded shadow bg-primary drop-shadow-xl backdrop-blur group-hover:bg-base-100">
-            <div className="z-20 px-2 text-3xl text-center uppercase truncate align-middle transition duration-300 sm:text-xl md:text-2xl lg:text-3xl text-primary-content drop-shadow group-hover:text-primary">
+            <div className="z-20 px-2 text-3xl text-center uppercase truncate align-middle transition duration-300 sm:text-xl md:text-2xl lg:text-3xl text-primary-content drop-shadow group-hover:text-primary font-display ">
               {photo.title}
             </div>
           </div>

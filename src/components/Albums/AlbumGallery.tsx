@@ -1,8 +1,8 @@
 // Import necessary modules and components
 import * as React from "react";
 import PhotoAlbum from "react-photo-album";
-import { NextJsImageAlbum } from "./NextJsImage";
-import { getResizedImage } from "@/sanity/lib/client";
+import { NextJsImageAlbum } from "../Albums/NextJsImage";
+import { getResizedImage } from "@/sanity/lib/image";
 
 // Define the AlbumGallery component
 type AlbumGalleryProps = {

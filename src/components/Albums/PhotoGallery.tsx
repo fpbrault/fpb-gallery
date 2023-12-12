@@ -9,8 +9,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
 import { NextJsImage, NextJsImageElement } from "./NextJsImage";
 import { useRouter } from "next/router";
-import { getResizedImage } from "@/sanity/lib/client";
-import PhotoAlbum from "react-photo-album";
+import { getResizedImage } from "@/sanity/lib/image";
+import PhotoAlbum, { ClickHandler, Photo } from "react-photo-album";
 import { PortableText } from "@portabletext/react";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { RoughNotationGroup } from "react-rough-notation";
@@ -28,40 +28,42 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
   const [index, setIndex] = React.useState(-1);
   const lightboxRef = React.useRef<ControllerRef | null>(null);
   const [isMobile, setIsMobile] = React.useState(false);
+  
 
-  const [theImages] = React.useState(
-    images
-      ? images.map((image) => {
-        const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
-        return {
-          ...image,
-          src: imageUrl,
-          height: imageHeight,
-          width: imageWidth,
-          title: (
-            <>
-              <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">{image.title}</div>
-            </>
-          ),
-          description: (
-            <>
-              {image.description && (
-                <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                  <RoughNotationGroup>
-                    <PortableText
-                      components={myPortableTextComponents as any}
-                      value={image.description}
-                    />
-                  </RoughNotationGroup>
-                </div>
-              )}
-            </>
-          ),
-          type: "image"
-        };
-      })
-      : []
-  );
+  const [theImages, setTheImages] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    // This function runs whenever `images` prop changes
+    const newImages = images ? images.map((image) => {
+      const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
+      return {
+        ...image,
+        src: imageUrl,
+        height: imageHeight,
+        width: imageWidth,
+        title: (
+          <>
+            <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">{image.title}</div>
+          </>
+        ),
+        description: (
+          <>
+            {image.description && (
+              <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
+                <RoughNotationGroup>
+                  <PortableText
+                    components={myPortableTextComponents as any}
+                    value={image.description}
+                  />
+                </RoughNotationGroup>
+              </div>
+            )}
+          </>
+        ),
+      };
+    }) : [];
+    setTheImages(newImages);
+  }, [images]);
 
   // Update the state on component mount
   React.useEffect(() => {
@@ -85,7 +87,7 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
     setIndex(current);
 
     // Extract the image id from the src URL
-    const selectedImageId = images[current]._key;
+    const selectedImageId = (theImages[current] as any)._key;
 
     // Update the URL with the selected image id in the query parameter
     router.push(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
@@ -94,7 +96,7 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
   React.useEffect(() => {
     if (imageId) {
       // Find the index of the image with the specified id
-      const selectedIndex = images.findIndex((image) => image._key === imageId);
+      const selectedIndex = theImages.findIndex((image) => image._key === imageId);
       // If the image is found, open the lightbox
       if (selectedIndex !== -1) {
         setIndex(selectedIndex);
@@ -103,7 +105,7 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
       setIndex(-1);
       lightboxRef.current.close();
     }
-  }, [imageId, images, router]);
+  }, [imageId, theImages, router]);
 
   if (!images) {
     return "nothing";
@@ -118,7 +120,14 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
         spacing={20}
         columns={isMobile ? 1 : columns ?? 3}
         renderPhoto={(photo) =>
-          NextJsImageElement({ limitHeight: images.length < 3 ? true : false, ...photo })
+          NextJsImageElement({
+            limitHeight: theImages.length < 3 ? true : false,
+            ...photo,
+            layoutOptions: {
+              ...photo.layoutOptions,
+              onClick: photo.layoutOptions.onClick as ClickHandler<Photo>
+            }
+          })
         }
         sizes={{
           size: "calc(100vw - 240px)",
@@ -135,9 +144,9 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
         captions={{ showToggle: true, descriptionTextAlign: "start", descriptionMaxLines: 50 }}
         styles={{ captionsDescription: { backgroundColor: "rgba(0,0,0,0" }, captionsTitle: { backgroundColor: "rgba(0,0,0,0" } }}
         render={{
-          buttonPrev: images.length <= 1 ? () => null : undefined,
+          buttonPrev: theImages.length <= 1 ? () => null : undefined,
           buttonZoom: isMobile ? () => null : undefined,
-          buttonNext: images.length <= 1 ? () => null : undefined,
+          buttonNext: theImages.length <= 1 ? () => null : undefined,
           slide: NextJsImage
         }}
         open={index > -1}
@@ -154,9 +163,13 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
         on={{
           view: ({ index: currentIndex }) => {
             // Extract the image id from the src URL
-            const selectedImageId = images[currentIndex]._key;
+            // Add the correct type for theImages
+            const theImages: { _key: string }[] = [];
+
+            // Update the code to access the _key property
+            const selectedImageId = theImages[currentIndex]._key;
             // Update the URL with the selected image id in the query parameter
-            router.push(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
+            router.replace(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
           }
         }}
       />

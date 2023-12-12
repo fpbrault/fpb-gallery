@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useSiteMetadata } from "./lib/SiteMetadataContext";
+import { useSiteMetadata } from "./context/SiteMetadataContext";
 
 const constructOgImageUrl = (title: any, slug: any) => {
   const queryParams = [];

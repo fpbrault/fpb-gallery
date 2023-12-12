@@ -1,8 +1,8 @@
 // usePageData.ts
 import { client } from "@/sanity/lib/client";
 import { useEffect, useState } from "react";
-import { q, makeSafeQueryRunner, InferType } from "groqd";
-import { SiteMetadata, siteMetadataQuery } from "@/components/lib/getBasePageProps";
+import { makeSafeQueryRunner } from "groqd";
+import { SiteMetadata, siteMetadataQuery } from "@/components/lib/pageHelpers";
 
 export const runQuery = makeSafeQueryRunner((query) => client.fetch(query));
 

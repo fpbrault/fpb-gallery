@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getResizedImageSquare } from "@/sanity/lib/client";
+import { getResizedImageSquare } from "@/sanity/lib/image";
 import React from "react";
 import { useTranslation } from "next-i18next";
 

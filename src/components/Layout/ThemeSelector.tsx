@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSiteMetadata } from "./lib/SiteMetadataContext";
+import { useSiteMetadata } from "../context/SiteMetadataContext";
 
 const ThemeSelector = () => {
   const siteMetadata = useSiteMetadata();

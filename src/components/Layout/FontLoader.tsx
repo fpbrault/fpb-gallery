@@ -16,66 +16,76 @@ import {
 export const raleway = Raleway({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const montserrat = Montserrat({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const nunito = Nunito({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const comfortaa = Comfortaa({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const sarabun = Sarabun({
-  weight: "600",
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
 });
 export const amaticSC = Amatic_SC({
-  weight: "700",
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: ["400", "700"],
 });
 export const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const workSans = Work_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
 export const libreFranklin = Libre_Franklin({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: "variable",
 });
-export const roboto = Roboto({
-  weight: "400",
+const roboto = Roboto({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans"
+  variable: "--font-sans",
+  weight: ["100","300","400", "500", "700"],
 });
+
 
 export function getFontFamily(fontName: string): any {
   let selectedFont = null;
@@ -103,9 +113,10 @@ export function getFontFamily(fontName: string): any {
   } else if (fontName === "libreFranklin") {
     selectedFont = libreFranklin;
   } else if (fontName === "roboto") {
-    selectedFont = roboto;
+    selectedFont = roboto
   } else {
     selectedFont = raleway;
   }
+ // selectedFont.variable = display ? displayName: sansName;
   return selectedFont;
 }

@@ -1,46 +1,29 @@
-import AlbumGallery from "@/components/AlbumGallery";
+import AlbumGallery from "@/components/Albums/AlbumGallery";
 import { PreviewBar } from "@/components/studio/PreviewBar";
-import { client } from "@/sanity/lib/client";
+import { getCategories, getLatestPost } from "@/sanity/lib/client";
 import { GetStaticProps } from "next";
-import { SanityDocument, groq } from "next-sanity";
+import { SanityDocument } from "next-sanity";
 import dynamic from "next/dynamic";
-import { getBasePageProps } from "../components/lib/getBasePageProps";
+import { getBasePageProps } from "../components/lib/pageHelpers";
 import PreviewPage from "@/components/studio/PreviewPage";
 import Page from "@/components/Page";
-import { getPageData } from "@/components/lib/getPageData";
-import { getPageLocaleVersions, handleLocaleRedirect } from "@/components/lib/pageHelpers";
 import HomePostMessage from "@/components/HomePostMessage";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
-import { indexAlbumQuery, pageQuery, postListQuery } from "@/sanity/queries";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    //Load custom Home Page data
-    const customContext = { params: { slug: "home", locale: context.locale }, ...context };
-    const customHomePageData = await client.fetch(pageQuery, customContext.params);
+ 
+    const posts = await getLatestPost(context.locale ?? "en");
+    const albumData = await getCategories();
+    const dataWithPosts = { albumData, posts };
 
-    const postListData = await client.fetch(postListQuery, context);
-
-    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } =
-      await getBasePageProps(context);
-    const { data } = await getPageData(indexAlbumQuery, ctx, previewToken);
-
-    const { currentLocale, otherLocale } = getPageLocaleVersions(data, ctx);
-    handleLocaleRedirect(currentLocale, ctx);
-    ctx.otherLocale = otherLocale;
-    const dataWithPosts = { albumData: data, posts: postListData };
 
     return {
       props: {
-        ..._nextI18Next,
-        data: customHomePageData ? { ...customHomePageData, type: "customPage" } : dataWithPosts,
-        preview,
-        previewToken,
-        siteMetadata,
-        context: ctx,
-        headerData
+        data: dataWithPosts,
+        ...await getBasePageProps(context)
       },
       revalidate: 3600
     };

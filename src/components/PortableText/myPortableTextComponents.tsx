@@ -47,8 +47,8 @@ export const myPortableTextComponents = {
         }
       }, [id]);
 
-      return <h1 id={id} >
-        <a className="link link-hover" onClick={handleClick} href={`#${id}`}>{children}</a>
+      return <h1 className="font-display" id={id} >
+        <a className="link link-hover " onClick={handleClick} href={`#${id}`}>{children}</a>
       </h1>;
     },
     h2: ({ children }: { children: any }) => {
@@ -67,7 +67,7 @@ export const myPortableTextComponents = {
           scrollToElement(element, id);
         }
       }, [id]);
-      return <h2 id={id}>
+      return <h2 className="font-display" id={id}>
         <a className="link link-hover" onClick={handleClick} href={`#${id}`}>{children}</a>
       </h2>;
     },

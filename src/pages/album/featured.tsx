@@ -1,20 +1,18 @@
 // pages/album/[albumId].tsx
 import { useRouter } from "next/router";
-import PhotoGallery from "@/components/PhotoGallery";
-import Breadcrumbs from "@/components/BreadCrumbs";
+import PhotoGallery from "@/components/Albums/PhotoGallery";
+import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import { PortableText } from "@portabletext/react";
 import dynamic from "next/dynamic";
-import { groq } from "next-sanity";
 import { GetStaticProps } from "next";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import PreviewPhotoGallery from "@/components/studio/PreviewPhotoGallery";
-import { getBasePageProps } from "@/components/lib/getBasePageProps";
-import { getPageData } from "@/components/lib/getPageData";
+import { getBasePageProps } from "@/components/lib/pageHelpers";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { useTranslation } from "next-i18next";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
-import { featuredAlbumQuery } from "@/sanity/queries";
+import { getFeaturedImagesAlbum } from "@/sanity/lib/client";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 
@@ -23,22 +21,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
     if (context.params) {
       context.params.locale = context?.locale;
     }
-    const { _nextI18Next, ctx, preview, previewToken, siteMetadata, headerData } =
-      await getBasePageProps(context);
 
-    const { data } = await getPageData(featuredAlbumQuery, ctx, previewToken);
-
-
+    const data = await getFeaturedImagesAlbum();
 
     return {
       props: {
-        ..._nextI18Next,
         data,
-        preview,
-        previewToken,
-        siteMetadata,
-        headerData,
-        context: ctx
+      ...await getBasePageProps(context)
       },
       revalidate: 3600
     };
@@ -81,7 +70,7 @@ export default function AlbumPage({
       <div>
         <Breadcrumbs items={[{ name: "featured" }]}></Breadcrumbs>
         <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-          <h2>{t("featuredHeader")}</h2>
+          <h2 className="text-5xl font-display">{t("featuredHeader")}</h2>
           <PortableText value={data?.description} components={myPortableTextComponents as any} />
         </div>
         {preview && previewToken ? (

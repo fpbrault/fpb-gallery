@@ -1,30 +1,32 @@
 // pages/album/[albumId].tsx
 import { useRouter } from "next/router";
-import AlbumGallery from "@/components/AlbumGallery";
-import Breadcrumbs from "@/components/BreadCrumbs";
+import AlbumGallery from "@/components/Albums/AlbumGallery";
+import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import dynamic from "next/dynamic";
-import { SanityDocument, groq } from "next-sanity";
+import { SanityDocument } from "next-sanity";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { client } from "@/sanity/lib/client";
+import { getCategoryBySlug, getCategoryPaths } from "@/sanity/lib/client";
 import PreviewAlbumGallery from "@/components/studio/PreviewAlbumGallery";
 import { PreviewBar } from "@/components/studio/PreviewBar";
 import { handlePageFetchError } from "@/components/lib/pageHelpers";
-import { getPageProps } from "@/components/lib/getPageProps";
 import OpenGraphMetadata from "@/components/OpenGraphMetadata";
-import { categoryParamsQuery, categoryQuery } from "@/sanity/queries";
+import { getBasePageProps } from "@/components/lib/pageHelpers";
+import { getSlugFromContext } from "@/components/lib/utils";
 
 const PreviewProvider = dynamic(() => import("@/components/studio/PreviewProvider"));
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = await client.fetch(
-    categoryParamsQuery,
-  );
+  const paths = await getCategoryPaths();
   return { paths, fallback: true };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    return getPageProps(categoryQuery, context);
+    const category = await getCategoryBySlug(getSlugFromContext(context));
+    return { props: { 
+      data: category ,
+      ...await getBasePageProps(context)
+     }};
   } catch (error) {
     return handlePageFetchError(error);
   }

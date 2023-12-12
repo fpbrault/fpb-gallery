@@ -1,8 +1,8 @@
 // ./nextjs-pages/src/components/PreviewPost.tsx
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
-import Post from "../Post";
-import { usePageProps } from "../lib/PagePropsContext";
+import Post from "../Blog/Post";
+import { usePageProps } from "../context/PagePropsContext";
 import { postQuery } from "@/sanity/queries";
 
 export default function PreviewPost({ post }: { post: SanityDocument }) {

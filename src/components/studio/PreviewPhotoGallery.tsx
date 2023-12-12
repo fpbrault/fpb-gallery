@@ -2,8 +2,8 @@
 
 import type { SanityDocument } from "@sanity/client";
 import { useLiveQuery } from "@sanity/preview-kit";
-import PhotoGallery from "../PhotoGallery";
-import { usePageProps } from "../lib/PagePropsContext";
+import PhotoGallery from "../Albums/PhotoGallery";
+import { usePageProps } from "../context/PagePropsContext";
 import { albumQueryWithSlug } from "@/sanity/queries";
 
 export default function PreviewPhotoGallery({ album }: { album: SanityDocument }) {

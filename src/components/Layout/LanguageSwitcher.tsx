@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
-import { usePageProps } from "./lib/PagePropsContext";
+import { usePageProps } from "../context/PagePropsContext";
 
 export function LanguageSwitcher(props: any) {
   const router = useRouter();

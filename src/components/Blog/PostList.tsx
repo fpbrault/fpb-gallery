@@ -8,7 +8,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
   const height = 600;
   return (
     <div className="text-center text-base-content text-sans">
-      <h2 className="pb-4 text-4xl font-bold"></h2>
+      <h2 className="pb-4 text-4xl font-bold font-display"></h2>
       {posts.length > 0 &&
         posts?.map((post: any, index: number) => {
           const imageUrl = post.coverImage
@@ -39,7 +39,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                   />
                 </Link>
                 <div className="items-center max-w-lg mx-auto card-body">
-                  <h2 className="card-title">
+                  <h2 className="card-title font-display">
                     <Link
                       className="text-2xl font-bold text-center link link-hover link-primary"
                       href={"/blog/" + post.slug.current}
