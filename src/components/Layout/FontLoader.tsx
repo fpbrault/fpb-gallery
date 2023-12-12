@@ -4,13 +4,13 @@ import {
   Inter,
   Nunito,
   Comfortaa,
-  Sarabun,
-  Amatic_SC,
+  Rokkitt,
+  Josefin_Sans,
   DM_Sans,
   Space_Grotesk,
-  Work_Sans,
+  Dosis,
   Libre_Franklin,
-  Roboto
+  Vollkorn
 } from "next/font/google";
 
 export const raleway = Raleway({
@@ -43,17 +43,17 @@ export const comfortaa = Comfortaa({
   variable: "--font-sans",
   weight: "variable",
 });
-export const sarabun = Sarabun({
+export const rokkitt = Rokkitt({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
+  weight: "variable",
 });
-export const amaticSC = Amatic_SC({
+export const josefinSans = Josefin_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: ["400", "700"],
+  weight: "variable",
 });
 export const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -67,7 +67,7 @@ export const spaceGrotesk = Space_Grotesk({
   variable: "--font-sans",
   weight: "variable",
 });
-export const workSans = Work_Sans({
+export const dosis = Dosis({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
@@ -79,11 +79,11 @@ export const libreFranklin = Libre_Franklin({
   variable: "--font-sans",
   weight: "variable",
 });
-const roboto = Roboto({
+export const vollkorn = Vollkorn({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: ["100","300","400", "500", "700"],
+  weight: "variable",
 });
 
 
@@ -100,20 +100,20 @@ export function getFontFamily(fontName: string): any {
     selectedFont = nunito;
   } else if (fontName === "comfortaa") {
     selectedFont = comfortaa;
-  } else if (fontName === "sarabun") {
-    selectedFont = sarabun;
-  } else if (fontName === "amaticSC") {
-    selectedFont = amaticSC;
+  } else if (fontName === "rokkitt") {
+    selectedFont = rokkitt;
+  } else if (fontName === "josefinSans") {
+    selectedFont = josefinSans;
   } else if (fontName === "dmSans") {
     selectedFont = dmSans;
   } else if (fontName === "spaceGrotesk") {
     selectedFont = spaceGrotesk;
-  } else if (fontName === "workSans") {
-    selectedFont = workSans;
+  } else if (fontName === "dosis") {
+    selectedFont = dosis;
   } else if (fontName === "libreFranklin") {
     selectedFont = libreFranklin;
-  } else if (fontName === "roboto") {
-    selectedFont = roboto
+  } else if (fontName === "vollkorn") {
+    selectedFont = vollkorn
   } else {
     selectedFont = raleway;
   }

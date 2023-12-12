@@ -8,6 +8,7 @@ import { SiteMetadataProvider } from "../context/SiteMetadataContext";
 import { PagePropsProvider } from "../context/PagePropsContext";
 import { getFontFamily } from "./FontLoader";
 
+
 type Props = {
   children: ReactNode;
   headerData?: any;
@@ -26,19 +27,9 @@ const Layout: React.FC<Props> = (props) => {
         })
       : {}
   };
-  const fontFamily = getFontFamily(props?.siteMetadata?.customFont);
+  const fontFamily = getFontFamily(props?.siteMetadata?.customFont ?? 'raleway');
+  const displayFontFamily = getFontFamily(props?.siteMetadata?.customDisplayFont ?? 'raleway');
 
-  useEffect(() => {
-    // Get the value of the variable
-    const fontFamilyObj = getFontFamily(props?.siteMetadata?.customDisplayFont ?? 'raleway');
-    const variableValue = fontFamilyObj.style.fontFamily;
-  
-    // Select the HTML element
-    const element = document.body; // or any other element
-  
-    // Set the CSS variable
-    element.style.setProperty('--font-display', variableValue);
-  }, []);
   return (
     <>
       <Head>
@@ -54,8 +45,8 @@ const Layout: React.FC<Props> = (props) => {
       </Head>
       <SiteMetadataProvider siteMetadata={props.siteMetadata}>
         <PagePropsProvider pageProps={props.context}>
-          <div
-            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col $ ${fontFamily.variable}`}
+          <div style={{ "--font-sans": fontFamily?.style?.fontFamily, "--font-display": displayFontFamily?.style?.fontFamily} as React.CSSProperties }
+            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col`}
           >
             <div className="flex-grow h-full drawer ">
               <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />

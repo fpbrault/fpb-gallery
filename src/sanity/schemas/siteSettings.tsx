@@ -175,13 +175,13 @@ export const siteSettings = defineType({
           { title: "Inter", value: "inter" },
           { title: "Nunito", value: "nunito" },
           { title: "Comfortaa", value: "comfortaa" },
-          { title: "Sarabun", value: "sarabun" },
-          { title: "Amatic SC", value: "amaticSC" },
+          { title: "Rokkitt", value: "rokkitt" },
+          { title: "Josefin Sans", value: "josefinSans" },
           { title: "DM Sans", value: "dmSans" },
           { title: "Space Grotesk", value: "spaceGrotesk" },
-          { title: "Work Sans", value: "workSans" },
+          { title: "Dosis", value: "dosis" },
           { title: "Libre Franklin", value: "libreFranklin" },
-          { title: "Roboto", value: "roboto" }
+          { title: "Vollkorn", value: "vollkorn" }
         ]
       }
     }),
@@ -201,13 +201,13 @@ export const siteSettings = defineType({
           { title: "Inter", value: "inter" },
           { title: "Nunito", value: "nunito" },
           { title: "Comfortaa", value: "comfortaa" },
-          { title: "Sarabun", value: "sarabun" },
-          { title: "Amatic SC", value: "amaticSC" },
+          { title: "Rokkitt", value: "rokkitt" },
+          { title: "Josefin Sans", value: "josefinSans" },
           { title: "DM Sans", value: "dmSans" },
           { title: "Space Grotesk", value: "spaceGrotesk" },
-          { title: "Work Sans", value: "workSans" },
+          { title: "Dosis", value: "dosis" },
           { title: "Libre Franklin", value: "libreFranklin" },
-          { title: "Roboto", value: "roboto" }
+          { title: "Vollkorn", value: "vollkorn" }
         ]
       }
     }),
