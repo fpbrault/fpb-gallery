@@ -8,6 +8,7 @@ import { appWithTranslation } from "next-i18next";
 import { createContext } from "react";
 import { getClient } from "@/sanity/lib/client";
 import { SanityClientProvider } from "@/components/context/SanityClientContext";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const PageContext = createContext({ params: {} });
 
@@ -78,7 +79,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         {page}
       </Layout>
     ));
-  return getLayout(<SanityClientProvider value={client}><Component {...pageProps} /></SanityClientProvider>);
+  return getLayout(<SanityClientProvider value={client}><Component {...pageProps} />  <SpeedInsights /></SanityClientProvider>);
 }
 
 export default appWithTranslation(App);
