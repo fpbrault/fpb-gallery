@@ -163,8 +163,6 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
         on={{
           view: ({ index: currentIndex }) => {
             // Extract the image id from the src URL
-            // Add the correct type for theImages
-            const theImages: { _key: string }[] = [];
 
             // Update the code to access the _key property
             const selectedImageId = theImages[currentIndex]._key;
