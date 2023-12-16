@@ -30,23 +30,6 @@ export const album = {
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "albumId",
-      type: "string",
-      title: "Album Id",
-      group: "metadata",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "publishDate",
-      type: "datetime",
-      group: "metadata",
-      initialValue: new Date().toISOString(),
-      title: "Publish Date",
-      options: {
-        dateFormat: "YYYY-MM-DD"
-      }
-    }),
-    defineField({
       name: "slug",
       type: "slug",
       title: "Album slug",
@@ -70,6 +53,16 @@ export const album = {
       validation: (Rule) => Rule.required(),
       title: "Category",
       to: [{ type: "category" as any }]
+    }),
+    defineField({
+      name: "publishDate",
+      type: "datetime",
+      group: "metadata",
+      initialValue: new Date().toISOString(),
+      title: "Publish Date",
+      options: {
+        dateFormat: "YYYY-MM-DD"
+      }
     }),
     defineField({
       name: "albumContent",
