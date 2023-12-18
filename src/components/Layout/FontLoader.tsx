@@ -3,14 +3,14 @@ import {
   Montserrat,
   Inter,
   Nunito,
-  Comfortaa,
+/*   Comfortaa,
   Rokkitt,
   Josefin_Sans,
   DM_Sans,
   Space_Grotesk,
   Dosis,
   Libre_Franklin,
-  Vollkorn
+  Vollkorn */
 } from "next/font/google";
 
 export const raleway = Raleway({
@@ -36,7 +36,7 @@ export const nunito = Nunito({
   display: "swap",
   variable: "--font-sans",
   weight: "variable",
-});
+});/* 
 export const comfortaa = Comfortaa({
   subsets: ["latin"],
   display: "swap",
@@ -84,7 +84,7 @@ export const vollkorn = Vollkorn({
   display: "swap",
   variable: "--font-sans",
   weight: "variable",
-});
+}); */
 
 
 export function getFontFamily(fontName: string): any {
@@ -98,7 +98,7 @@ export function getFontFamily(fontName: string): any {
     selectedFont = inter;
   } else if (fontName === "nunito") {
     selectedFont = nunito;
-  } else if (fontName === "comfortaa") {
+ /*  } else if (fontName === "comfortaa") {
     selectedFont = comfortaa;
   } else if (fontName === "rokkitt") {
     selectedFont = rokkitt;
@@ -113,7 +113,7 @@ export function getFontFamily(fontName: string): any {
   } else if (fontName === "libreFranklin") {
     selectedFont = libreFranklin;
   } else if (fontName === "vollkorn") {
-    selectedFont = vollkorn
+    selectedFont = vollkorn */
   } else {
     selectedFont = raleway;
   }

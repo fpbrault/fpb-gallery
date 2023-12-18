@@ -44,53 +44,12 @@ export default function Header({
           <label
             htmlFor="my-drawer-3"
             aria-label="open sidebar"
-            className="text-3xl btn btn-square md:hidden btn-ghost"
-          >
+            className="text-3xl btn btn-square md:hidden btn-ghost">
             <FaBars />
           </label>
-          <div className="dropdown">
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 rounded-xl w-48"
-            >
-              {headerData?.showHome != false && (
-                <li>
-                  <Link className="mx-auto link link-hover link-primary" href={"/"}>
-                    {context?.locale == "en" ? "Home" : "Accueil"}
-                  </Link>
-                </li>
-              )}
-              {headerData?.pages ? (
-                headerData?.pages.map((headerLink) => {
-                  return CustomHeaderLink(headerData, headerLink, context);
-                })
-              ) : (
-                <li>
-                  <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
-                    Blog
-                  </Link>
-                </li>
-              )}
-              {/*  <li><Link className='flex h-4 mx-auto link link-hover link-primary' href={contactUrl}>
-                        <div className='w-4 mt-1 mr-1 '>{icon}</div>{contactText}</Link></li> */}
-
-              <div className="my-1 divider"></div>
-              <div className="flex justify-center gap-2">
-                <div className="flex justify-center ">
-                  {" "}
-                  <LanguageSwitcher context={context}></LanguageSwitcher>
-                </div>
-
-                <div className="flex justify-center ">
-                  <ThemeSelector></ThemeSelector>
-                </div>
-              </div>
-            </ul>
-          </div>
           <Link
             className="w-full text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3 font-display"
-            href="/"
-          >
+            href="/">
             {title}
           </Link>
         </div>
@@ -135,44 +94,46 @@ export function HeaderSideBar({
 }) {
   //const icon = getSocialIcon(contactType);
   return (
-    <div className="z-50 drawer-side md:hidden">
+    <div className="z-50 h-screen drawer-side md:hidden">
       <label
         htmlFor="my-drawer-3"
         aria-label="close sidebar"
-        className="drawer-overlay !bg-transparent"
-      ></label>
-      <ul className="min-h-full p-4 text-3xl font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
-        {/* Sidebar content here */}
-        {headerData?.showHome != false && (
-          <li>
-            <Link className="mx-auto link link-hover link-primary" href={"/"}>
-              {context?.locale == "en" ? "Home" : "Accueil"}
-            </Link>
-          </li>
-        )}
-        {headerData?.pages ? (
-          headerData?.pages.map((headerLink) => {
-            return CustomHeaderLink(headerData, headerLink, context);
-          })
-        ) : (
-          <li>
-            <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
-              Blog
-            </Link>
-          </li>
-        )}
-        <div className="my-1 divider"></div>
-        <div className="flex justify-center gap-2">
-          <div className="flex justify-center ">
-            {" "}
-            <LanguageSwitcher></LanguageSwitcher>
-          </div>
+        className="drawer-overlay !bg-transparent"></label>
+      <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
+        <ul className="p-4 text-3xl ">
+          {/* Sidebar content here */}
+          {headerData?.showHome != false && (
+            <li>
+              <Link className="mx-auto link link-hover link-primary" href={"/"}>
+                {context?.locale == "en" ? "Home" : "Accueil"}
+              </Link>
+            </li>
+          )}
+          {headerData?.pages ? (
+            headerData?.pages.map((headerLink) => {
+              return CustomHeaderLink(headerData, headerLink, context);
+            })
+          ) : (
+            <li>
+              <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
+                Blog
+              </Link>
+            </li>
+          )}
+        </ul>
+        <div>
+          <div className="my-1 divider"></div>
+          <div className="flex justify-center gap-2">
+            <div className="flex justify-center ">
+              <LanguageSwitcher></LanguageSwitcher>
+            </div>
 
-          <div className="flex justify-center ">
-            <ThemeSelector></ThemeSelector>
+            <div className="flex justify-center ">
+              <ThemeSelector></ThemeSelector>
+            </div>
           </div>
         </div>
-      </ul>
+      </div>
     </div>
   );
 }
@@ -192,8 +153,7 @@ function CustomHeaderLink(headerData: any, headerLink: HeaderLink, context: any)
     <li key={headerLink?.slug}>
       <Link
         className="link link-hover link-primary"
-        href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}
-      >
+        href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}>
         {translatedHeaderLink?.title ??
           translatedHeaderText ??
           headerLink?.title ??
