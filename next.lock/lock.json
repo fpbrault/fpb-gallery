@@ -1,0 +1,5 @@
+{
+  "https://themer.sanity.build/api/hues?default=069292&primary=09d1d2;300&transparent=395f5f;600&positive=43d675;300&caution=fbd024;200&lightest=fcfdfd&darkest=0d1515": { "integrity": "sha512-1S19+lFIM0eMoG67y60NbiRAmFymQMNiNLmhqMWO8w3YhT5Z4aSiB/zgLvI/BK08sqzFlM+vv60DdEbBXxX2Sg==", "contentType": "application/javascript; charset=utf-8" },
+  "https://themer.sanity.build/api/hues?preset=verdant": { "integrity": "sha512-vClqx7zYa2hup76uJRqR+3uQpuuU4m80JpSlFICWiMFMROPwYumQnKAW9XhnIJ1hcwJM6oout1KQiMUpzttaLw==", "contentType": "application/javascript; charset=utf-8" },
+  "version": 1
+}

@@ -1,0 +1,14 @@
+{
+    "home": {
+        "readPost": "Nouveau sur mon blog:"
+    },
+    "blog": {
+        "previousPost": "Précédent",
+        "nextPost": "Suivant"
+    },
+    "related": {
+        "post": "Article",
+        "album": "Album"
+    },
+    "featuredHeader": "Photo Préférées"
+}
