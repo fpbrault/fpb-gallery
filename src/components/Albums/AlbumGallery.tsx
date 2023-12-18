@@ -26,11 +26,10 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
       })
     : albums.map((category: any) => {
         const { imageUrl, imageWidth, imageHeight } = getResizedImage(
-          category.albums[0].cover,
+          category.coverImage ?? category.albums[0].cover,
           75,
           600
         );
-
         return {
           href:
             category.albums.length > 1
@@ -40,7 +39,7 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
           width: imageWidth,
           height: imageHeight,
           title: category.categoryName,
-          blurDataURL: category.albums[0].cover.placeholders.metadata.lqip
+          blurDataURL: category.coverImage ? category.coverImage.placeholders.metadata.lqip : category.albums[0].cover.placeholders.metadata.lqip
         };
       });
 

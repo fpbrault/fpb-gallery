@@ -26,7 +26,16 @@ export const category = {
             .replace(/[^\w-]+/g, "");
         }
       }
-    })
+    }),
+    defineField({
+      name: "coverImage",
+      type: "image",
+      description: "Optional, defaults to the first image of the most recent album",
+      options: {
+        hotspot: true
+      },
+      title: "Cover Image"
+    }),
   ]
 };
 

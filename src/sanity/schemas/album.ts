@@ -87,6 +87,15 @@ export const album = {
       }
     }),
     defineField({
+      name: "coverImage",
+      type: "image",
+      description: "Optional, defaults to the first image of the album",
+      options: {
+        hotspot: true
+      },
+      title: "Cover Image"
+    }),
+    defineField({
       name: "columns",
       type: "number",
       group: "options",

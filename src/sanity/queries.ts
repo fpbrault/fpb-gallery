@@ -18,6 +18,8 @@ export const postListQuery = groq`
 }| order(publishDate desc)[0..1]`;
 
 
+const lqipPlaceholders = groq`asset->{metadata{lqip}}`;
+
 export const postListQuery2 = groq`
 *[_type == "post" && defined(slug.current) || defined(slug_fr.current)]  {
     "posts": *[_type == "post" && defined(slug.current) || defined(slug_fr.current)] {
@@ -42,12 +44,16 @@ export const postListQuery2 = groq`
 export const indexAlbumQuery = groq`
 *[_type == "category" && count(*[_type=="album" && references(^._id)]) > 0]{
     ...,
-    "albums": *[_type=="album" && references(^._id)]
+    "coverImage": coverImage{
+      ...,
+      "placeholders" : ${lqipPlaceholders}
+      },
+      "albums": *[_type=="album" && references(^._id)]
     | order(coalesce(publishDate, -1) desc){
         ...,
         "cover": images[0]{
             asset,
-            "placeholders" : asset->{metadata{lqip}}
+            "placeholders": ${lqipPlaceholders}
         }
     }
 }`;
@@ -95,7 +101,7 @@ export const categoryQuery = groq`
     ...,
     "category": category->categoryName,images[]{
         ...,
-        "placeholders" : asset->{metadata{lqip}}
+        "placeholders": ${lqipPlaceholders}
         }
     } | order(coalesce(publishDate, -1) desc)`;
 
@@ -139,12 +145,12 @@ export const postQuery = groq`*[_type == "post" && (slug.current == $slug || slu
   }
   } [0]`;
 
-export const featuredAlbumQuery = groq`*[_type == "album"]{...,category->,images[featured == true]
-    {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
 
+export const featuredAlbumQuery = groq`*[_type == "album"]{...,category->,images[featured == true]
+  {...,"placeholders" : ${lqipPlaceholders}}}.images[]`;
 
 export const albumQuery = groq`*[_type == "album"]{...,category->,images[]
-    {...,"placeholders" : asset->{metadata{lqip}}}}.images[]`;
+  {...,"placeholders" : ${lqipPlaceholders}}}.images[]`;
 
 export const albumQueryWithSlug = groq`*[_type == "album" && slug.current == $slug][0]{...,
     "description": albumContent[_key == $locale][0]{value[]
@@ -153,4 +159,4 @@ export const albumQueryWithSlug = groq`*[_type == "album" && slug.current == $sl
         _type == "album" || _type == "albumCard" =>{...}->{albumName,"slug": slug.current,images[0]{...,asset->}}}}.value
   
   ,
-    category->,images[]{...,"placeholders" : asset->{metadata{lqip}}}}`;
+  category->,images[]{...,"placeholders" : ${lqipPlaceholders}}}`;
