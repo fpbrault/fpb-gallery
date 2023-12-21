@@ -8,9 +8,9 @@ import { postQuery } from "@/sanity/queries";
 export default function PreviewPost({ post }: { post: SanityDocument }) {
   const context = usePageProps();
   const params = context.params;
-  const [data] = useLiveQuery(post, postQuery, params);
+  const [data] = useLiveQuery(post ?? null, postQuery, params);
   if (data == null) {
     return null;
   }
-  return <Post post={data.current} />;
+  return <Post post={data?.current} />;
 } 

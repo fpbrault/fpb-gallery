@@ -25,15 +25,15 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    const post = await getPostBySlug(getSlugFromContext(context), context.locale ?? "en");
+    const post = await getPostBySlug(getSlugFromContext(context), context?.locale ?? "en");
 
-    const redirect = await handleLocaleRedirect(post, context, "blog/");
+    /* const redirect = await handleLocaleRedirect(post, context, "blog/");
     if (redirect !== null) {
       return redirect;
     }
     if (!post) {
       throw new Error("Page not found");
-    }
+    } */
     
     return { props: { 
       data: post ,
@@ -63,7 +63,6 @@ export default function Page({
       </div>
     );
   }
-
   return (
     <>
       <OpenGraphMetadata
@@ -77,7 +76,7 @@ export default function Page({
         {preview && previewToken ? (
           <PreviewProvider previewToken={previewToken}>
             <PreviewPost post={data?.current} />
-            <PostNavigation data={data}></PostNavigation>
+           {data && <PostNavigation data={data}></PostNavigation>}
             <PreviewBar />
           </PreviewProvider>
         ) : (

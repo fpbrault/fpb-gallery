@@ -120,7 +120,7 @@ export async function getBasePageProps(context: any) {
     console.error(error);
   }
 
-  if (context.params) {
+  if (context?.params) {
     context.params.locale = context?.locale;
   } else {
     context = { ...context, params: {} };
@@ -152,7 +152,7 @@ export async function handleLocaleRedirect(data: any, context: any, prefix?: str
       return {
         redirect: {
           destination:
-            `/${context.locale != "en" ? context.locale + "/" : ""}${prefix ?? ""}${currentLocale?.slug?.current}`,
+            `/${context?.locale != "en" ? context?.locale + "/" : ""}${prefix ?? ""}${currentLocale?.slug?.current}`,
           permanent: false
         }
       };
@@ -166,10 +166,10 @@ export async function handleLocaleRedirect(data: any, context: any, prefix?: str
 
 export function getPageLocales(data: any, context: any, isSlug = false) {
   if (isSlug) {
-    const slugName = context.locale === "en" ? "slug" : "slug_fr";
-    const currentLocale = { slug: data.current[slugName] };
+    const slugName = context?.locale === "en" ? "slug" : "slug_fr";
+    const currentLocale = { slug: data?.current[slugName] };
     const otherLocale = {
-      slug: data.current[slugName === "slug" ? "slug_fr" : "slug"]
+      slug: data?.current[slugName === "slug" ? "slug_fr" : "slug"]
     };
 
     return { currentLocale, otherLocale };
@@ -177,11 +177,11 @@ export function getPageLocales(data: any, context: any, isSlug = false) {
 
   const otherLocale =
     data?._translations?.find(
-      (translation: { language: string }) => translation?.language != context.locale
+      (translation: { language: string }) => translation?.language != context?.locale
     ) ?? null;
   const currentLocale =
     data?._translations?.find(
-      (translation: { language: string }) => translation?.language == context.locale
+      (translation: { language: string }) => translation?.language == context?.locale
     ) ?? null;
 
   return { otherLocale, currentLocale };
