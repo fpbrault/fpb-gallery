@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     
     return { props: { 
       data: album,
-      ...await getBasePageProps(context)
+      ...(await getBasePageProps(context))
      }};
   } catch (error) {
     return handlePageFetchError(error);

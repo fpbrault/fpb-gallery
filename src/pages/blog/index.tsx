@@ -17,7 +17,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   try {
     const initialData = await getAllPosts(context);
     return {
-      props: {...await getBasePageProps(context), data: {...initialData}},
+      props: {...(await getBasePageProps(context)), data: {...initialData}},
     };
   } catch (error) {
     return handlePageFetchError(error);

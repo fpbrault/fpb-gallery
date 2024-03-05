@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const category = await getCategoryBySlug(getSlugFromContext(context));
     return { props: { 
       data: category ,
-      ...await getBasePageProps(context)
+      ...(await getBasePageProps(context))
      }};
   } catch (error) {
     return handlePageFetchError(error);

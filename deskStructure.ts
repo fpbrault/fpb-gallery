@@ -115,12 +115,12 @@ export const structure = (S: any) =>
                 .icon(FaCircleInfo)
                 .child(S.document().schemaType("siteSettings").documentId("siteSettings") .views([
                   S.view.form(),
-                  S.view
-                    .component(Iframe)
-                    .options({
-                      url: (doc: SanityDocument) => getPreviewUrl(doc),
-                    })
-                    .title('Preview')
+                  // S.view
+                  //   .component(Iframe)
+                  //   .options({
+                  //     url: (doc: SanityDocument) => getPreviewUrl(doc),
+                  //   })
+                  //   .title('Preview')
                 ])
                 ),
               S.listItem()

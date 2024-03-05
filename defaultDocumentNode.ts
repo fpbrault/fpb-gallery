@@ -1,6 +1,4 @@
-// ./src/defaultDocumentNode.ts
-
-import { DefaultDocumentNodeResolver } from "sanity/desk";
+import { DefaultDocumentNodeResolver } from "sanity/structure";
 import { Iframe } from "sanity-plugin-iframe-pane";
 
 // Customise this function to show the correct URL based on the current document

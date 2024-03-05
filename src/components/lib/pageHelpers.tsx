@@ -96,7 +96,7 @@ export async function getBasePageProps(context: any) {
   }
   try {
     siteMetadata = {
-      ...await runQuery(siteMetadataQuery),
+      ...(await runQuery(siteMetadataQuery)),
       customThemeVariables: null,
     };
   } catch (error) {
@@ -127,7 +127,7 @@ export async function getBasePageProps(context: any) {
   }
 
   return {
-    ...await getTranslations(context),
+    ...(await getTranslations(context)),
     context,
     preview,
     previewToken,

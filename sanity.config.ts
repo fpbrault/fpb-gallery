@@ -1,5 +1,5 @@
 import { visionTool } from "@sanity/vision";
-import { deskTool } from "sanity/desk";
+import { structureTool } from "sanity/structure";
 import { media } from "sanity-plugin-media";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { schemaTypes } from "@/sanity/schemas";
@@ -26,7 +26,7 @@ export const config = defineConfig({
   schema: schemaTypes,
   plugins: [
     secretsToolbar(),
-    deskTool({
+    structureTool({
       defaultDocumentNode,
       structure
     }),

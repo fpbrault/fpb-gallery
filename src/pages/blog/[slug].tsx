@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     
     return { props: { 
       data: post ,
-      ...await getBasePageProps(context)
+      ...(await getBasePageProps(context))
      }};
   } catch (error) {
     console.error(error)

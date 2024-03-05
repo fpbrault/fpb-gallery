@@ -27,7 +27,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {
       props: {
         data,
-      ...await getBasePageProps(context)
+      ...(await getBasePageProps(context))
       },
       revalidate: 3600
     };

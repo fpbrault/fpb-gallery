@@ -7,7 +7,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
   const width = 1000;
   const height = 600;
   return (
-    <div className="text-center text-base-content text-sans">
+    (<div className="text-center text-base-content text-sans">
       <h2 className="pb-4 text-4xl font-bold font-display"></h2>
       {posts.length > 0 &&
         posts?.map((post: any, index: number) => {
@@ -15,7 +15,7 @@ export default function Post({ posts }: { posts: SanityDocument }) {
             ? urlForImage(post.coverImage).height(height).width(width).quality(80).url()
             : null;
           return (
-            <div className="" key={post.slug.current}>
+            (<div className="" key={post.slug.current}>
               <article className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side">
                 <Link href={"/blog/" + post.slug.current}>
                   <Image
@@ -68,9 +68,9 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                   <div className="divider divider-primary"></div>
                 </div>
               )}
-            </div>
+            </div>)
           );
         })}
-    </div>
+    </div>)
   );
 }

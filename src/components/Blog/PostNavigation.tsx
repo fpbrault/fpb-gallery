@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 
 function PostNavigationItem(props: any) {
   return (
-    <div className="flex w-full nav-item indicator">
+    (<div className="flex w-full nav-item indicator">
       {props.data?.slug && (
         <>
           <div className="indicator-item indicator-center badge-sm badge badge-primary backdrop-blur-xl">
@@ -41,7 +41,7 @@ function PostNavigationItem(props: any) {
           </Link>
         </>
       )}
-    </div>
+    </div>)
   );
 }
 
