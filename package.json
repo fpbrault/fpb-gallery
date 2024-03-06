@@ -55,7 +55,7 @@
     "sanity-plugin-media": "^2.2.4",
     "sanity-plugin-note-field": "^2.0.2",
     "sharp": "^0.33.2",
-    "styled-components": "^5.3.11",
+    "styled-components": "^6.0.0",
     "tailwindcss-neumorphism": "^0.1.0",
     "typescript": "^5.3.3",
     "yet-another-react-lightbox": "^3.17.0"
