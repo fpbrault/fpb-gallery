@@ -42,7 +42,7 @@
     "picosanity": "^4.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-i18next": "^14.0.5",
+    "react-i18next": "^15.0.0",
     "react-icons": "^5.0.1",
     "react-intersection-observer": "^9.8.1",
     "react-photo-album": "^2.3.0",
