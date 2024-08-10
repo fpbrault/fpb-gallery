@@ -45,7 +45,7 @@
     "react-i18next": "^14.0.5",
     "react-icons": "^5.0.1",
     "react-intersection-observer": "^9.8.1",
-    "react-photo-album": "^2.3.0",
+    "react-photo-album": "^3.0.0",
     "react-player": "^2.15.1",
     "react-rough-notation": "^1.0.5",
     "react-spring-lightbox": "^1.8.0",
