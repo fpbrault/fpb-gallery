@@ -13,7 +13,6 @@ import { getResizedImage } from "@/sanity/lib/image";
 import PhotoAlbum, { ClickHandler, Photo } from "react-photo-album";
 import { PortableText } from "@portabletext/react";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
-import { RoughNotationGroup } from "react-rough-notation";
 
 type Props = {
   images: any[];
@@ -28,40 +27,41 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
   const [index, setIndex] = React.useState(-1);
   const lightboxRef = React.useRef<ControllerRef | null>(null);
   const [isMobile, setIsMobile] = React.useState(false);
-  
 
   const [theImages, setTheImages] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     // This function runs whenever `images` prop changes
-    const newImages = images ? images.map((image) => {
-      const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
-      return {
-        ...image,
-        src: imageUrl,
-        height: imageHeight,
-        width: imageWidth,
-        title: (
-          <>
-            <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">{image.title}</div>
-          </>
-        ),
-        description: (
-          <>
-            {image.description && (
-              <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                <RoughNotationGroup>
-                  <PortableText
-                    components={myPortableTextComponents as any}
-                    value={image.description}
-                  />
-                </RoughNotationGroup>
-              </div>
-            )}
-          </>
-        ),
-      };
-    }) : [];
+    const newImages = images
+      ? images.map((image) => {
+          const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
+          return {
+            ...image,
+            src: imageUrl,
+            height: imageHeight,
+            width: imageWidth,
+            title: (
+              <>
+                <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">
+                  {image.title}
+                </div>
+              </>
+            ),
+            description: (
+              <>
+                {image.description && (
+                  <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
+                    <PortableText
+                      components={myPortableTextComponents as any}
+                      value={image.description}
+                    />
+                  </div>
+                )}
+              </>
+            )
+          };
+        })
+      : [];
     setTheImages(newImages);
   }, [images]);
 
@@ -125,7 +125,7 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
             ...photo,
             layoutOptions: {
               ...photo.layoutOptions,
-              onClick: photo.layoutOptions.onClick as ClickHandler<Photo>
+              onClick: photo.layoutOptions.onClick as ClickHandler
             }
           })
         }
@@ -142,7 +142,10 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
         slides={theImages}
         plugins={[Fullscreen, Captions, Zoom, Counter, ({ remove }) => remove("no-scroll")]}
         captions={{ showToggle: true, descriptionTextAlign: "start", descriptionMaxLines: 50 }}
-        styles={{ captionsDescription: { backgroundColor: "rgba(0,0,0,0" }, captionsTitle: { backgroundColor: "rgba(0,0,0,0" } }}
+        styles={{
+          captionsDescription: { backgroundColor: "rgba(0,0,0,0" },
+          captionsTitle: { backgroundColor: "rgba(0,0,0,0" }
+        }}
         render={{
           buttonPrev: theImages.length <= 1 ? () => null : undefined,
           buttonZoom: isMobile ? () => null : undefined,

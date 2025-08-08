@@ -9,7 +9,7 @@ import {
   FaPalette
 } from "react-icons/fa6";
 import { MdOutlineArticle } from "react-icons/md";
-import Iframe from "sanity-plugin-iframe-pane";
+import {Iframe} from "sanity-plugin-iframe-pane";
 
 
 function getPreviewUrl(doc: any) {

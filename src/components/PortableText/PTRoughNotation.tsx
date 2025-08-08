@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { RoughNotation } from "react-rough-notation";
 import { useInView } from "react-intersection-observer";
 
 export function PTRoughNotation(props: any) {
@@ -9,22 +8,5 @@ export function PTRoughNotation(props: any) {
     delay: 0
   });
 
-  return (
-    <span ref={ref}>
-      {inView ? (
-        <RoughNotation
-          animate={props?.value?.animate ?? false}
-          multiline={true}
-          order={props?.value?.order ?? 1}
-          color={props?.value?.color?.hex ?? null}
-          type={props?.value?.type || "underline"}
-          show={false}
-        >
-          {props.children}
-        </RoughNotation>
-      ) : (
-        <>{props.children}</>
-      )}
-    </span>
-  );
+  return <span ref={ref}>{<>{props.children}</>}</span>;
 }

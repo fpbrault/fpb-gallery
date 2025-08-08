@@ -3,11 +3,10 @@ import Head from "next/head";
 import Header, { HeaderSideBar } from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
-import { Layout } from "@/types/layout";
+import type { Layout } from "@/types/layout";
 import { SiteMetadataProvider } from "../context/SiteMetadataContext";
 import { PagePropsProvider } from "../context/PagePropsContext";
 import { getFontFamily } from "./FontLoader";
-
 
 type Props = {
   children: ReactNode;
@@ -27,8 +26,8 @@ const Layout: React.FC<Props> = (props) => {
         })
       : {}
   };
-  const fontFamily = getFontFamily(props?.siteMetadata?.customFont ?? 'raleway');
-  const displayFontFamily = getFontFamily(props?.siteMetadata?.customDisplayFont ?? 'raleway');
+  const fontFamily = getFontFamily(props?.siteMetadata?.customFont ?? "raleway");
+  const displayFontFamily = getFontFamily(props?.siteMetadata?.customDisplayFont ?? "raleway");
 
   return (
     <>
@@ -45,9 +44,14 @@ const Layout: React.FC<Props> = (props) => {
       </Head>
       <SiteMetadataProvider siteMetadata={props.siteMetadata}>
         <PagePropsProvider pageProps={props.context}>
-          <div style={{ "--font-sans": fontFamily?.style?.fontFamily, "--font-display": displayFontFamily?.style?.fontFamily} as React.CSSProperties }
-            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col`}
-          >
+          <div
+            style={
+              {
+                "--font-sans": fontFamily?.style?.fontFamily,
+                "--font-display": displayFontFamily?.style?.fontFamily
+              } as React.CSSProperties
+            }
+            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col`}>
             <div className="flex-grow h-full drawer ">
               <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
               <div className="flex flex-col drawer-content">

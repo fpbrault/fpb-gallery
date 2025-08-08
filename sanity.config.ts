@@ -13,7 +13,6 @@ import { internationalizedArray } from "sanity-plugin-internationalized-array";
 import { defineConfig } from "sanity";
 
 import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
-import { noteField } from "sanity-plugin-note-field";
 import structure from "./deskStructure";
 import { DeleteAndRevalidate, PublishAndRevalidate } from "@/sanity/lib/actions";
 import { secretsToolbar } from "@/sanity/plugins/secrets-toolbar";
@@ -49,7 +48,6 @@ export const config = defineConfig({
     }),
     colorInput(),
     media(),
-    noteField()
   ],
   document: {
     actions: (prev: any, { schemaType }: any) => {

@@ -17,7 +17,7 @@ const nextConfig = {
         // should handle (these are only required when setting up domain routing)
         // Note: subdomains must be included in the domain value to be matched e.g. "fr.example.com".
     },
-    experimental: { urlImports: ['https://themer.sanity.build/'] },
+    experimental: { urlImports: ['https://themer.sanity.build/'],    esmExternals: false, },
     images: {
         formats: ['image/webp'],
         remotePatterns: [

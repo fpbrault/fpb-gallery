@@ -27,22 +27,31 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    
-    const pageContent = await getCustomPageContent(getSlugFromContext(context), context.locale);
+    const slug = getSlugFromContext(context);
+    if (!slug) {
+      console.error("Slug is undefined in getStaticProps", { context });
+      throw new Error("Slug is undefined");
+    }
+    console.log("Fetched slug in getStaticProps:", slug);
+    const pageContent = await getCustomPageContent(slug, context.locale);
 
     const redirect = await handleLocaleRedirect(pageContent, context, "");
     if (redirect !== null) {
       return redirect;
     }
     if (!pageContent) {
+      console.error("Page not found for slug:", slug);
       throw new Error("Page not found");
     }
 
-    return { props: { 
-       data: {...pageContent },
-       ...(await getBasePageProps(context))
-      }};
+    return {
+      props: {
+        data: { ...pageContent },
+        ...(await getBasePageProps(context))
+      }
+    };
   } catch (error) {
+    console.error("Error in getStaticProps:", error);
     return handlePageFetchError(error);
   }
 };
