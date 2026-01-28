@@ -41,7 +41,7 @@
     "groqd": "^0.15.10",
     "i18next": "^23.10.0",
     "marked": "^12.0.0",
-    "next": "^15",
+    "next": "^16",
     "next-i18next": "^15.2.0",
     "next-sanity": "^10.0.10",
     "next-sanity-image": "^6.2.0",
