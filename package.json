@@ -35,7 +35,7 @@
     "@vercel/og": "^0.6.2",
     "@vercel/speed-insights": "^1.0.1",
     "culori": "^4.0.1",
-    "dotenv": "^16.4.5",
+    "dotenv": "^17.0.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^15.0.0",
     "groqd": "^0.15.10",
