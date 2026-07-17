@@ -1,4 +1,5 @@
 import "../../styles/globals.css";
+import "react-photo-album/styles.css";
 import "yet-another-react-lightbox/styles.css";
 
 import type { Metadata } from "next";

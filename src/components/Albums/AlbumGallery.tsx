@@ -61,7 +61,16 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
         photos={photos}
         targetRowHeight={500}
         spacing={20}
-        renderPhoto={(props) => <NextJsImageAlbum limitHeight={photos.length < 2} {...props} />}
+        render={{
+          photo: (renderProps, context) => (
+            <NextJsImageAlbum
+              context={context}
+              key={context.photo.key ?? context.photo.src}
+              limitHeight={photos.length < 2}
+              renderProps={renderProps}
+            />
+          )
+        }}
         sizes={{
           size: "calc(100vw - 240px)",
           sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }]

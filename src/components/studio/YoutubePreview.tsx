@@ -1,5 +1,5 @@
 import type { PreviewProps } from "sanity";
-import YouTubePlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 
 interface PreviewYouTubeProps extends PreviewProps {
   selection?: {
@@ -10,5 +10,5 @@ interface PreviewYouTubeProps extends PreviewProps {
 export function YouTubePreview(props: PreviewYouTubeProps) {
   const { selection } = props;
   const url = selection?.url;
-  return <>{url ? <YouTubePlayer url={url} /> : <span>Add a YouTube URL</span>}</>;
+  return <>{url ? <ReactPlayer src={url} /> : <span>Add a YouTube URL</span>}</>;
 }
