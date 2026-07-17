@@ -14,10 +14,12 @@ test("unknown content returns a real 404", async ({ page }) => {
 });
 
 test("theme selection persists without site metadata", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.locator('label[aria-label="open sidebar"]').click();
   await page.getByRole("checkbox", { name: "Toggle light and dark theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "mytheme");
 

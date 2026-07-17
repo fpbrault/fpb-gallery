@@ -1,20 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import {
-  isThemeName,
-  presentationConfig,
-  resolveTheme,
-  type ThemeName
-} from "@/config/presentation";
+import { useSyncExternalStore } from "react";
+import { isThemeName, presentationConfig, resolveTheme } from "@/config/presentation";
+
+const themeChangeEvent = "site-theme-change";
+
+const getThemeSnapshot = () => {
+  const activeTheme = document.documentElement.dataset.theme;
+  if (isThemeName(activeTheme)) return activeTheme;
+  return resolveTheme(null, window.matchMedia("(prefers-color-scheme: dark)").matches);
+};
+
+const subscribeToTheme = (onStoreChange: () => void) => {
+  window.addEventListener(themeChangeEvent, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(themeChangeEvent, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+};
 
 const ThemeSelector = () => {
-  const [theme, setTheme] = useState<ThemeName>(() => {
-    if (typeof document === "undefined") return presentationConfig.themes.dark;
-    const activeTheme = document.documentElement.dataset.theme;
-    if (isThemeName(activeTheme)) return activeTheme;
-    return resolveTheme(null, window.matchMedia("(prefers-color-scheme: dark)").matches);
-  });
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    () => presentationConfig.themes.light
+  );
 
   const toggleTheme = () => {
     const newTheme =
@@ -22,8 +33,8 @@ const ThemeSelector = () => {
         ? presentationConfig.themes.light
         : presentationConfig.themes.dark;
     document.documentElement.setAttribute("data-theme", newTheme);
-    setTheme(newTheme);
     localStorage.setItem(presentationConfig.themes.storageKey, newTheme);
+    window.dispatchEvent(new Event(themeChangeEvent));
   };
 
   return (
