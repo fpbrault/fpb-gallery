@@ -17,36 +17,30 @@ vi.mock("next/image", () => ({
   }
 }));
 
-import { NextJsImageElement, type GalleryPhoto } from "./NextJsImage";
+import { GalleryThumbnailImage } from "./GalleryThumbnailImage";
+import type { GalleryThumbnail } from "@/features/gallery/models";
 
 function renderPhoto(lqip?: string) {
-  const photo: GalleryPhoto = {
-    _key: "photo-1",
-    _type: "image",
+  const photo: GalleryThumbnail = {
     alt: "Winter landscape",
-    asset: {
-      _ref: "image-4338b28bcb30c42a571234d34c1d4507b2704b98-3088x2048-jpg",
-      _type: "reference"
-    },
-    decorative: false,
-    description: undefined,
-    featured: false,
-    height: 2048,
-    placeholders: { metadata: { lqip } },
+    height: 1000,
+    id: "photo-1",
+    key: "photo-1",
+    lqip,
     src: "https://cdn.sanity.io/image.jpg",
     title: "Winter",
-    width: 3088
+    width: 1500
   };
 
   render(
-    <NextJsImageElement
+    <GalleryThumbnailImage
       context={{ height: photo.height, index: 0, photo, width: photo.width }}
       renderProps={{}}
     />
   );
 }
 
-describe("gallery Next Image placeholder", () => {
+describe("gallery thumbnail placeholder", () => {
   it("uses an empty placeholder when Sanity has no LQIP", () => {
     renderPhoto();
     expect(screen.getByRole("img")).toHaveAttribute("data-placeholder", "empty");

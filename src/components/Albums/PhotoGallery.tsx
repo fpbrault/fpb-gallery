@@ -1,32 +1,23 @@
 "use client";
 
-import * as React from "react";
+import { useMemo } from "react";
 
-import Lightbox, { ControllerRef } from "yet-another-react-lightbox";
+import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/counter.css";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
-import { NextJsImage, NextJsImageElement, type GalleryPhoto } from "./NextJsImage";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getResizedImage } from "@/sanity/lib/image";
 import PhotoAlbum, { type ClickHandler } from "react-photo-album";
-import { RichText } from "@/components/PortableText/RichText";
+import { GalleryCaption } from "@/components/Albums/GalleryCaption";
+import { GalleryThumbnailImage } from "@/components/Albums/GalleryThumbnailImage";
+import { LightboxSlideImage } from "@/components/Albums/LightboxSlideImage";
+import { useGalleryUrlState } from "@/components/Albums/useGalleryUrlState";
+import { useIsMobile } from "@/components/Albums/useIsMobile";
 import type { ContentImage } from "@/features/content/models";
-
-const mobileQuery = "(max-width: 768px)";
-
-function subscribeToMobile(callback: () => void) {
-  const media = window.matchMedia(mobileQuery);
-  media.addEventListener("change", callback);
-  return () => media.removeEventListener("change", callback);
-}
-
-function getMobileSnapshot() {
-  return window.matchMedia(mobileQuery).matches;
-}
+import { mapGalleryImages } from "@/features/gallery/galleryMapper";
+import type { GalleryThumbnail } from "@/features/gallery/models";
 
 type Props = {
   images: ContentImage[];
@@ -35,71 +26,41 @@ type Props = {
 };
 
 function PhotoGallery({ images, mode, columns }: Props) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const imageId = searchParams?.get("imageId") ?? null;
-  const [selectedIndex, setSelectedIndex] = React.useState(-1);
-  const lightboxRef = React.useRef<ControllerRef | null>(null);
-  const isMobile = React.useSyncExternalStore(subscribeToMobile, getMobileSnapshot, () => false);
-
-  const theImages = React.useMemo<GalleryPhoto[]>(
+  const { slides, thumbnails } = useMemo(() => mapGalleryImages(images), [images]);
+  const lightboxSlides = useMemo(
     () =>
-      images
-        ? images.map((image) => {
-            const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
-            return {
-              ...image,
-              src: imageUrl,
-              height: imageHeight,
-              width: imageWidth,
-              title: image.title,
-              description: (
-                <>
-                  {image.description && (
-                    <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                      <RichText value={image.description} />
-                    </div>
-                  )}
-                </>
-              )
-            };
-          })
-        : [],
-    [images]
+      slides.map((slide) => ({
+        ...slide,
+        description: slide.description?.length ? (
+          <GalleryCaption value={slide.description} />
+        ) : undefined
+      })),
+    [slides]
   );
-  const deepLinkedIndex = imageId ? theImages.findIndex((image) => image._key === imageId) : -1;
-  const index = imageId ? deepLinkedIndex : selectedIndex;
+  const isMobile = useIsMobile();
+  const galleryUrl = useGalleryUrlState(slides.map(({ id }) => id));
 
-  const handleImageClick: ClickHandler<GalleryPhoto> = ({ index: current }) => {
-    setSelectedIndex(current);
-
-    // Extract the image id from the src URL
-    const selectedImageId = theImages[current]?._key;
-    if (!selectedImageId) return;
-
-    // Update the URL with the selected image id in the query parameter
-    router.push(`${pathname}?imageId=${selectedImageId}`, { scroll: false });
+  const handleImageClick: ClickHandler<GalleryThumbnail> = ({ index }) => {
+    const selectedImageId = slides[index]?.id;
+    if (selectedImageId) galleryUrl.open(selectedImageId);
   };
 
-  if (!images) {
-    return "nothing";
-  }
+  if (!thumbnails.length) return null;
 
   return (
     <>
       <PhotoAlbum
         layout={mode ?? "rows"}
-        photos={theImages}
+        photos={thumbnails}
         targetRowHeight={500}
         spacing={20}
         columns={columns ?? 3}
         render={{
           photo: (renderProps, context) => (
-            <NextJsImageElement
+            <GalleryThumbnailImage
               context={context}
-              key={context.photo.key ?? context.photo._key}
-              limitHeight={theImages.length < 3}
+              key={context.photo.key}
+              limitHeight={thumbnails.length < 3}
               renderProps={renderProps}
             />
           )
@@ -112,9 +73,8 @@ function PhotoGallery({ images, mode, columns }: Props) {
       />
 
       <Lightbox
-        controller={{ ref: lightboxRef }}
-        index={index}
-        slides={theImages}
+        index={galleryUrl.index}
+        slides={lightboxSlides}
         plugins={[Fullscreen, Captions, Zoom, Counter, ({ remove }) => remove("no-scroll")]}
         captions={{ showToggle: true, descriptionTextAlign: "start", descriptionMaxLines: 50 }}
         styles={{
@@ -122,29 +82,17 @@ function PhotoGallery({ images, mode, columns }: Props) {
           captionsTitle: { backgroundColor: "rgba(0,0,0,0" }
         }}
         render={{
-          buttonPrev: theImages.length <= 1 ? () => null : undefined,
+          buttonPrev: slides.length <= 1 ? () => null : undefined,
           buttonZoom: isMobile ? () => null : undefined,
-          buttonNext: theImages.length <= 1 ? () => null : undefined,
-          slide: NextJsImage
+          buttonNext: slides.length <= 1 ? () => null : undefined,
+          slide: LightboxSlideImage
         }}
-        open={index > -1}
-        close={() => {
-          setSelectedIndex(-1);
-
-          // Check if the current URL contains the imageId parameter
-          if (searchParams?.has("imageId")) {
-            router.push(pathname ?? "/", { scroll: false });
-          }
-        }}
+        open={galleryUrl.index > -1}
+        close={galleryUrl.close}
         on={{
-          view: ({ index: currentIndex }) => {
-            // Extract the image id from the src URL
-
-            // Update the code to access the _key property
-            const selectedImageId = theImages[currentIndex]?._key;
-            if (!selectedImageId) return;
-            // Update the URL with the selected image id in the query parameter
-            router.replace(`${pathname}?imageId=${selectedImageId}`, { scroll: false });
+          view: ({ index }) => {
+            const selectedImageId = slides[index]?.id;
+            if (selectedImageId) galleryUrl.view(selectedImageId);
           }
         }}
       />

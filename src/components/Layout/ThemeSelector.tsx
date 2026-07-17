@@ -38,13 +38,13 @@ const ThemeSelector = () => {
   };
 
   return (
-    <label className="grid cursor-pointer place-items-center">
+    <label className="toggle bg-base-content cursor-pointer">
       <input
         type="checkbox"
         aria-label="Toggle light and dark theme"
         checked={theme === presentationConfig.themes.dark}
         onChange={toggleTheme}
-        className="col-span-2 col-start-1 row-start-1 toggle theme-controller bg-base-content"
+        className="theme-controller"
       />
       <svg
         className="col-start-1 row-start-1 stroke-base-100 fill-base-100"

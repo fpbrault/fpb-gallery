@@ -3,47 +3,54 @@
 import { useContext, useMemo, useState } from "react";
 import Image from "next/image";
 import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
 
-import { urlForImage } from "@/sanity/lib/image";
 import ImageContext from "./ImageContext";
-import type { Image as SanityImage } from "sanity";
+import {
+  getPortableImageId,
+  type PortableImageValue
+} from "@/features/content/portableImageRegistry";
 
-export type PortableImageValue = SanityImage & { alt?: string; blurDataURL?: string };
+export type { PortableImageValue } from "@/features/content/portableImageRegistry";
 
 export function PTImage({ value }: { value: PortableImageValue }) {
   const [isOpen, setIsOpen] = useState(false);
-  const imageUrls = useContext(ImageContext);
-  const thumbnailSrc = urlForImage(value).width(1000).quality(75).format("webp").url();
-  const lightboxSrc = urlForImage(value).width(2048).quality(80).format("webp").url();
+  const registry = useContext(ImageContext);
+  const id = getPortableImageId(value);
+  const entry = registry?.images.find((image) => image.id === id);
   const slides = useMemo(
-    () => Array.from(new Set([...imageUrls, lightboxSrc])).map((src) => ({ src })),
-    [imageUrls, lightboxSrc]
+    () =>
+      registry?.images.map(({ slide }) => ({
+        alt: slide.alt,
+        height: slide.height,
+        id: slide.id,
+        src: slide.src,
+        width: slide.width
+      })) ?? [],
+    [registry]
   );
-  const currentIndex = Math.max(
-    0,
-    slides.findIndex((slide) => slide.src === lightboxSrc)
-  );
+  const currentIndex = entry ? (registry?.images.indexOf(entry) ?? -1) : -1;
+
+  if (!entry || currentIndex < 0) return null;
 
   return (
     <div>
       <button
         type="button"
-        className="block rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-        aria-label={value.alt ? `Open image: ${value.alt}` : "Open image"}
+        className="block rounded focus-visible:outline focus-visible:outline-primary"
+        aria-label={entry.slide.alt ? `Open image: ${entry.slide.alt}` : "Open image"}
         onClick={() => setIsOpen(true)}
       >
         <Image
-          width={1000}
-          height={1000}
+          width={entry.thumbnail.width}
+          height={entry.thumbnail.height}
           className="transition-transform duration-500 rounded shadow-2xl object-fit hover:scale-105"
-          alt={value.alt ?? ""}
-          blurDataURL={value.blurDataURL}
-          placeholder={value.blurDataURL ? "blur" : "empty"}
-          src={thumbnailSrc}
+          alt={entry.slide.alt}
+          blurDataURL={entry.slide.lqip}
+          placeholder={entry.slide.lqip ? "blur" : "empty"}
+          src={entry.thumbnail.src}
         />
       </button>
-      <Lightbox open={isOpen} close={() => setIsOpen(false)} index={currentIndex} slides={slides} />
+      <Lightbox close={() => setIsOpen(false)} index={currentIndex} open={isOpen} slides={slides} />
     </div>
   );
 }
