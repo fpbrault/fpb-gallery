@@ -33,7 +33,7 @@ export function NextJsImageAlbum({
       className={"mx-auto rounded" + (limitHeight ? " max-h-[600px]" : "") + " cover group"}
       style={{ ...wrapperStyle, ...limitHeightStyle, position: "relative" }}
     >
-      <Link href={photo.href ?? "/"}>
+      <Link className="relative block h-full w-full" href={photo.href ?? "/"}>
         <div className="absolute bottom-0 left-0 right-0 z-20 flex mx-2 transition duration-300 ">
           <div className="max-w-full px-3 mx-auto mb-5 transition duration-300 rounded shadow bg-primary drop-shadow-xl backdrop-blur group-hover:bg-base-100">
             <div className="z-20 px-2 text-sm text-center uppercase truncate align-middle transition duration-300 sm:text-xl md:text-2xl text-primary-content drop-shadow group-hover:text-primary font-display ">

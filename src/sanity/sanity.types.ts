@@ -157,22 +157,6 @@ export type PageList = {
   >;
 };
 
-export type Colors = {
-  _type: "colors";
-  name?: string;
-  primary?: Color;
-  secondary?: Color;
-};
-
-export type Color = {
-  _type: "color";
-  hex?: string;
-  alpha?: number;
-  hsl?: HslaColor;
-  hsv?: HsvaColor;
-  rgb?: RgbaColor;
-};
-
 export type Author = {
   _id: string;
   _type: "author";
@@ -211,13 +195,6 @@ export type SocialLink = {
   url?: string;
 };
 
-export type CustomThemeReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "customTheme";
-};
-
 export type SiteSettings = {
   _id: string;
   _type: "siteSettings";
@@ -233,81 +210,6 @@ export type SiteSettings = {
       _key: string;
     } & SocialLink
   >;
-  customFont?:
-    | "raleway"
-    | "montserrat"
-    | "inter"
-    | "nunito"
-    | "comfortaa"
-    | "rokkitt"
-    | "josefinSans"
-    | "dmSans"
-    | "spaceGrotesk"
-    | "dosis"
-    | "libreFranklin"
-    | "vollkorn";
-  customDisplayFont?:
-    | "raleway"
-    | "montserrat"
-    | "inter"
-    | "nunito"
-    | "comfortaa"
-    | "rokkitt"
-    | "josefinSans"
-    | "dmSans"
-    | "spaceGrotesk"
-    | "dosis"
-    | "libreFranklin"
-    | "vollkorn";
-  darkThemeName?:
-    | "mytheme"
-    | "dark"
-    | "synthwave"
-    | "dracula"
-    | "black"
-    | "night"
-    | "dim"
-    | "sunset"
-    | "business";
-  lightThemeName?:
-    | "light"
-    | "autumn"
-    | "retro"
-    | "cupcake"
-    | "emerald"
-    | "lofi"
-    | "garden"
-    | "cmyk"
-    | "winter"
-    | "nord"
-    | "cyberpunk";
-  customDarkTheme?: CustomThemeReference;
-  customLightTheme?: CustomThemeReference;
-};
-
-export type CustomTheme = {
-  _id: string;
-  _type: "customTheme";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  p?: Color;
-  pc?: Color;
-  s?: Color;
-  sc?: Color;
-  a?: Color;
-  ac?: Color;
-  n?: Color;
-  nc?: Color;
-  b1?: Color;
-  b2?: Color;
-  b3?: Color;
-  bc?: Color;
-  in?: Color;
-  su?: Color;
-  wa?: Color;
-  er?: Color;
 };
 
 export type MediaTag = {
@@ -323,6 +225,15 @@ export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type Color = {
+  _type: "color";
+  hex?: string;
+  alpha?: number;
+  hsl?: HslaColor;
+  hsv?: HsvaColor;
+  rgb?: RgbaColor;
 };
 
 export type RgbaColor = {
@@ -655,15 +566,12 @@ export type AllSanitySchemaTypes =
   | StyledBlock
   | BlockContent
   | PageList
-  | Colors
-  | Color
   | Author
   | SocialLink
-  | CustomThemeReference
   | SiteSettings
-  | CustomTheme
   | MediaTag
   | Slug
+  | Color
   | RgbaColor
   | HsvaColor
   | HslaColor
@@ -694,167 +602,11 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries.ts
 // Variable: SITE_METADATA_QUERY
-// Query: *[_type == "siteSettings"][0]{  siteTitle,  description,  author,  customFont,  customDisplayFont,  "themes": {darkThemeName, lightThemeName},  "customThemes": {    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}  },  socialLinks[]{name, type, url}}
+// Query: *[_type == "siteSettings"][0]{  siteTitle,  description,  author,  socialLinks[]{name, type, url}}
 export type SITE_METADATA_QUERY_RESULT = {
   siteTitle: string | null;
   description: string | null;
   author: string | null;
-  customFont:
-    | "comfortaa"
-    | "dmSans"
-    | "dosis"
-    | "inter"
-    | "josefinSans"
-    | "libreFranklin"
-    | "montserrat"
-    | "nunito"
-    | "raleway"
-    | "rokkitt"
-    | "spaceGrotesk"
-    | "vollkorn"
-    | null;
-  customDisplayFont:
-    | "comfortaa"
-    | "dmSans"
-    | "dosis"
-    | "inter"
-    | "josefinSans"
-    | "libreFranklin"
-    | "montserrat"
-    | "nunito"
-    | "raleway"
-    | "rokkitt"
-    | "spaceGrotesk"
-    | "vollkorn"
-    | null;
-  themes: {
-    darkThemeName:
-      | "black"
-      | "business"
-      | "dark"
-      | "dim"
-      | "dracula"
-      | "mytheme"
-      | "night"
-      | "sunset"
-      | "synthwave"
-      | null;
-    lightThemeName:
-      | "autumn"
-      | "cmyk"
-      | "cupcake"
-      | "cyberpunk"
-      | "emerald"
-      | "garden"
-      | "light"
-      | "lofi"
-      | "nord"
-      | "retro"
-      | "winter"
-      | null;
-  };
-  customThemes: {
-    darkTheme: {
-      p: {
-        hex: string | null;
-      } | null;
-      pc: {
-        hex: string | null;
-      } | null;
-      s: {
-        hex: string | null;
-      } | null;
-      sc: {
-        hex: string | null;
-      } | null;
-      a: {
-        hex: string | null;
-      } | null;
-      ac: {
-        hex: string | null;
-      } | null;
-      n: {
-        hex: string | null;
-      } | null;
-      nc: {
-        hex: string | null;
-      } | null;
-      b1: {
-        hex: string | null;
-      } | null;
-      b2: {
-        hex: string | null;
-      } | null;
-      b3: {
-        hex: string | null;
-      } | null;
-      bc: {
-        hex: string | null;
-      } | null;
-      in: {
-        hex: string | null;
-      } | null;
-      su: {
-        hex: string | null;
-      } | null;
-      wa: {
-        hex: string | null;
-      } | null;
-      er: {
-        hex: string | null;
-      } | null;
-    } | null;
-    lightTheme: {
-      p: {
-        hex: string | null;
-      } | null;
-      pc: {
-        hex: string | null;
-      } | null;
-      s: {
-        hex: string | null;
-      } | null;
-      sc: {
-        hex: string | null;
-      } | null;
-      a: {
-        hex: string | null;
-      } | null;
-      ac: {
-        hex: string | null;
-      } | null;
-      n: {
-        hex: string | null;
-      } | null;
-      nc: {
-        hex: string | null;
-      } | null;
-      b1: {
-        hex: string | null;
-      } | null;
-      b2: {
-        hex: string | null;
-      } | null;
-      b3: {
-        hex: string | null;
-      } | null;
-      bc: {
-        hex: string | null;
-      } | null;
-      in: {
-        hex: string | null;
-      } | null;
-      su: {
-        hex: string | null;
-      } | null;
-      wa: {
-        hex: string | null;
-      } | null;
-      er: {
-        hex: string | null;
-      } | null;
-    } | null;
-  };
   socialLinks: Array<{
     name: string | null;
     type:
@@ -1446,7 +1198,7 @@ export type OG_ALBUM_IMAGE_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "siteSettings"][0]{\n  siteTitle,\n  description,\n  author,\n  customFont,\n  customDisplayFont,\n  "themes": {darkThemeName, lightThemeName},\n  "customThemes": {\n    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},\n    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}\n  },\n  socialLinks[]{name, type, url}\n}': SITE_METADATA_QUERY_RESULT;
+    '*[_type == "siteSettings"][0]{\n  siteTitle,\n  description,\n  author,\n  socialLinks[]{name, type, url}\n}': SITE_METADATA_QUERY_RESULT;
     '*[_type == "pageList" && defined(pages)][0]{\n  showHome,\n  pages[]{\n    _type,\n    _type == "reference" => @->{\n      title,\n      "slug": slug.current,\n      "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{language, title, "slug": slug.current}\n    },\n    _type == "hardcodedPage" => {\n      title,\n      title_fr,\n      slug,\n      slug_fr\n    }\n  }\n}': HEADER_QUERY_RESULT;
     '\n*[_type == "category" && count(*[_type == "album" && references(^._id)]) > 0]{\n  _id,\n  categoryName,\n  slug,\n  "coverImage": coverImage{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n},\n  "albums": *[_type == "album" && references(^._id)] | order(coalesce(publishDate, "") desc){\n    _id,\n    albumName,\n    slug,\n    "images": images[0...1]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n},\n    "cover": images[0]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n  }\n}': CATEGORY_INDEX_QUERY_RESULT;
     '\n*[_type == "album" && category->slug.current == $slug] | order(coalesce(publishDate, "") desc){\n  _id,\n  albumName,\n  slug,\n  "images": images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n}': CATEGORY_QUERY_RESULT;

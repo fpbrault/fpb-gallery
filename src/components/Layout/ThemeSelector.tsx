@@ -1,26 +1,40 @@
 "use client";
 
-import { useState } from "react";
-import { useSiteMetadata } from "../context/SiteMetadataContext";
+import { useSyncExternalStore } from "react";
+import { isThemeName, presentationConfig, resolveTheme } from "@/config/presentation";
+
+const themeChangeEvent = "site-theme-change";
+
+const getThemeSnapshot = () => {
+  const activeTheme = document.documentElement.dataset.theme;
+  if (isThemeName(activeTheme)) return activeTheme;
+  return resolveTheme(null, window.matchMedia("(prefers-color-scheme: dark)").matches);
+};
+
+const subscribeToTheme = (onStoreChange: () => void) => {
+  window.addEventListener(themeChangeEvent, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(themeChangeEvent, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+};
 
 const ThemeSelector = () => {
-  const siteMetadata = useSiteMetadata();
-  const [darkThemeName] = useState(siteMetadata?.themes.darkThemeName ?? "mytheme");
-  const [lightThemeName] = useState(siteMetadata?.themes.lightThemeName ?? "garden");
-  const [isDarkTheme, setIsDarkTheme] = useState(() => {
-    if (typeof document === "undefined") return true;
-    return document.documentElement.dataset.theme === darkThemeName;
-  });
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    () => presentationConfig.themes.light
+  );
 
-  // Function to toggle the theme
   const toggleTheme = () => {
-    const newTheme = !isDarkTheme ? darkThemeName : lightThemeName;
+    const newTheme =
+      theme === presentationConfig.themes.dark
+        ? presentationConfig.themes.light
+        : presentationConfig.themes.dark;
     document.documentElement.setAttribute("data-theme", newTheme);
-    setIsDarkTheme(!isDarkTheme);
-
-    // Save the selected theme to local storage
-    localStorage.setItem("theme", newTheme);
-    //applyCustomTheme();
+    localStorage.setItem(presentationConfig.themes.storageKey, newTheme);
+    window.dispatchEvent(new Event(themeChangeEvent));
   };
 
   return (
@@ -28,7 +42,7 @@ const ThemeSelector = () => {
       <input
         type="checkbox"
         aria-label="Toggle light and dark theme"
-        checked={isDarkTheme}
+        checked={theme === presentationConfig.themes.dark}
         onChange={toggleTheme}
         className="col-span-2 col-start-1 row-start-1 toggle theme-controller bg-base-content"
       />

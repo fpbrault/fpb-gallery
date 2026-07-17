@@ -825,99 +825,6 @@
     }
   },
   {
-    "name": "colors",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "colors"
-          }
-        },
-        "name": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "primary": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "color"
-          },
-          "optional": true
-        },
-        "secondary": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "color"
-          },
-          "optional": true
-        }
-      }
-    }
-  },
-  {
-    "name": "color",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "color"
-          }
-        },
-        "hex": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "alpha": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "number"
-          },
-          "optional": true
-        },
-        "hsl": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "hslaColor"
-          },
-          "optional": true
-        },
-        "hsv": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "hsvaColor"
-          },
-          "optional": true
-        },
-        "rgb": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "rgbaColor"
-          },
-          "optional": true
-        }
-      }
-    }
-  },
-  {
     "name": "author",
     "type": "document",
     "attributes": {
@@ -1092,36 +999,6 @@
     }
   },
   {
-    "type": "type",
-    "name": "customTheme.reference",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_ref": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          }
-        },
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "reference"
-          }
-        },
-        "_weak": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        }
-      },
-      "dereferencesTo": "customTheme"
-    }
-  },
-  {
     "name": "siteSettings",
     "type": "document",
     "attributes": {
@@ -1205,406 +1082,6 @@
           }
         },
         "optional": true
-      },
-      "customFont": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "raleway"
-            },
-            {
-              "type": "string",
-              "value": "montserrat"
-            },
-            {
-              "type": "string",
-              "value": "inter"
-            },
-            {
-              "type": "string",
-              "value": "nunito"
-            },
-            {
-              "type": "string",
-              "value": "comfortaa"
-            },
-            {
-              "type": "string",
-              "value": "rokkitt"
-            },
-            {
-              "type": "string",
-              "value": "josefinSans"
-            },
-            {
-              "type": "string",
-              "value": "dmSans"
-            },
-            {
-              "type": "string",
-              "value": "spaceGrotesk"
-            },
-            {
-              "type": "string",
-              "value": "dosis"
-            },
-            {
-              "type": "string",
-              "value": "libreFranklin"
-            },
-            {
-              "type": "string",
-              "value": "vollkorn"
-            }
-          ]
-        },
-        "optional": true
-      },
-      "customDisplayFont": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "raleway"
-            },
-            {
-              "type": "string",
-              "value": "montserrat"
-            },
-            {
-              "type": "string",
-              "value": "inter"
-            },
-            {
-              "type": "string",
-              "value": "nunito"
-            },
-            {
-              "type": "string",
-              "value": "comfortaa"
-            },
-            {
-              "type": "string",
-              "value": "rokkitt"
-            },
-            {
-              "type": "string",
-              "value": "josefinSans"
-            },
-            {
-              "type": "string",
-              "value": "dmSans"
-            },
-            {
-              "type": "string",
-              "value": "spaceGrotesk"
-            },
-            {
-              "type": "string",
-              "value": "dosis"
-            },
-            {
-              "type": "string",
-              "value": "libreFranklin"
-            },
-            {
-              "type": "string",
-              "value": "vollkorn"
-            }
-          ]
-        },
-        "optional": true
-      },
-      "darkThemeName": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "mytheme"
-            },
-            {
-              "type": "string",
-              "value": "dark"
-            },
-            {
-              "type": "string",
-              "value": "synthwave"
-            },
-            {
-              "type": "string",
-              "value": "dracula"
-            },
-            {
-              "type": "string",
-              "value": "black"
-            },
-            {
-              "type": "string",
-              "value": "night"
-            },
-            {
-              "type": "string",
-              "value": "dim"
-            },
-            {
-              "type": "string",
-              "value": "sunset"
-            },
-            {
-              "type": "string",
-              "value": "business"
-            }
-          ]
-        },
-        "optional": true
-      },
-      "lightThemeName": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "light"
-            },
-            {
-              "type": "string",
-              "value": "autumn"
-            },
-            {
-              "type": "string",
-              "value": "retro"
-            },
-            {
-              "type": "string",
-              "value": "cupcake"
-            },
-            {
-              "type": "string",
-              "value": "emerald"
-            },
-            {
-              "type": "string",
-              "value": "lofi"
-            },
-            {
-              "type": "string",
-              "value": "garden"
-            },
-            {
-              "type": "string",
-              "value": "cmyk"
-            },
-            {
-              "type": "string",
-              "value": "winter"
-            },
-            {
-              "type": "string",
-              "value": "nord"
-            },
-            {
-              "type": "string",
-              "value": "cyberpunk"
-            }
-          ]
-        },
-        "optional": true
-      },
-      "customDarkTheme": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "customTheme.reference"
-        },
-        "optional": true
-      },
-      "customLightTheme": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "customTheme.reference"
-        },
-        "optional": true
-      }
-    }
-  },
-  {
-    "name": "customTheme",
-    "type": "document",
-    "attributes": {
-      "_id": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_type": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string",
-          "value": "customTheme"
-        }
-      },
-      "_createdAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_updatedAt": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "_rev": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        }
-      },
-      "name": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
-      "p": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "pc": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "s": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "sc": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "a": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "ac": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "n": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "nc": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "b1": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "b2": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "b3": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "bc": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "in": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "su": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "wa": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
-      },
-      "er": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "color"
-        },
-        "optional": true
       }
     }
   },
@@ -1677,6 +1154,60 @@
           "type": "objectAttribute",
           "value": {
             "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "color",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "color"
+          }
+        },
+        "hex": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "alpha": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
+        "hsl": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "hslaColor"
+          },
+          "optional": true
+        },
+        "hsv": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "hsvaColor"
+          },
+          "optional": true
+        },
+        "rgb": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "rgbaColor"
           },
           "optional": true
         }

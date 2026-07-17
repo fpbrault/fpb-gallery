@@ -9,7 +9,8 @@ const token = process.env.SANITY_API_READ_TOKEN;
 
 const live = defineLive({
   client: getSanityClient(),
-  serverToken: token
+  serverToken: token,
+  browserToken: false
 });
 
 export const SanityLive = live.SanityLive;

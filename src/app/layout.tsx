@@ -7,6 +7,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { getSiteUrl } from "@/lib/metadata";
+import { bodyFont, displayFont } from "@/config/fonts";
+import { createThemeInitializationScript } from "@/config/presentation";
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest"
 };
 
-const themeScript = `(() => {try {const saved=localStorage.getItem('theme');if(saved) document.documentElement.dataset.theme=saved;} catch {}})();`;
+const themeScript = createThemeInitializationScript();
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = (await headers()).get("x-fpb-locale") ?? "en";
@@ -31,7 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>
+      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
         {children}
         <SpeedInsights />
         <Analytics />

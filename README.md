@@ -36,6 +36,8 @@ Never expose either server-only secret through a `NEXT_PUBLIC_` variable. Rotate
 
 The Presentation tool opens the site through `GET /api/preview`. Sanity creates and validates the short-lived preview secret; the application additionally allowlists the destination before enabling draft mode. The read token stays on the server.
 
+Site Settings owns editorial metadata only: site title, description, author, and social links. Navigation and page content are also authored in Sanity. Fonts and theme palettes are deployment configuration in `src/config`; changing them requires a code change and deployment. Existing legacy presentation fields in the dataset are intentionally left untouched but are ignored by this version.
+
 Configure a Sanity webhook to send `POST /api/revalidate` with this projection:
 
 ```groq

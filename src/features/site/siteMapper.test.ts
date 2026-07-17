@@ -9,8 +9,7 @@ describe("site mappers", () => {
       author: "Felix Perron-Brault",
       description: "Photography portfolio",
       siteTitle: "Felix Perron-Brault Photographe",
-      socialLinks: [],
-      themes: { darkThemeName: "mytheme", lightThemeName: "light" }
+      socialLinks: []
     });
   });
 
@@ -48,10 +47,6 @@ describe("site mappers", () => {
       siteTitle: "Gallery",
       description: "Photos",
       author: "Author",
-      customFont: null,
-      customDisplayFont: null,
-      themes: { darkThemeName: null, lightThemeName: null },
-      customThemes: { darkTheme: null, lightTheme: null },
       socialLinks: [{ name: "Instagram", type: "instagram", url: null }]
     } satisfies SITE_METADATA_QUERY_RESULT;
 

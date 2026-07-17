@@ -1,6 +1,7 @@
 import typography from "@tailwindcss/typography";
 import daisyui from "daisyui";
 import daisyThemes from "daisyui/src/theming/themes";
+import { presentationConfig } from "./src/config/presentation";
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -12,8 +13,8 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        display: ["var(--font-display)"]
+        sans: [`var(${presentationConfig.fonts.cssVariable})`],
+        display: [`var(${presentationConfig.fonts.cssVariable})`]
       }
     }
   },
@@ -22,35 +23,15 @@ const config = {
   },
   daisyui: {
     themes: [
-      "light",
-      "autumn",
-      "retro",
-      "cupcake",
-      "emerald",
-      "lofi",
-      "garden",
-      "cmyk",
-      "pastel",
-      "winter",
-      "nord",
-      "dark",
-      "synthwave",
-      "dracula",
-      "black",
-      "night",
-      "dim",
-      "sunset",
-      "business",
-      "cyberpunk",
       {
-        light: {
+        [presentationConfig.themes.light]: {
           ...daisyThemes.light,
           primary: "mediumseagreen",
           secondary: "darkslategrey"
         }
       },
       {
-        mytheme: {
+        [presentationConfig.themes.dark]: {
           primary: "#22c55e",
           secondary: "#22d3ee",
           accent: "#fbbf24",

@@ -20,7 +20,7 @@ This backlog tracks work discovered after the App Router cutover. Preserve publi
 - [x] Localize Portable Text internal links.
 - [x] Correct Portable Text external-link target and `rel` behavior.
 - [ ] Build a complete Portable Text image collection so rich-content lightboxes navigate between images.
-- [ ] Align Studio font choices with fonts actually loaded by the frontend.
+- [x] Remove Studio font choices now that frontend typography is code-owned.
 - [ ] Remove or replace the brittle Studio `/v1/users/me` author initialization request.
 - [ ] Require meaningful post cover-image alt text unless explicitly decorative.
 - [ ] Validate required localized post content and unique English/French post slugs.
@@ -29,16 +29,16 @@ This backlog tracks work discovered after the App Router cutover. Preserve publi
 
 The original project exposed presentation settings in Sanity so non-technical adopters could customize deployments. This installation no longer needs that product-level flexibility: design configuration should have one source of truth in code, while Sanity remains responsible for editorial content.
 
-- [ ] Define the supported light and dark themes, default theme, body font, and display font in a typed code configuration module.
-- [ ] Preserve the current rendered fonts, colors, light/dark behavior, and pre-paint theme initialization during the cutover.
-- [ ] Remove font, theme-name, and custom-theme color fields from the site-settings query and application view models.
-- [ ] Remove the corresponding font and theme controls, previews, references, and validation from the Sanity Studio schema.
-- [ ] Delete runtime custom-theme conversion and CSS generation after the code-owned themes are active.
-- [ ] Remove `culori`, unused font loaders, and other dependencies or utilities made obsolete by the cutover.
-- [ ] Decide whether the theme toggle remains user-facing; if retained, restrict it to the two code-owned themes.
-- [ ] Audit the remaining site-settings fields and document why each belongs to editorial content or deployment configuration.
-- [ ] Update architecture, setup, and authoring documentation to describe the new ownership boundary.
-- [ ] Add tests for configured theme names, font loading, persisted theme selection, and flash-free initialization.
+- [x] Define the supported light and dark themes, default theme, body font, and display font in a typed code configuration module.
+- [x] Preserve the current rendered fonts, colors, light/dark behavior, and pre-paint theme initialization during the cutover.
+- [x] Remove font, theme-name, and custom-theme color fields from the site-settings query and application view models.
+- [x] Remove the corresponding font and theme controls, previews, references, and validation from the Sanity Studio schema.
+- [x] Delete runtime custom-theme conversion and CSS generation after the code-owned themes are active.
+- [x] Remove `culori`, unused font loaders, and other dependencies or utilities made obsolete by the cutover.
+- [x] Retain the visitor theme toggle and restrict it to the two code-owned themes.
+- [x] Audit the remaining site-settings fields and document why each belongs to editorial content or deployment configuration.
+- [x] Update architecture, setup, and authoring documentation to describe the new ownership boundary.
+- [x] Add tests for configured theme names, font loading, persisted theme selection, and flash-free initialization.
 
 ## Component and feature architecture
 
@@ -62,6 +62,7 @@ The original project exposed presentation settings in Sanity so non-technical ad
 
 ## Operations and observability
 
+- [ ] Remove the temporary `/sw.js` retirement worker after legacy browser registrations have expired.
 - [ ] Configure the read-only CI Sanity project, dataset, and token secrets.
 - [ ] Configure and verify the signed Sanity webhook in Preview and Production.
 - [ ] Add provider-backed error monitoring for Sanity reads, preview, revalidation, OG generation, and builds.
