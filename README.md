@@ -36,6 +36,10 @@ Never expose either server-only secret through a `NEXT_PUBLIC_` variable. Rotate
 
 The Presentation tool opens the site through `GET /api/preview`. Sanity creates and validates the short-lived preview secret; the application additionally allowlists the destination before enabling draft mode. The read token stays on the server.
 
+Presentation resolves English and French pages, posts, albums, and categories to their public URLs and shows additional “Used on” locations for index and collection pages. Draft mutations request a server-rendered refresh immediately and again after Sanity's consistency window; no browser-readable API token is used. When a preview URL is opened outside the Presentation iframe, use the floating **Exit preview** control to clear draft mode.
+
+Add both the local frontend origin and every deployed preview/production origin to the Sanity project's CORS settings with credentials enabled. Presentation uses `http://localhost:3000` during development and `NEXT_PUBLIC_SITE_URL` in production, so local Studio changes exercise the local frontend instead of the deployed bundle.
+
 Site Settings owns editorial metadata only: site title, description, author, and social links. Navigation and page content are also authored in Sanity. Fonts and theme palettes are deployment configuration in `src/config`; changing them requires a code change and deployment. Existing legacy presentation fields in the dataset are intentionally left untouched but are ignored by this version.
 
 Configure a Sanity webhook to send `POST /api/revalidate` with this projection:

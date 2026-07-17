@@ -23,9 +23,10 @@ type Props = {
   images: ContentImage[];
   mode: "rows" | "columns" | "masonry";
   columns: number | undefined;
+  dataSanity?: string;
 };
 
-function PhotoGallery({ images, mode, columns }: Props) {
+function PhotoGallery({ images, mode, columns, dataSanity }: Props) {
   const { slides, thumbnails } = useMemo(() => mapGalleryImages(images), [images]);
   const lightboxSlides = useMemo(
     () =>
@@ -49,28 +50,30 @@ function PhotoGallery({ images, mode, columns }: Props) {
 
   return (
     <>
-      <PhotoAlbum
-        layout={mode ?? "rows"}
-        photos={thumbnails}
-        targetRowHeight={500}
-        spacing={20}
-        columns={columns ?? 3}
-        render={{
-          photo: (renderProps, context) => (
-            <GalleryThumbnailImage
-              context={context}
-              key={context.photo.key}
-              limitHeight={thumbnails.length < 3}
-              renderProps={renderProps}
-            />
-          )
-        }}
-        sizes={{
-          size: "calc(100vw - 240px)",
-          sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }]
-        }}
-        onClick={handleImageClick}
-      />
+      <div data-sanity={dataSanity} data-sanity-edit-target="">
+        <PhotoAlbum
+          layout={mode ?? "rows"}
+          photos={thumbnails}
+          targetRowHeight={500}
+          spacing={20}
+          columns={columns ?? 3}
+          render={{
+            photo: (renderProps, context) => (
+              <GalleryThumbnailImage
+                context={context}
+                key={context.photo.key}
+                limitHeight={thumbnails.length < 3}
+                renderProps={renderProps}
+              />
+            )
+          }}
+          sizes={{
+            size: "calc(100vw - 240px)",
+            sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }]
+          }}
+          onClick={handleImageClick}
+        />
+      </div>
 
       <Lightbox
         index={galleryUrl.index}

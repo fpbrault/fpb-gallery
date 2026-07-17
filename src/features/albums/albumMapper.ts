@@ -1,4 +1,5 @@
 import { mapContentImage } from "@/features/content/imageMapper";
+import { stegaClean } from "next-sanity";
 import type { Album, AlbumSummary, CategorySummary } from "@/features/albums/models";
 import type {
   ALBUM_QUERY_RESULT,
@@ -12,7 +13,7 @@ import type { ContentImage } from "@/features/content/models";
 type AlbumInput = CATEGORY_QUERY_RESULT[number];
 
 function mapAlbumSummary(input: AlbumInput): AlbumSummary | null {
-  const slug = input.slug?.current;
+  const slug = stegaClean(input.slug?.current);
   if (!slug) return null;
 
   return {
@@ -31,7 +32,7 @@ export function mapAlbums(input: CATEGORY_QUERY_RESULT): AlbumSummary[] {
 
 export function mapCategories(input: CATEGORY_INDEX_QUERY_RESULT): CategorySummary[] {
   return input.flatMap((category) => {
-    const slug = category.slug?.current;
+    const slug = stegaClean(category.slug?.current);
     if (!slug) return [];
 
     const albums = category.albums.flatMap((album) => {
@@ -53,22 +54,23 @@ export function mapCategories(input: CATEGORY_INDEX_QUERY_RESULT): CategorySumma
 }
 
 export function mapAlbum(input: ALBUM_QUERY_RESULT): Album | null {
-  if (!input?.slug?.current) return null;
+  if (!input || !stegaClean(input.slug?.current)) return null;
 
   const summary = mapAlbumSummary(input);
   if (!summary) return null;
+  const categorySlug = stegaClean(input.category?.slug?.current);
 
   return {
     ...summary,
-    category: input.category?.slug?.current
+    category: categorySlug
       ? {
-          name: input.category.categoryName ?? "Untitled category",
-          slug: input.category.slug.current
+          name: input.category?.categoryName ?? "Untitled category",
+          slug: categorySlug
         }
       : null,
     columns: input.columns ?? 3,
     description: input.description ?? [],
-    display: input.display ?? "rows"
+    display: stegaClean(input.display) ?? "rows"
   };
 }
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { createDataAttribute } from "next-sanity";
 
 import PhotoGallery from "@/components/Albums/PhotoGallery";
 import Breadcrumbs from "@/components/Layout/BreadCrumbs";
@@ -53,7 +54,17 @@ export default async function AlbumPage({ params }: PageProps<"/[locale]/album/[
         <h1 className="text-5xl font-display">{album.name}</h1>
         <RichText value={album.description} />
       </div>
-      <PhotoGallery mode={album.display} columns={album.columns} images={album.images} />
+      <PhotoGallery
+        mode={album.display}
+        columns={album.columns}
+        images={album.images}
+        dataSanity={createDataAttribute({
+          baseUrl: "/studio",
+          id: album.id,
+          path: "images",
+          type: "album"
+        }).toString()}
+      />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
 import type { Image as SanityImage } from "sanity";
+import { stegaClean } from "next-sanity";
 
 export type RelatedAlbumValue = {
   albumName?: string;
@@ -16,14 +17,15 @@ export type RelatedAlbumValue = {
 
 export function PTRelatedAlbum({ value }: { value: RelatedAlbumValue }) {
   const { locale, t } = useLocale();
-  if (!value.images?.asset || !value.slug) return null;
+  const slug = stegaClean(value.slug);
+  if (!value.images?.asset || !slug) return null;
   const src = urlForImage(value.images).width(128).height(64).url();
   return (
     <div className="w-full max-w-sm mx-auto shadow-xl">
       <span className="text-sm">{t("related.album")}:</span>
       <Link
         className="link link-secondary link-hover"
-        href={localizePath("/album/" + value.slug, locale)}
+        href={localizePath("/album/" + slug, locale)}
       >
         <div className="flex w-full max-w-sm mx-auto transition-all border justify-evenly rounded-xl bg-secondary text-secondary-content border-secondary hover:bg-secondary-content hover:text-secondary">
           <span className="self-center flex-grow px-2 font-bold text-center ">

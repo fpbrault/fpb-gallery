@@ -50,4 +50,9 @@ describe("gallery thumbnail placeholder", () => {
     renderPhoto("data:image/jpeg;base64,blurred");
     expect(screen.getByRole("img")).toHaveAttribute("data-placeholder", "blur");
   });
+
+  it("makes the full thumbnail a visual editing target", () => {
+    renderPhoto();
+    expect(screen.getByRole("img").closest("[data-sanity-edit-target]")).not.toBeNull();
+  });
 });

@@ -12,6 +12,7 @@ import { PTRoughNotation } from "./PTRoughNotation";
 import { PTExternalLink, type ExternalLinkValue } from "./PTExternalLink";
 import { PTAlbumCard, type AlbumCardValue } from "./PTAlbumCard";
 import type { Youtube } from "@/sanity/sanity.types";
+import { stegaClean } from "next-sanity";
 
 export const myPortableTextComponents: PortableTextComponents = {
   marks: {
@@ -41,7 +42,7 @@ export const myPortableTextComponents: PortableTextComponents = {
 
 function PortableHeading({ children, level }: { children: ReactNode; level: 1 | 2 }) {
   const text = React.Children.toArray(children).join("");
-  const id = text.replace(/\s+/g, "-").toLowerCase();
+  const id = stegaClean(text).replace(/\s+/g, "-").toLowerCase();
 
   useEffect(() => {
     const element = document.getElementById(id);

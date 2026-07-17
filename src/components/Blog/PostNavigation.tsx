@@ -7,6 +7,7 @@ import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
 import type { PostPage, PostSummary } from "@/features/blog/models";
+import { stegaClean } from "next-sanity";
 
 function PostNavigationItem(props: {
   data?: PostSummary | null;
@@ -32,18 +33,16 @@ function PostNavigationItem(props: {
                 src={
                   props.relatedPostImage?.imageUrl ??
                   "https://placehold.co/200x200/jpg?text=" +
-                    (props.data.title.length >= 60
-                      ? props.data.title.substring(0, 60) + "..."
-                      : props.data.title
+                    (stegaClean(props.data.title).length >= 60
+                      ? stegaClean(props.data.title).substring(0, 60) + "..."
+                      : stegaClean(props.data.title)
                     ).replace(/ /g, "+")
                 }
                 height={props.relatedPostImage?.imageHeight ?? 200}
                 width={props.relatedPostImage?.imageWidth ?? 200}
               ></Image>
-              <span className="flex flex-col justify-center w-full px-2 text-sm font-bold">
-                {props.data.title.length >= 60
-                  ? props.data.title.substring(0, 60) + "..."
-                  : props.data.title}
+              <span className="line-clamp-2 flex w-full flex-col justify-center px-2 text-sm font-bold">
+                {props.data.title}
               </span>
             </div>
           </Link>

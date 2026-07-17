@@ -4,6 +4,7 @@ import { presentationTool } from "sanity/presentation";
 import { media } from "sanity-plugin-media";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { schemaTypes } from "@/sanity/schemas";
+import { presentationResolve } from "@/sanity/presentation";
 import { colorInput } from "@sanity/color-input";
 import {
   DeleteTranslationAction,
@@ -14,6 +15,11 @@ import { defineConfig } from "sanity";
 
 import structure from "./deskStructure";
 
+const presentationOrigin =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
+
 export const config = defineConfig({
   basePath: "/studio",
   projectId,
@@ -21,9 +27,10 @@ export const config = defineConfig({
   schema: schemaTypes,
   plugins: [
     presentationTool({
+      resolve: presentationResolve,
       previewUrl: {
-        origin: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-        previewMode: { enable: "/api/preview" }
+        origin: presentationOrigin,
+        previewMode: { enable: "/api/preview", disable: "/api/exit-preview" }
       }
     }),
     structureTool({

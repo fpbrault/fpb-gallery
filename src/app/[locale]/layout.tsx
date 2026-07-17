@@ -1,8 +1,8 @@
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { VisualEditing } from "next-sanity/visual-editing";
 
 import Layout from "@/components/Layout/Layout";
+import { VisualEditingPreview } from "@/components/VisualEditingPreview";
 import { isLocale, locales } from "@/i18n/config";
 import { getSiteUrl } from "@/lib/metadata";
 import { getSiteShellData } from "@/sanity/repositories/siteRepository";
@@ -39,7 +39,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       />
       {children}
       <SanityLive />
-      {isEnabled && <VisualEditing />}
+      {isEnabled && <VisualEditingPreview />}
     </Layout>
   );
 }

@@ -16,6 +16,7 @@ export function GalleryThumbnailImage({
 }) {
   return (
     <div
+      data-sanity-edit-target=""
       className={`cover group rounded${limitHeight ? " max-h-200" : ""}`}
       style={{ height, position: "relative", width }}
     >

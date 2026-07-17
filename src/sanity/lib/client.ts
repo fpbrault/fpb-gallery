@@ -3,6 +3,7 @@ import "server-only";
 import { createClient, type SanityClient } from "next-sanity";
 
 import { apiVersion, dataset, getSanityEnvironment, projectId, useCdn } from "@/sanity/env";
+import { createStegaConfig } from "@/sanity/lib/stegaConfig";
 
 let publishedClient: SanityClient | undefined;
 
@@ -14,7 +15,7 @@ export function getSanityClient(): SanityClient {
       projectId,
       useCdn,
       perspective: "published",
-      stega: { enabled: false }
+      stega: createStegaConfig(false)
     });
   }
 
@@ -30,6 +31,6 @@ export function getPreviewClient(): SanityClient {
     token,
     useCdn: false,
     perspective: "drafts",
-    stega: { enabled: true, studioUrl: "/studio" }
+    stega: createStegaConfig(true)
   });
 }
