@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { isImageFitCover, isImageSlide, useLightboxProps } from "yet-another-react-lightbox";
 
@@ -40,11 +42,10 @@ export function NextJsImageAlbum({
           draggable={false}
           className="object-contain transition-all duration-300 rounded border-primary group-hover:brightness-90 group-hover:border-4"
           src={photo.src}
-          loading="eager"
+          loading="lazy"
           blurDataURL={photo.blurDataURL}
           placeholder={"blur"}
           sizes={sizes}
-          unoptimized
           {...{ alt, title, onClick }}
         />
       </Link>
@@ -66,7 +67,6 @@ export function NextJsImageElement({
       style={{ ...wrapperStyle, position: "relative" }}
     >
       <Image
-        unoptimized
         height={imageHeight}
         width={imageWidth}
         draggable={false}
@@ -119,12 +119,11 @@ export function NextJsImage({ slide, rect }: NextJsImageProps) {
   return (
     <div style={{ position: "relative", width, height }}>
       <Image
-        unoptimized
         fill
         alt={slide.alt ?? ""}
         title={slide.alt}
         src={slide.src}
-        loading="eager"
+        loading="lazy"
         blurDataURL={slide?.placeholders?.metadata.lqip}
         draggable={false}
         placeholder={"blur"}

@@ -1,4 +1,4 @@
-import { FaInfo, FaMoon, FaSun } from "react-icons/fa6";
+import { FaMoon, FaSun } from "react-icons/fa6";
 import { defineArrayMember, defineField, defineType } from "sanity";
 import FontPreview from "../components/FontPreview";
 
@@ -256,17 +256,6 @@ export const siteSettings = defineType({
       }
     }),
     defineField({
-      title: "Custom Theme Colors",
-      description:
-        "You can set custom theme colors. These will override the default colors of your selected themes. Note that you do not need to set all of the colors.",
-      name: "myCustomNote",
-      type: "note",
-      options: {
-        icon: () => FaInfo,
-        tone: "positive"
-      }
-    }),
-    defineField({
       name: "customDarkTheme",
       type: "reference",
       title: "Custom Dark Theme Colors",
@@ -331,10 +320,10 @@ export const socialLink = defineType({
       name: "url",
       title: "url",
       validation: (Rule) =>
-      Rule.uri({
-        allowRelative: false,
-        scheme: ["http", "https", "mailto", "tel"]
-      }),
+        Rule.uri({
+          allowRelative: false,
+          scheme: ["http", "https", "mailto", "tel"]
+        }),
       type: "url"
     })
   ]

@@ -1,14 +1,16 @@
-import React, { createContext, useContext } from "react";
-import { CustomSiteMetadata } from "../lib/pageHelpers";
+"use client";
 
-const SiteMetadataContext = createContext<CustomSiteMetadata>({} as CustomSiteMetadata);
+import React, { createContext, useContext, type ReactNode } from "react";
+import type { SiteMetadata } from "@/features/site/models";
+
+const SiteMetadataContext = createContext<SiteMetadata>({} as SiteMetadata);
 
 export const SiteMetadataProvider = ({
   siteMetadata,
   children
 }: {
-  siteMetadata: CustomSiteMetadata;
-  children: any;
+  siteMetadata: SiteMetadata;
+  children: ReactNode;
 }) => {
   return (
     <SiteMetadataContext.Provider value={siteMetadata}>{children}</SiteMetadataContext.Provider>

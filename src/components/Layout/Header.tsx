@@ -1,40 +1,25 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import ThemeSelector from "./ThemeSelector";
-import { getSocialIcon } from "../lib/getSocialIcon";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { FaBars } from "react-icons/fa6";
-
-type HeaderLink = {
-  title: string;
-  title_fr: string;
-  slug: string;
-  slug_fr: string;
-  _translations: any;
-};
+import { localizePath } from "@/i18n/config";
+import { useLocale } from "../context/LocaleContext";
+import type { HeaderData, NavigationItem } from "@/features/site/models";
 
 type Props = {
   title: string;
-  contactUrl: string;
-  contactText: string;
-  contactType: string;
-  headerData: { showHome: Boolean; pages: Array<HeaderLink> };
-  context: any;
+  headerData: HeaderData;
 };
 
-export default function Header({
-  title,
-  contactUrl,
-  contactText,
-  contactType,
-  headerData,
-  context
-}: Props) {
-  //const icon = getSocialIcon(contactType);
+export default function Header({ title, headerData }: Props) {
+  const { locale } = useLocale();
   return (
     <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:pt-4 bg-base-200/70 backdrop-blur-lg ">
       <h1 className="justify-center hidden py-1 text-2xl font-light text-center font-display md:flex md:text-4xl lg:text-5xl ">
-        <Link className="link link-hover" href="/">
+        <Link className="link link-hover" href={localizePath("/", locale)}>
           {title}
         </Link>
       </h1>
@@ -44,12 +29,14 @@ export default function Header({
           <label
             htmlFor="my-drawer-3"
             aria-label="open sidebar"
-            className="text-3xl btn btn-square md:hidden btn-ghost">
+            className="text-3xl btn btn-square md:hidden btn-ghost"
+          >
             <FaBars />
           </label>
           <Link
             className="w-full text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3 font-display"
-            href="/">
+            href={localizePath("/", locale)}
+          >
             {title}
           </Link>
         </div>
@@ -57,18 +44,24 @@ export default function Header({
           <ul className="flex gap-8 px-1 py-0 text-2xl font-bold font-display">
             {headerData?.showHome != false && (
               <li>
-                <Link className="mx-auto link link-hover link-primary" href={"/"}>
-                  {context?.locale == "en" ? "Home" : "Accueil"}
+                <Link
+                  className="mx-auto link link-hover link-primary"
+                  href={localizePath("/", locale)}
+                >
+                  {locale === "en" ? "Home" : "Accueil"}
                 </Link>
               </li>
             )}
-            {headerData?.pages ? (
-              headerData?.pages.map((headerLink) => {
-                return CustomHeaderLink(headerData, headerLink, context);
+            {headerData.pages.length ? (
+              headerData.pages.map((headerLink) => {
+                return <CustomHeaderLink key={headerLink.slug} item={headerLink} />;
               })
             ) : (
               <li>
-                <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
+                <Link
+                  className="mx-auto link link-hover link-primary"
+                  href={localizePath("/blog", locale)}
+                >
                   Blog
                 </Link>
               </li>
@@ -85,37 +78,38 @@ export default function Header({
   );
 }
 
-export function HeaderSideBar({
-  headerData,
-  context
-}: {
-  headerData: { showHome: Boolean; pages: Array<HeaderLink> };
-  context: any;
-}) {
-  //const icon = getSocialIcon(contactType);
+export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
+  const { locale } = useLocale();
   return (
     <div className="z-50 h-screen drawer-side md:hidden">
       <label
         htmlFor="my-drawer-3"
         aria-label="close sidebar"
-        className="drawer-overlay !bg-transparent"></label>
+        className="drawer-overlay !bg-transparent"
+      ></label>
       <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
           {headerData?.showHome != false && (
             <li>
-              <Link className="mx-auto link link-hover link-primary" href={"/"}>
-                {context?.locale == "en" ? "Home" : "Accueil"}
+              <Link
+                className="mx-auto link link-hover link-primary"
+                href={localizePath("/", locale)}
+              >
+                {locale === "en" ? "Home" : "Accueil"}
               </Link>
             </li>
           )}
-          {headerData?.pages ? (
-            headerData?.pages.map((headerLink) => {
-              return CustomHeaderLink(headerData, headerLink, context);
+          {headerData.pages.length ? (
+            headerData.pages.map((headerLink) => {
+              return <CustomHeaderLink key={headerLink.slug} item={headerLink} />;
             })
           ) : (
             <li>
-              <Link className="mx-auto link link-hover link-primary" href={"/blog"}>
+              <Link
+                className="mx-auto link link-hover link-primary"
+                href={localizePath("/blog", locale)}
+              >
                 Blog
               </Link>
             </li>
@@ -138,26 +132,12 @@ export function HeaderSideBar({
   );
 }
 
-function CustomHeaderLink(headerData: any, headerLink: HeaderLink, context: any) {
-  const translations = headerData.pages.find(
-    (data: { slug: string }) => data.slug == headerLink.slug
-  )?._translations._translations;
-  const translatedHeaderLink =
-    translations?.find(
-      (translation: { language: any }) => translation.language == context?.locale
-    ) ?? null;
-
-  const translatedHeaderText =
-    (context?.locale == "fr" ? headerLink.title_fr : headerLink.title) ?? null;
+function CustomHeaderLink({ item }: { item: NavigationItem }) {
+  const { locale } = useLocale();
   return (
-    <li key={headerLink?.slug}>
-      <Link
-        className="link link-hover link-primary"
-        href={"/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug)}>
-        {translatedHeaderLink?.title ??
-          translatedHeaderText ??
-          headerLink?.title ??
-          headerLink.slug}
+    <li>
+      <Link className="link link-hover link-primary" href={localizePath(`/${item.slug}`, locale)}>
+        {item.title}
       </Link>
     </li>
   );

@@ -2,8 +2,8 @@ import {
   Raleway,
   Montserrat,
   Inter,
-  Nunito,
-/*   Comfortaa,
+  Nunito
+  /*   Comfortaa,
   Rokkitt,
   Josefin_Sans,
   DM_Sans,
@@ -17,26 +17,26 @@ export const raleway = Raleway({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: "variable",
+  weight: "variable"
 });
 export const montserrat = Montserrat({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: "variable",
+  weight: "variable"
 });
 export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: "variable",
+  weight: "variable"
 });
 export const nunito = Nunito({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: "variable",
-});/* 
+  weight: "variable"
+}); /*
 export const comfortaa = Comfortaa({
   subsets: ["latin"],
   display: "swap",
@@ -86,7 +86,6 @@ export const vollkorn = Vollkorn({
   weight: "variable",
 }); */
 
-
 export function getFontFamily(fontName: string): any {
   let selectedFont = null;
 
@@ -98,7 +97,7 @@ export function getFontFamily(fontName: string): any {
     selectedFont = inter;
   } else if (fontName === "nunito") {
     selectedFont = nunito;
- /*  } else if (fontName === "comfortaa") {
+    /*  } else if (fontName === "comfortaa") {
     selectedFont = comfortaa;
   } else if (fontName === "rokkitt") {
     selectedFont = rokkitt;
@@ -117,6 +116,6 @@ export function getFontFamily(fontName: string): any {
   } else {
     selectedFont = raleway;
   }
- // selectedFont.variable = display ? displayName: sansName;
+  // selectedFont.variable = display ? displayName: sansName;
   return selectedFont;
 }

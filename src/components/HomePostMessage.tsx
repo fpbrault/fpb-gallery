@@ -1,15 +1,18 @@
-import { SanityDocument } from "next-sanity";
-import Link from "next/link";
-import { useTranslation } from "next-i18next";
+"use client";
 
-export default function HomePostMessage({ post }: { post: SanityDocument }) {
-  const { t } = useTranslation("common");
+import Link from "next/link";
+import { useLocale } from "@/components/context/LocaleContext";
+import { localizePath } from "@/i18n/config";
+import type { PostSummary } from "@/features/blog/models";
+
+export default function HomePostMessage({ post }: { post: PostSummary }) {
+  const { locale, t } = useLocale();
   return (
     <div className="p-2 mb-2 rounded sm:mx-1 card bg-base-300">
       <p>{t("home.readPost")}</p>
       <Link
         className="text-2xl font-bold text-center font-display link link-hover link-primary"
-        href={"/blog/" + post.slug.current}
+        href={localizePath("/blog/" + post.slug, locale)}
       >
         {post?.title ?? "Untitled"}
       </Link>

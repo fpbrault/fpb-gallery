@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useSiteMetadata } from "../context/SiteMetadataContext";
 
@@ -41,6 +43,7 @@ const ThemeSelector = () => {
     <label className="grid cursor-pointer place-items-center">
       <input
         type="checkbox"
+        aria-label="Toggle light and dark theme"
         checked={isDarkTheme}
         onChange={toggleTheme}
         className="col-span-2 col-start-1 row-start-1 toggle theme-controller bg-base-content"

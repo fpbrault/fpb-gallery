@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 
 import Lightbox, { ControllerRef } from "yet-another-react-lightbox";
@@ -8,104 +10,86 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
 import { NextJsImage, NextJsImageElement } from "./NextJsImage";
-import { useRouter } from "next/router";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getResizedImage } from "@/sanity/lib/image";
-import PhotoAlbum, { ClickHandler, Photo } from "react-photo-album";
+import PhotoAlbum, { ClickHandler } from "react-photo-album";
 import { PortableText } from "@portabletext/react";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import type { ContentImage } from "@/features/content/models";
+
+const mobileQuery = "(max-width: 768px)";
+
+function subscribeToMobile(callback: () => void) {
+  const media = window.matchMedia(mobileQuery);
+  media.addEventListener("change", callback);
+  return () => media.removeEventListener("change", callback);
+}
+
+function getMobileSnapshot() {
+  return window.matchMedia(mobileQuery).matches;
+}
 
 type Props = {
-  images: any[];
+  images: ContentImage[];
   mode: "rows" | "columns" | "masonry";
-  slug: string;
   columns: number | undefined;
 };
 
-function PhotoGallery({ images, mode, slug, columns }: Props) {
+function PhotoGallery({ images, mode, columns }: Props) {
   const router = useRouter();
-  const imageId = router.query.imageId;
-  const [index, setIndex] = React.useState(-1);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const imageId = searchParams?.get("imageId") ?? null;
+  const [selectedIndex, setSelectedIndex] = React.useState(-1);
   const lightboxRef = React.useRef<ControllerRef | null>(null);
-  const [isMobile, setIsMobile] = React.useState(false);
+  const isMobile = React.useSyncExternalStore(subscribeToMobile, getMobileSnapshot, () => false);
 
-  const [theImages, setTheImages] = React.useState<any[]>([]);
-
-  React.useEffect(() => {
-    // This function runs whenever `images` prop changes
-    const newImages = images
-      ? images.map((image) => {
-          const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
-          return {
-            ...image,
-            src: imageUrl,
-            height: imageHeight,
-            width: imageWidth,
-            title: (
-              <>
-                <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">
-                  {image.title}
-                </div>
-              </>
-            ),
-            description: (
-              <>
-                {image.description && (
-                  <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                    <PortableText
-                      components={myPortableTextComponents as any}
-                      value={image.description}
-                    />
+  const theImages = React.useMemo(
+    () =>
+      images
+        ? images.map((image) => {
+            const { imageUrl, imageWidth, imageHeight } = getResizedImage(image, 80, 2048);
+            return {
+              ...image,
+              src: imageUrl,
+              height: imageHeight,
+              width: imageWidth,
+              title: (
+                <>
+                  <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">
+                    {image.title}
                   </div>
-                )}
-              </>
-            )
-          };
-        })
-      : [];
-    setTheImages(newImages);
-  }, [images]);
-
-  // Update the state on component mount
-  React.useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
-    };
-
-    // Set initial mobile state
-    handleResize();
-
-    // Add resize event listener
-    window.addEventListener("resize", handleResize);
-
-    // Remove event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+                </>
+              ),
+              description: (
+                <>
+                  {image.description && (
+                    <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
+                      <PortableText
+                        components={myPortableTextComponents as any}
+                        value={image.description}
+                      />
+                    </div>
+                  )}
+                </>
+              )
+            };
+          })
+        : [],
+    [images]
+  );
+  const deepLinkedIndex = imageId ? theImages.findIndex((image) => image._key === imageId) : -1;
+  const index = imageId ? deepLinkedIndex : selectedIndex;
 
   const handleImageClick = ({ index: current }: { index: any }) => {
-    setIndex(current);
+    setSelectedIndex(current);
 
     // Extract the image id from the src URL
     const selectedImageId = (theImages[current] as any)._key;
 
     // Update the URL with the selected image id in the query parameter
-    router.push(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
+    router.push(`${pathname}?imageId=${selectedImageId}`, { scroll: false });
   };
-
-  React.useEffect(() => {
-    if (imageId) {
-      // Find the index of the image with the specified id
-      const selectedIndex = theImages.findIndex((image) => image._key === imageId);
-      // If the image is found, open the lightbox
-      if (selectedIndex !== -1) {
-        setIndex(selectedIndex);
-      }
-    } else if (lightboxRef.current && typeof imageId == "undefined") {
-      setIndex(-1);
-      lightboxRef.current.close();
-    }
-  }, [imageId, theImages, router]);
 
   if (!images) {
     return "nothing";
@@ -115,11 +99,11 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
     <>
       <PhotoAlbum
         layout={mode ?? "rows"}
-        photos={theImages}
+        photos={theImages as any}
         targetRowHeight={500}
         spacing={20}
-        columns={isMobile ? 1 : columns ?? 3}
-        renderPhoto={(photo) =>
+        columns={columns ?? 3}
+        renderPhoto={(photo: any) =>
           NextJsImageElement({
             limitHeight: theImages.length < 3 ? true : false,
             ...photo,
@@ -154,13 +138,11 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
         }}
         open={index > -1}
         close={() => {
-          setIndex(-1);
+          setSelectedIndex(-1);
 
           // Check if the current URL contains the imageId parameter
-          const currentUrl = window.location.href;
-          if (currentUrl.includes("imageId")) {
-            // Update the URL without the imageId parameter
-            router.push("/album/" + slug, undefined, { shallow: true });
+          if (searchParams?.has("imageId")) {
+            router.push(pathname ?? "/", { scroll: false });
           }
         }}
         on={{
@@ -168,9 +150,10 @@ function PhotoGallery({ images, mode, slug, columns }: Props) {
             // Extract the image id from the src URL
 
             // Update the code to access the _key property
-            const selectedImageId = theImages[currentIndex]._key;
+            const selectedImageId = theImages[currentIndex]?._key;
+            if (!selectedImageId) return;
             // Update the URL with the selected image id in the query parameter
-            router.replace(`${slug}?imageId=${selectedImageId}`, undefined, { shallow: true });
+            router.replace(`${pathname}?imageId=${selectedImageId}`, { scroll: false });
           }
         }}
       />

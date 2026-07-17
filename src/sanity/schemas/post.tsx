@@ -13,7 +13,7 @@ export const post = defineType({
       name: "title",
       type: "internationalizedArrayString",
       title: "Post Title",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required()
     }),
 
     defineField({
@@ -112,7 +112,8 @@ export const post = defineType({
       name: "publishDate",
       type: "datetime",
       validation: (Rule) => Rule.required(),
-      description: "This does not affect the publishing status of the post. It is only used to determine the order of the posts on the blog page (and post navigation)",
+      description:
+        "This does not affect the publishing status of the post. It is only used to determine the order of the posts on the blog page (and post navigation)",
       initialValue: new Date().toISOString(),
       title: "Publish Date",
       options: {
@@ -158,7 +159,15 @@ export const post = defineType({
       return {
         title: value.title[0].value,
         subtitle: publishDate && `${new Date(publishDate).toLocaleString()}`,
-        media: value.coverImage ?? <Image unoptimized width={100} height={100} alt="no image" src="https://placehold.co/100x100/jpg?text=no-image"></Image>,
+        media: value.coverImage ?? (
+          <Image
+            unoptimized
+            width={100}
+            height={100}
+            alt="no image"
+            src="https://placehold.co/100x100/jpg?text=no-image"
+          ></Image>
+        )
       };
     }
   }

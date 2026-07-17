@@ -1,16 +1,25 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { UrlObject } from "url";
 import { FaHouse } from "react-icons/fa6";
+import { localizePath } from "@/i18n/config";
+import { useLocale } from "../context/LocaleContext";
 
 const Breadcrumbs = ({ items }: any) => {
+  const { locale } = useLocale();
   return (
     <div className="flex">
       <div className="mx-auto uppercase breadcrumbs">
         <ul aria-label="Breadcrumb">
           <li className="inline-flex items-center">
-            <Link className="flex items-center w-4 h-4 text-sm link-secondary " href="/">
-            <FaHouse></FaHouse>
+            <Link
+              aria-label="Home"
+              className="flex items-center w-4 h-4 text-sm link-secondary "
+              href={localizePath("/", locale)}
+            >
+              <FaHouse></FaHouse>
             </Link>
           </li>
           {items.map(
@@ -20,7 +29,10 @@ const Breadcrumbs = ({ items }: any) => {
             ) => (
               <li key={index} className="inline-flex items-center">
                 {item.url ? (
-                  <Link href={item.url} className="flex items-center text-sm link-secondary">
+                  <Link
+                    href={localizePath(String(item.url), locale)}
+                    className="flex items-center text-sm link-secondary"
+                  >
                     {item?.name?.length && item?.name?.length > 30
                       ? item?.name?.slice(0, 30) + "..."
                       : item?.name}

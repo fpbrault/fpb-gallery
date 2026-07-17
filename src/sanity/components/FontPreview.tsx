@@ -1,62 +1,61 @@
-// FontPreview.js
+import { useCallback, useState } from "react";
+import { Card, Select, Stack, Text } from "@sanity/ui";
+import { set, unset } from "sanity";
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Card, Select, Tooltip, Text, Stack } from '@sanity/ui'
-import schemaTypes from '../schemas/index';
-import { TextInput, set, unset } from 'sanity';
-import { getFontFamily } from '@/components/Layout/FontLoader';
-
-const FontPreview = (props: any) => {
-    const { elementProps, onChange, value = '' } = props
-    const [testText, setTestText] = useState("My Voice is my passport")
-
-    const handleChange = useCallback((event: any) => {
-        const nextValue = event.currentTarget.value
-        onChange(nextValue ? set(nextValue) : unset())
-    }, [onChange])
-    const fontStyle = getFontFamily(props.value)
-    return (
-        <Stack space={[2]}>
-            <Select
-                onChange={handleChange}
-                value={value}
-            >
-                {props.schemaType.options.list.map((listOption: any) => {
-                    return <option key={listOption.value} value={listOption.value}>{listOption.title}</option>
-                })}
-            </Select>
-            <div {...getFontFamily(props.value)} >
-                <label htmlFor="textPreviewInput">Font Preview</label>
-                <input name="textPreviewInput" style={{ paddingLeft:"16px", borderRadius: "6px", background: "white", color: "black", fontSize: 24, width: "100%" }} value={testText} onChange={e => setTestText(e.target.value)} ></input>
-                <Card padding={4} style={{textAlign: 'center'}}>
-  <Text >
-    <Tooltip
-      content={
-        <Box padding={2}>
-          <Text muted size={1}>
-          <Stack {...getFontFamily(props.value)} space={[1]}>
-                <span style={{  fontSize: 16 }}>{testText}</span>
-                <span style={{  fontSize: 24 }}>{testText}</span>
-                <span style={{  fontSize: 40 }}>{testText}</span>
-                <span style={{  fontSize: 64 }}>{testText}</span>
-                </Stack>
-          </Text>
-        </Box>
-      }
-      fallbackPlacements={['right', 'left']}
-      placement="top"
-      portal
-    >
-      <span style={{display: 'inline-block'}}>
-        Hover here to see more examples
-      </span>
-    </Tooltip>
-  </Text>
-</Card>
-               
-                </div>
-        </Stack >
-    );
+const fontFamilies: Record<string, string> = {
+  comfortaa: "Comfortaa, sans-serif",
+  dmSans: "DM Sans, sans-serif",
+  dosis: "Dosis, sans-serif",
+  inter: "Inter, sans-serif",
+  josefinSans: "Josefin Sans, sans-serif",
+  libreFranklin: "Libre Franklin, sans-serif",
+  montserrat: "Montserrat, sans-serif",
+  nunito: "Nunito, sans-serif",
+  raleway: "Raleway, sans-serif",
+  rokkitt: "Rokkitt, serif",
+  spaceGrotesk: "Space Grotesk, sans-serif",
+  vollkorn: "Vollkorn, serif"
 };
 
-export default FontPreview;
+export default function FontPreview(props: any) {
+  const { onChange, value = "" } = props;
+  const [testText, setTestText] = useState("My voice is my passport");
+  const fontFamily = fontFamilies[value] ?? fontFamilies.raleway;
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const nextValue = event.currentTarget.value;
+      onChange(nextValue ? set(nextValue) : unset());
+    },
+    [onChange]
+  );
+
+  return (
+    <Stack space={3}>
+      <Select onChange={handleChange} value={value}>
+        {props.schemaType.options.list.map((option: { title: string; value: string }) => (
+          <option key={option.value} value={option.value}>
+            {option.title}
+          </option>
+        ))}
+      </Select>
+      <label htmlFor="textPreviewInput">Font preview</label>
+      <input
+        id="textPreviewInput"
+        style={{
+          background: "white",
+          borderRadius: 6,
+          color: "black",
+          fontFamily,
+          fontSize: 24,
+          padding: 16,
+          width: "100%"
+        }}
+        value={testText}
+        onChange={(event) => setTestText(event.target.value)}
+      />
+      <Card padding={4} style={{ fontFamily, textAlign: "center" }}>
+        <Text size={4}>{testText}</Text>
+      </Card>
+    </Stack>
+  );
+}

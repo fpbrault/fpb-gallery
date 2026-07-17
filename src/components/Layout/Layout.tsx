@@ -1,18 +1,21 @@
-import React, { ReactNode, useEffect } from "react";
-import Head from "next/head";
+"use client";
+
+import React, { ReactNode } from "react";
 import Header, { HeaderSideBar } from "./Header";
 import ScrollToTopButton from "./ScrollToTop";
 import { Footer } from "./Footer";
 import type { Layout } from "@/types/layout";
 import { SiteMetadataProvider } from "../context/SiteMetadataContext";
-import { PagePropsProvider } from "../context/PagePropsContext";
 import { getFontFamily } from "./FontLoader";
+import { LocaleProvider } from "../context/LocaleContext";
+import type { HeaderData, SiteMetadata } from "@/features/site/models";
+import type { Locale } from "@/i18n/config";
 
 type Props = {
   children: ReactNode;
-  headerData?: any;
-  siteMetadata?: any;
-  context?: any;
+  headerData: HeaderData;
+  siteMetadata: SiteMetadata;
+  locale: Locale;
 };
 
 const Layout: React.FC<Props> = (props) => {
@@ -24,61 +27,61 @@ const Layout: React.FC<Props> = (props) => {
       ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => {
           return { name: socialLink.name, url: socialLink.url, type: socialLink.type };
         })
-      : {}
+      : []
   };
   const fontFamily = getFontFamily(props?.siteMetadata?.customFont ?? "raleway");
   const displayFontFamily = getFontFamily(props?.siteMetadata?.customDisplayFont ?? "raleway");
+  const customThemeCss = Object.entries({
+    [props.siteMetadata.themes.darkThemeName]: props.siteMetadata.customThemeVariables?.dark,
+    [props.siteMetadata.themes.lightThemeName]: props.siteMetadata.customThemeVariables?.light
+  })
+    .filter(([name, values]) => /^[a-zA-Z0-9_-]+$/.test(name) && values)
+    .map(
+      ([name, values]) =>
+        `[data-theme="${name}"]{${Object.entries(values ?? {})
+          .map(([variable, value]) => `${variable}:${value}`)
+          .join(";")}}`
+    )
+    .join("");
+  const themeInitialization = `(() => {try {const dark=${JSON.stringify(
+    props.siteMetadata.themes.darkThemeName
+  )};const light=${JSON.stringify(
+    props.siteMetadata.themes.lightThemeName
+  )};const saved=localStorage.getItem('theme');const theme=saved===dark||saved===light?saved:(matchMedia('(prefers-color-scheme: dark)').matches?dark:light);document.documentElement.dataset.theme=theme;}catch{}})();`;
 
   return (
-    <>
-      <Head>
-        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <title>{metadata.title}</title>
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-        <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff" />
-      </Head>
-      <SiteMetadataProvider siteMetadata={props.siteMetadata}>
-        <PagePropsProvider pageProps={props.context}>
-          <div
-            style={
-              {
-                "--font-sans": fontFamily?.style?.fontFamily,
-                "--font-display": displayFontFamily?.style?.fontFamily
-              } as React.CSSProperties
-            }
-            className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col`}>
-            <div className="flex-grow h-full drawer ">
-              <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-              <div className="flex flex-col drawer-content">
-                {/* Navbar */}
-                <Header
-                  title={metadata.title}
-                  contactText={metadata?.socialLinks[0]?.name ?? ""}
-                  contactType={metadata?.socialLinks[0]?.type ?? ""}
-                  contactUrl={metadata?.socialLinks[0]?.url ?? ""}
-                  headerData={props && props.headerData}
-                  context={props.context}
-                />
+    <SiteMetadataProvider siteMetadata={props.siteMetadata}>
+      <script dangerouslySetInnerHTML={{ __html: themeInitialization }} />
+      {customThemeCss ? <style>{customThemeCss}</style> : null}
+      <LocaleProvider locale={props.locale}>
+        <div
+          style={
+            {
+              "--font-sans": fontFamily?.style?.fontFamily,
+              "--font-display": displayFontFamily?.style?.fontFamily
+            } as React.CSSProperties
+          }
+          className={`min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col`}
+        >
+          <div className="flex-grow h-full drawer ">
+            <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+            <div className="flex flex-col drawer-content">
+              {/* Navbar */}
+              <Header title={metadata.title} headerData={props && props.headerData} />
 
-                <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
-                  {props.children}
-                </main>
-              </div>
-              <HeaderSideBar headerData={props.headerData} context={props.context}></HeaderSideBar>
+              <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
+                {props.children}
+              </main>
             </div>
-
-            <ScrollToTopButton></ScrollToTopButton>
-
-            <Footer context={props.context} metadata={metadata}></Footer>
+            <HeaderSideBar headerData={props.headerData} />
           </div>
-        </PagePropsProvider>
-      </SiteMetadataProvider>
-    </>
+
+          <ScrollToTopButton></ScrollToTopButton>
+
+          <Footer metadata={metadata} />
+        </div>
+      </LocaleProvider>
+    </SiteMetadataProvider>
   );
 };
 export default Layout;

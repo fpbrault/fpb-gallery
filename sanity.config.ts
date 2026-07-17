@@ -1,9 +1,9 @@
 import { visionTool } from "@sanity/vision";
 import { structureTool } from "sanity/structure";
+import { presentationTool } from "sanity/presentation";
 import { media } from "sanity-plugin-media";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { schemaTypes } from "@/sanity/schemas";
-import { defaultDocumentNode } from "./defaultDocumentNode";
 import { colorInput } from "@sanity/color-input";
 import {
   DeleteTranslationAction,
@@ -12,21 +12,21 @@ import {
 import { internationalizedArray } from "sanity-plugin-internationalized-array";
 import { defineConfig } from "sanity";
 
-import { theme } from "https://themer.sanity.build/api/hues?preset=verdant";
 import structure from "./deskStructure";
-import { DeleteAndRevalidate, PublishAndRevalidate } from "@/sanity/lib/actions";
-import { secretsToolbar } from "@/sanity/plugins/secrets-toolbar";
 
 export const config = defineConfig({
-  theme,
   basePath: "/studio",
   projectId,
   dataset,
   schema: schemaTypes,
   plugins: [
-    secretsToolbar(),
+    presentationTool({
+      previewUrl: {
+        origin: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+        previewMode: { enable: "/api/preview" }
+      }
+    }),
     structureTool({
-      defaultDocumentNode,
       structure
     }),
     visionTool({ defaultApiVersion: apiVersion }),
@@ -47,77 +47,22 @@ export const config = defineConfig({
       schemaTypes: ["page"]
     }),
     colorInput(),
-    media(),
+    media()
   ],
   document: {
-    actions: (prev: any, { schemaType }: any) => {
-      const actionMapping: { [key: string]: any[] } ={
-        'page': [DeleteTranslationAction],
-        'post': [],
-        'album': [],
-        'category': []
-      };
-  
-      let actions = prev.filter((action: any) => action.name !== 'delete');
-
-  
-      Object.keys(actionMapping).forEach(key => {
-        if (schemaType === key) {
-          actions = actions.map((originalAction: { action: string; }) => {
-            if (originalAction.action === 'delete') {
-              return DeleteAndRevalidate;
-            }
-            return originalAction;
-          });
-          actions = [
-            ...actions.map((originalAction: { action: string; }) => {
-              if (originalAction.action === 'publish') {
-                return PublishAndRevalidate;
-              }
-              if (originalAction.action === 'delete') {
-                return DeleteAndRevalidate;
-              }
-              return originalAction;
-            }),
-            ...actionMapping[key]
-          ];
-        }
-      });
-  
+    actions: (prev, { schemaType }) => {
       if (["pageList", "siteSettings"].includes(schemaType)) {
-        const newActions = prev.filter(
-          (originalAction: any) =>
+        return prev.filter(
+          (originalAction) =>
             originalAction.action !== "delete" &&
             originalAction.action !== "duplicate" &&
             originalAction.action !== "unpublish"
         );
-        return [...newActions];
       }
-  
-      return actions;
+
+      return schemaType === "page" ? [...prev, DeleteTranslationAction] : prev;
     }
   }
 });
-
-export const getDefaultDocumentNode = (
-  S: {
-    document: () => { (): any; new(): any; views: { (arg0: any[]): any; new(): any } };
-    view: {
-      form: () => any;
-      component: (arg0: any) => {
-        (): any;
-        new(): any;
-        title: { (arg0: string): any; new(): any };
-      };
-    };
-  },
-  { schemaType }: any
-) => {
-  // Conditionally return a different configuration based on the schema type
-  if (schemaType === "post") {
-    return S.document().views([S.view.form()]);
-  }
-  return S.document().views([S.view.form()]);
-};
 
 export default config;

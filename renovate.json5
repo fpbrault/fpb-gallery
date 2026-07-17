@@ -1,8 +1,38 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "group:allNonMajor",
-    "npm:unpublishSafe"
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended", "npm:unpublishSafe"],
+  schedule: ["before 6am on monday"],
+  minimumReleaseAge: "7 days",
+  dependencyDashboard: true,
+  packageRules: [
+    {
+      description: "Group non-major production updates",
+      matchDepTypes: ["dependencies"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      groupName: "production dependencies"
+    },
+    {
+      description: "Group non-major development updates",
+      matchDepTypes: ["devDependencies"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      groupName: "development dependencies"
+    },
+    {
+      description: "Keep the Next and React cutover aligned",
+      matchPackageNames: [
+        "next",
+        "eslint-config-next",
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ],
+      groupName: "next and react"
+    },
+    {
+      description: "Keep the Sanity integration aligned",
+      matchPackagePrefixes: ["@sanity/", "next-sanity", "sanity", "sanity-plugin-"],
+      groupName: "sanity"
+    }
   ]
 }
