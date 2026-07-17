@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import type { ComponentProps } from "react";
-import type { RenderPhotoProps } from "react-photo-album";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/image", () => ({
@@ -39,13 +38,12 @@ function renderPhoto(lqip?: string) {
     width: 3088
   };
 
-  const props = {
-    photo,
-    imageProps: { alt: photo.alt, sizes: "100vw", src: photo.src, style: {} },
-    wrapperStyle: {}
-  } as RenderPhotoProps<GalleryPhoto>;
-
-  render(<NextJsImageElement {...props} />);
+  render(
+    <NextJsImageElement
+      context={{ height: photo.height, index: 0, photo, width: photo.width }}
+      renderProps={{}}
+    />
+  );
 }
 
 describe("gallery Next Image placeholder", () => {

@@ -94,9 +94,16 @@ function PhotoGallery({ images, mode, columns }: Props) {
         targetRowHeight={500}
         spacing={20}
         columns={columns ?? 3}
-        renderPhoto={(props) => (
-          <NextJsImageElement limitHeight={theImages.length < 3} {...props} />
-        )}
+        render={{
+          photo: (renderProps, context) => (
+            <NextJsImageElement
+              context={context}
+              key={context.photo.key ?? context.photo._key}
+              limitHeight={theImages.length < 3}
+              renderProps={renderProps}
+            />
+          )
+        }}
         sizes={{
           size: "calc(100vw - 240px)",
           sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }]

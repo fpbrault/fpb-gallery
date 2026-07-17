@@ -15,7 +15,7 @@ export function PTYoutube({ value }: { value: Youtube }) {
               </div>
             );
           }}
-          url={value?.url ?? ""}
+          src={value?.url ?? ""}
         />
       </div>
     </div>

@@ -1,6 +1,85 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss" source("../src");
+@plugin "@tailwindcss/typography";
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: #f2f2f2;
+  --color-base-300: #e5e6e6;
+  --color-base-content: #1f2937;
+  --color-primary: mediumseagreen;
+  --color-primary-content: #062e16;
+  --color-secondary: darkslategrey;
+  --color-secondary-content: #f8fafc;
+  --color-accent: oklch(76.76% 0.184 183.61);
+  --color-accent-content: #052e2b;
+  --color-neutral: #2b3440;
+  --color-neutral-content: #d7dde4;
+  --color-info: #2563eb;
+  --color-info-content: #eff6ff;
+  --color-success: #16a34a;
+  --color-success-content: #f0fdf4;
+  --color-warning: #d97706;
+  --color-warning-content: #fffbeb;
+  --color-error: oklch(65.72% 0.199 27.33);
+  --color-error-content: #fff1f2;
+  --radius-selector: 1.9rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "mytheme";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #020202;
+  --color-base-200: #111111;
+  --color-base-300: #333333;
+  --color-base-content: #f5f5f5;
+  --color-primary: #22c55e;
+  --color-primary-content: #052e16;
+  --color-secondary: #22d3ee;
+  --color-secondary-content: #083344;
+  --color-accent: #fbbf24;
+  --color-accent-content: #422006;
+  --color-neutral: #222222;
+  --color-neutral-content: #e5e5e5;
+  --color-info: #67e8f9;
+  --color-info-content: #083344;
+  --color-success: #a3e635;
+  --color-success-content: #1a2e05;
+  --color-warning: #fb923c;
+  --color-warning-content: #431407;
+  --color-error: #ef4444;
+  --color-error-content: #450a0a;
+  --radius-selector: 1.9rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme inline {
+  --font-display: var(--font-site);
+  --font-sans: var(--font-site);
+}
 
 @supports (-webkit-touch-callout: none) {
   .h-screen {

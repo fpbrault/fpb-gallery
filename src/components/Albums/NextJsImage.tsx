@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { isImageFitCover, isImageSlide, useLightboxProps } from "yet-another-react-lightbox";
 
-import type { Photo, RenderPhotoProps } from "react-photo-album";
+import type { Photo, RenderPhotoContext, RenderPhotoProps } from "react-photo-album";
 import { getResizedImage } from "@/sanity/lib/image";
 import Link from "next/link";
 import type { ContentImage } from "@/features/content/models";
@@ -12,15 +12,16 @@ import type { ReactNode } from "react";
 export type AlbumPhoto = Photo & { blurDataURL?: string; href: string };
 export type GalleryPhoto = Photo & Omit<ContentImage, "description"> & { description?: ReactNode };
 
-interface AlbumRenderPhotoProps extends RenderPhotoProps<AlbumPhoto> {
+interface AlbumRenderPhotoProps {
+  context: RenderPhotoContext<AlbumPhoto>;
   limitHeight?: boolean;
+  renderProps: RenderPhotoProps;
 }
 
 export function NextJsImageAlbum({
+  context: { height, photo, width },
   limitHeight,
-  photo,
-  imageProps: { alt, title, sizes, onClick },
-  wrapperStyle
+  renderProps: { onClick }
 }: AlbumRenderPhotoProps) {
   const limitHeightStyle = limitHeight
     ? {
@@ -31,7 +32,7 @@ export function NextJsImageAlbum({
   return (
     <div
       className={"mx-auto rounded" + (limitHeight ? " max-h-[600px]" : "") + " cover group"}
-      style={{ ...wrapperStyle, ...limitHeightStyle, position: "relative" }}
+      style={{ width, height, ...limitHeightStyle, position: "relative" }}
     >
       <Link className="relative block h-full w-full" href={photo.href ?? "/"}>
         <div className="absolute bottom-0 left-0 right-0 z-20 flex mx-2 transition duration-300 ">
@@ -49,8 +50,10 @@ export function NextJsImageAlbum({
           loading="lazy"
           blurDataURL={photo.blurDataURL}
           placeholder={photo.blurDataURL ? "blur" : "empty"}
-          sizes={sizes}
-          {...{ alt, title, onClick }}
+          sizes={`${Math.ceil(width)}px`}
+          alt={photo.title ?? ""}
+          title={photo.title}
+          onClick={onClick}
         />
       </Link>
     </div>
@@ -58,17 +61,20 @@ export function NextJsImageAlbum({
 }
 
 export function NextJsImageElement({
+  context: { height, photo, width },
   limitHeight,
-  photo,
-  imageProps: { alt, sizes, onClick },
-  wrapperStyle
-}: RenderPhotoProps<GalleryPhoto> & { limitHeight?: boolean }) {
+  renderProps: { onClick }
+}: {
+  context: RenderPhotoContext<GalleryPhoto>;
+  limitHeight?: boolean;
+  renderProps: RenderPhotoProps;
+}) {
   const { imageUrl: thumbnailUrl, imageWidth, imageHeight } = getResizedImage(photo, 80, 1000);
 
   return (
     <div
       className={"rounded" + (limitHeight ? " max-h-[800px] " : "") + " cover group"}
-      style={{ ...wrapperStyle, position: "relative" }}
+      style={{ width, height, position: "relative" }}
     >
       <Image
         height={imageHeight}
@@ -79,8 +85,9 @@ export function NextJsImageElement({
         loading="lazy"
         blurDataURL={photo.placeholders.metadata.lqip}
         placeholder={photo.placeholders.metadata.lqip ? "blur" : "empty"}
-        sizes={sizes}
-        {...{ alt, onClick }}
+        sizes={`${Math.ceil(width)}px`}
+        alt={photo.alt}
+        onClick={onClick}
       />
     </div>
   );
