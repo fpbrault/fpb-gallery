@@ -2,6 +2,10 @@
 
 import { createContext } from "react";
 
-const ImageContext = createContext<string[]>([]);
+import type { PortableImageRegistryEntry } from "@/features/content/portableImageRegistry";
+
+export type PortableImageRegistry = { images: PortableImageRegistryEntry[] };
+
+const ImageContext = createContext<PortableImageRegistry | null>(null);
 
 export default ImageContext;

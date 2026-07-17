@@ -12,18 +12,27 @@ This backlog tracks work discovered after the App Router cutover. Preserve publi
 - [x] Add unit tests for domain mapping and legacy fallbacks.
 - [x] Re-enable strict lint rules for application code where this slice removes `any` and unsafe casts.
 
-## Active slice: public-content correctness
+## Completed slice: public-content correctness
 
 - [x] Make blog cursor pagination deterministic with an opaque `publishDate` plus `_id` cursor.
 - [x] Generate localized canonical alternatives using the actual English and French slugs.
 - [x] Pass post and album identifiers to the OG endpoint so content-specific images are used.
 - [x] Use blur placeholders only when Sanity provides a usable LQIP.
 
+## Completed slice: gallery and rich-content lightboxes
+
+- [x] Separate album-card, gallery-thumbnail, and lightbox-slide presentation models.
+- [x] Split gallery URL state, responsive behavior, captions, and image rendering into focused modules.
+- [x] Build one recursively collected Portable Text image registry across top-level and two-column content.
+- [x] Preserve unrelated query parameters and scroll position across gallery deep-link navigation.
+- [x] Keep missing assets non-renderable and use blur placeholders only when an LQIP exists.
+- [x] Add focused coverage for gallery mapping, deep links, image fallbacks, and rich-content indexing.
+
 ## Correctness and public behavior
 
 - [x] Localize Portable Text internal links.
 - [x] Correct Portable Text external-link target and `rel` behavior.
-- [ ] Build a complete Portable Text image collection so rich-content lightboxes navigate between images.
+- [x] Build a complete Portable Text image collection so rich-content lightboxes navigate between images.
 - [x] Remove Studio font choices now that frontend typography is code-owned.
 - [ ] Remove or replace the brittle Studio `/v1/users/me` author initialization request.
 - [ ] Require meaningful post cover-image alt text unless explicitly decorative.
@@ -47,8 +56,8 @@ The original project exposed presentation settings in Sanity so non-technical ad
 ## Component and feature architecture
 
 - [x] Rebuild the Portable Text component map with generated value types and normal React component composition.
-- [ ] Separate gallery thumbnail, Photo Album, and lightbox slide models.
-- [ ] Split gallery URL state, responsive behavior, captions, and image rendering into focused modules.
+- [x] Separate gallery thumbnail, Photo Album, and lightbox slide models.
+- [x] Split gallery URL state, responsive behavior, captions, and image rendering into focused modules.
 - [x] Simplify navigation into one typed link model shared by desktop and mobile renderers.
 - [x] Remove unused header contact props and duplicate locale context plumbing.
 - [ ] Add drawer focus trapping, Escape handling, focus restoration, and close-on-navigation behavior.
@@ -58,7 +67,7 @@ The original project exposed presentation settings in Sanity so non-technical ad
 ## Quality gates and testing
 
 - [x] Remove global ESLint rule suppressions; retain only narrow, documented exceptions.
-- [ ] Add tests for localized metadata, Portable Text links, gallery deep links, and image fallbacks.
+- [x] Add tests for localized metadata, Portable Text links, gallery deep links, and image fallbacks.
 - [ ] Add component tests for navigation and drawer keyboard behavior.
 - [ ] Add integration tests for Sanity query normalization and infrastructure failures.
 - [ ] Run the Playwright route, preview, pagination, Studio, and visual-regression suites against a real preview environment.

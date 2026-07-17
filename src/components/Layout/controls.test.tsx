@@ -36,6 +36,8 @@ describe("site controls", () => {
     document.documentElement.dataset.theme = "light";
     const view = render(<ThemeSelector />);
     const control = screen.getByRole("checkbox", { name: "Toggle light and dark theme" });
+    expect(control.parentElement).toHaveClass("toggle");
+    expect(control).not.toHaveClass("toggle");
     await user.click(control);
     expect(localStorage.getItem("theme")).toBe("mytheme");
     expect(document.documentElement.dataset.theme).toBe("mytheme");

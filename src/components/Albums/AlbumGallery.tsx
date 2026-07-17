@@ -1,12 +1,10 @@
 "use client";
 
-import * as React from "react";
 import PhotoAlbum from "react-photo-album";
-import { NextJsImageAlbum, type AlbumPhoto } from "../Albums/NextJsImage";
-import { getResizedImage } from "@/sanity/lib/image";
-import { localizePath } from "@/i18n/config";
+import { AlbumCardImage } from "@/components/Albums/AlbumCardImage";
 import { useLocale } from "@/components/context/LocaleContext";
 import type { AlbumSummary, CategorySummary } from "@/features/albums/models";
+import { mapAlbumCards, mapCategoryCards } from "@/features/gallery/galleryMapper";
 
 // Define the AlbumGallery component
 type AlbumGalleryProps = {
@@ -14,45 +12,11 @@ type AlbumGalleryProps = {
   categories?: boolean;
 };
 
-const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
+const AlbumGallery = ({ albums, categories }: AlbumGalleryProps) => {
   const { locale } = useLocale();
-  const photos: AlbumPhoto[] = !categories
-    ? (albums as AlbumSummary[])
-        .filter((album) => album.images?.[0])
-        .map((album) => {
-          const cover = album.images[0]!;
-          const { imageUrl, imageWidth, imageHeight } = getResizedImage(cover, 75, 600);
-          return {
-            href: localizePath("/album/" + album.slug, locale),
-            src: imageUrl,
-            width: imageWidth,
-            height: imageHeight,
-            blurDataURL: cover.placeholders?.metadata?.lqip,
-            title: album.name
-          };
-        })
-    : (albums as CategorySummary[])
-        .filter((category) => category.albums?.[0])
-        .map((category) => {
-          const firstAlbum = category.albums[0]!;
-          const cover = category.coverImage ?? firstAlbum.images[0];
-          if (!cover) return null;
-          const { imageUrl, imageWidth, imageHeight } = getResizedImage(cover, 75, 600);
-          return {
-            href: localizePath(
-              category.albums.length > 1
-                ? "/category/" + category.slug
-                : "/album/" + firstAlbum.slug,
-              locale
-            ),
-            src: imageUrl,
-            width: imageWidth,
-            height: imageHeight,
-            title: category.name,
-            blurDataURL: cover.placeholders?.metadata?.lqip
-          };
-        })
-        .filter((photo) => photo !== null);
+  const photos = categories
+    ? mapCategoryCards(albums as CategorySummary[], locale)
+    : mapAlbumCards(albums as AlbumSummary[], locale);
 
   return (
     <div>
@@ -63,7 +27,7 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
         spacing={20}
         render={{
           photo: (renderProps, context) => (
-            <NextJsImageAlbum
+            <AlbumCardImage
               context={context}
               key={context.photo.key ?? context.photo.src}
               limitHeight={photos.length < 2}
