@@ -1,8 +1,8 @@
 import { PreviewImage } from "@/components/studio/PreviewImage";
-import { defineArrayMember, defineField } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 import { FaImages } from "react-icons/fa6";
 
-export const album = {
+export const album = defineType({
   name: "album",
   type: "document",
   title: "Albums",
@@ -52,7 +52,7 @@ export const album = {
       group: "metadata",
       validation: (Rule) => Rule.required(),
       title: "Category",
-      to: [{ type: "category" as any }]
+      to: [{ type: "category" as const }]
     }),
     defineField({
       name: "publishDate",
@@ -206,7 +206,7 @@ export const album = {
       category: "category.categoryName",
       publishDate: "publishDate"
     },
-    prepare(selection: any) {
+    prepare(selection) {
       const { title, images, category, publishDate } = selection;
 
       return {
@@ -218,6 +218,6 @@ export const album = {
       };
     }
   }
-};
+});
 
 export default album;

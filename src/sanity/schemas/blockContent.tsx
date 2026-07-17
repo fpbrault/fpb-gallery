@@ -1,10 +1,14 @@
 import { FaImages, FaLink, FaPen } from "react-icons/fa6";
-import { defineType, defineArrayMember, defineField } from "sanity";
+import { defineType, defineArrayMember, defineField, type BlockStyleProps } from "sanity";
 import LinkRenderer from "@/components/PortableText/LinkRenderer";
 import RoughAnnotationRenderer from "@/components/PortableText/RoughAnnotationRenderer";
 
-const JustifyStyle = (props: any) => <div className="text-justify">{props.children} </div>;
-const CenterStyle = (props: any) => <div className="text-center">{props.children} </div>;
+const JustifyStyle = (props: BlockStyleProps) => (
+  <div className="text-justify">{props.children} </div>
+);
+const CenterStyle = (props: BlockStyleProps) => (
+  <div className="text-center">{props.children} </div>
+);
 
 export const styledBlock = defineType({
   title: "Block Content",

@@ -9,12 +9,11 @@ import Captions from "yet-another-react-lightbox/plugins/captions";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
-import { NextJsImage, NextJsImageElement } from "./NextJsImage";
+import { NextJsImage, NextJsImageElement, type GalleryPhoto } from "./NextJsImage";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getResizedImage } from "@/sanity/lib/image";
-import PhotoAlbum, { ClickHandler } from "react-photo-album";
-import { PortableText } from "@portabletext/react";
-import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import PhotoAlbum, { type ClickHandler } from "react-photo-album";
+import { RichText } from "@/components/PortableText/RichText";
 import type { ContentImage } from "@/features/content/models";
 
 const mobileQuery = "(max-width: 768px)";
@@ -44,7 +43,7 @@ function PhotoGallery({ images, mode, columns }: Props) {
   const lightboxRef = React.useRef<ControllerRef | null>(null);
   const isMobile = React.useSyncExternalStore(subscribeToMobile, getMobileSnapshot, () => false);
 
-  const theImages = React.useMemo(
+  const theImages = React.useMemo<GalleryPhoto[]>(
     () =>
       images
         ? images.map((image) => {
@@ -54,21 +53,12 @@ function PhotoGallery({ images, mode, columns }: Props) {
               src: imageUrl,
               height: imageHeight,
               width: imageWidth,
-              title: (
-                <>
-                  <div className="mt-6 text-3xl text-white bg-transparent text-bold text-sans">
-                    {image.title}
-                  </div>
-                </>
-              ),
+              title: image.title,
               description: (
                 <>
                   {image.description && (
                     <div className="max-h-[150px] overflow-auto px-2 py-0.5 prose-sm prose rounded prose-red bg-base-100/80 backdrop-blur-xl lg:prose-lg">
-                      <PortableText
-                        components={myPortableTextComponents as any}
-                        value={image.description}
-                      />
+                      <RichText value={image.description} />
                     </div>
                   )}
                 </>
@@ -81,11 +71,12 @@ function PhotoGallery({ images, mode, columns }: Props) {
   const deepLinkedIndex = imageId ? theImages.findIndex((image) => image._key === imageId) : -1;
   const index = imageId ? deepLinkedIndex : selectedIndex;
 
-  const handleImageClick = ({ index: current }: { index: any }) => {
+  const handleImageClick: ClickHandler<GalleryPhoto> = ({ index: current }) => {
     setSelectedIndex(current);
 
     // Extract the image id from the src URL
-    const selectedImageId = (theImages[current] as any)._key;
+    const selectedImageId = theImages[current]?._key;
+    if (!selectedImageId) return;
 
     // Update the URL with the selected image id in the query parameter
     router.push(`${pathname}?imageId=${selectedImageId}`, { scroll: false });
@@ -99,20 +90,13 @@ function PhotoGallery({ images, mode, columns }: Props) {
     <>
       <PhotoAlbum
         layout={mode ?? "rows"}
-        photos={theImages as any}
+        photos={theImages}
         targetRowHeight={500}
         spacing={20}
         columns={columns ?? 3}
-        renderPhoto={(photo: any) =>
-          NextJsImageElement({
-            limitHeight: theImages.length < 3 ? true : false,
-            ...photo,
-            layoutOptions: {
-              ...photo.layoutOptions,
-              onClick: photo.layoutOptions.onClick as ClickHandler
-            }
-          })
-        }
+        renderPhoto={(props) => (
+          <NextJsImageElement limitHeight={theImages.length < 3} {...props} />
+        )}
         sizes={{
           size: "calc(100vw - 240px)",
           sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }]

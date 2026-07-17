@@ -1,13 +1,22 @@
-import React from "react";
+import type { ReactNode } from "react";
 
-export function PTExternalLink(value: any, children: any) {
+export type ExternalLinkValue = { blank?: boolean; href?: string };
+
+export function PTExternalLink({
+  value,
+  children
+}: {
+  value: ExternalLinkValue;
+  children: ReactNode;
+}) {
   const { blank, href } = value;
-  return blank ? (
-    <a className="link link-secondary" href={href} target="_blank" rel="noopener">
-      {children}
-    </a>
-  ) : (
-    <a className="link link-secondary" target="_blank" href={href}>
+  return (
+    <a
+      className="link link-secondary"
+      href={href}
+      target={blank ? "_blank" : undefined}
+      rel={blank ? "noopener noreferrer" : undefined}
+    >
       {children}
     </a>
   );

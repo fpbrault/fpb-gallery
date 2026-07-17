@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import PhotoAlbum from "react-photo-album";
-import { NextJsImageAlbum } from "../Albums/NextJsImage";
+import { NextJsImageAlbum, type AlbumPhoto } from "../Albums/NextJsImage";
 import { getResizedImage } from "@/sanity/lib/image";
 import { localizePath } from "@/i18n/config";
 import { useLocale } from "@/components/context/LocaleContext";
@@ -16,7 +16,7 @@ type AlbumGalleryProps = {
 
 const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
   const { locale } = useLocale();
-  const photos = !categories
+  const photos: AlbumPhoto[] = !categories
     ? (albums as AlbumSummary[])
         .filter((album) => album.images?.[0])
         .map((album) => {
@@ -61,9 +61,7 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
         photos={photos}
         targetRowHeight={500}
         spacing={20}
-        renderPhoto={(photo: any) =>
-          NextJsImageAlbum({ limitHeight: photos.length < 2 ? true : false, ...photo })
-        }
+        renderPhoto={(props) => <NextJsImageAlbum limitHeight={photos.length < 2} {...props} />}
         sizes={{
           size: "calc(100vw - 240px)",
           sizes: [{ viewport: "(max-width: 960px)", size: "100vw" }]

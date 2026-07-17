@@ -6,9 +6,17 @@ import { urlForImage } from "@/sanity/lib/image";
 import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
+import type { Image as SanityImage } from "sanity";
 
-export function PTRelatedPost(value: any) {
+export type RelatedPostValue = {
+  coverImage?: SanityImage;
+  slug?: string;
+  title?: Array<{ value?: string }>;
+};
+
+export function PTRelatedPost({ value }: { value: RelatedPostValue }) {
   const { locale, t } = useLocale();
+  if (!value.coverImage?.asset || !value.slug) return null;
   const src = urlForImage(value.coverImage).width(128).height(64).url();
   return (
     <div className="w-full max-w-sm mx-auto shadow-xl">
@@ -29,7 +37,7 @@ export function PTRelatedPost(value: any) {
           />{" "}
           <span className="self-center flex-grow px-2 text-base font-bold text-center max-h-12 line-clamp-2 ">
             {" "}
-            {value.title[0]?.value?.slice(0, 100) ?? "Article"}
+            {value.title?.[0]?.value?.slice(0, 100) ?? "Article"}
           </span>
         </div>
       </Link>

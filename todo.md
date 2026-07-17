@@ -17,8 +17,8 @@ This backlog tracks work discovered after the App Router cutover. Preserve publi
 - [ ] Make blog cursor pagination deterministic with an opaque `publishDate` plus `_id` cursor.
 - [ ] Generate localized canonical alternatives using the actual English and French slugs.
 - [ ] Pass post and album identifiers to the OG endpoint so content-specific images are used.
-- [ ] Localize Portable Text internal links.
-- [ ] Correct Portable Text external-link target and `rel` behavior.
+- [x] Localize Portable Text internal links.
+- [x] Correct Portable Text external-link target and `rel` behavior.
 - [ ] Build a complete Portable Text image collection so rich-content lightboxes navigate between images.
 - [ ] Align Studio font choices with fonts actually loaded by the frontend.
 - [ ] Remove or replace the brittle Studio `/v1/users/me` author initialization request.
@@ -42,7 +42,7 @@ The original project exposed presentation settings in Sanity so non-technical ad
 
 ## Component and feature architecture
 
-- [ ] Rebuild the Portable Text component map with generated value types and normal React component composition.
+- [x] Rebuild the Portable Text component map with generated value types and normal React component composition.
 - [ ] Separate gallery thumbnail, Photo Album, and lightbox slide models.
 - [ ] Split gallery URL state, responsive behavior, captions, and image rendering into focused modules.
 - [x] Simplify navigation into one typed link model shared by desktop and mobile renderers.
@@ -53,7 +53,7 @@ The original project exposed presentation settings in Sanity so non-technical ad
 
 ## Quality gates and testing
 
-- [ ] Remove global ESLint rule suppressions; retain only narrow, documented exceptions.
+- [x] Remove global ESLint rule suppressions; retain only narrow, documented exceptions.
 - [ ] Add tests for localized metadata, Portable Text links, gallery deep links, and image fallbacks.
 - [ ] Add component tests for navigation and drawer keyboard behavior.
 - [ ] Add integration tests for Sanity query normalization and infrastructure failures.

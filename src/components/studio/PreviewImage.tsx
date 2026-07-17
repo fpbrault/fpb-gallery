@@ -1,16 +1,22 @@
 import createImageUrlBuilder from "@sanity/image-url";
+import Image from "next/image";
 import React, { useMemo } from "react";
-import { useClient } from "sanity";
+import { useClient, type PreviewProps } from "sanity";
 
-export function PreviewImage(props: { renderDefault?: any; media?: any }) {
-  const { media } = props;
+function getImageReference(media: PreviewProps["media"]): string | undefined {
+  if (!media || typeof media !== "object" || !("_ref" in media)) return undefined;
+  return typeof media._ref === "string" ? media._ref : undefined;
+}
+
+export function PreviewImage(props: PreviewProps) {
+  const imageReference = getImageReference(props.media);
   const client = useClient({ apiVersion: "2021-03-25" });
 
   const imageUrlBuilder = useMemo(() => createImageUrlBuilder(client), [client]);
 
   const imgSrc = useMemo(
-    () => media?._ref && imageUrlBuilder.image(media?._ref).width(500).url(),
-    [media?._ref, imageUrlBuilder]
+    () => imageReference && imageUrlBuilder.image(imageReference).width(500).url(),
+    [imageReference, imageUrlBuilder]
   );
 
   if (!imgSrc) {
@@ -19,7 +25,7 @@ export function PreviewImage(props: { renderDefault?: any; media?: any }) {
 
   const newProps = {
     ...props,
-    media: <img src={imgSrc} alt="" />
+    media: <Image unoptimized src={imgSrc} alt="" width={500} height={300} />
   };
 
   return props.renderDefault(newProps);

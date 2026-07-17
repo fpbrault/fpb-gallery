@@ -1,4 +1,6 @@
-const LinkRenderer = (props: any) => {
+import type { BlockAnnotationProps } from "sanity";
+
+const LinkRenderer = (props: BlockAnnotationProps) => {
   return (
     <>
       <span className="inline-flex link link-primary">

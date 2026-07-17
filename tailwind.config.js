@@ -1,5 +1,9 @@
+import typography from "@tailwindcss/typography";
+import daisyui from "daisyui";
+import daisyThemes from "daisyui/src/theming/themes";
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -40,7 +44,7 @@ module.exports = {
       "cyberpunk",
       {
         light: {
-          ...require("daisyui/src/theming/themes")["light"],
+          ...daisyThemes.light,
           primary: "mediumseagreen",
           secondary: "darkslategrey"
         }
@@ -63,5 +67,7 @@ module.exports = {
     ]
   },
 
-  plugins: [require("@tailwindcss/typography"), require("daisyui")]
+  plugins: [typography, daisyui]
 };
+
+export default config;

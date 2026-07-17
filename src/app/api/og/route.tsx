@@ -49,19 +49,15 @@ export async function GET(request: Request) {
         alignItems: "center",
         justifyContent: "center",
         background: "#101010",
+        backgroundImage: background
+          ? `linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.28)), url(${background})`
+          : undefined,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
         color: "white",
         position: "relative"
       }}
     >
-      {background && (
-        <img
-          src={background}
-          alt=""
-          width="1200"
-          height="630"
-          style={{ position: "absolute", inset: 0, objectFit: "cover", opacity: 0.72 }}
-        />
-      )}
       <div
         style={{
           display: "flex",

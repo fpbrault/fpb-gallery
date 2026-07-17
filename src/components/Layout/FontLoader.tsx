@@ -86,7 +86,7 @@ export const vollkorn = Vollkorn({
   weight: "variable",
 }); */
 
-export function getFontFamily(fontName: string): any {
+export function getFontFamily(fontName: string): typeof raleway {
   let selectedFont = null;
 
   if (fontName === "raleway") {
