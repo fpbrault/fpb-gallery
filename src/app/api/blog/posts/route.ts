@@ -1,4 +1,4 @@
-import { getPostsAfter } from "@/sanity/repositories/blogRepository";
+import { getNextCursor, getPostsAfter } from "@/sanity/repositories/blogRepository";
 import { blogCursorQuerySchema } from "@/lib/pagination";
 
 export async function GET(request: Request) {
@@ -8,7 +8,7 @@ export async function GET(request: Request) {
 
   const items = await getPostsAfter(parsed.data.locale, parsed.data.cursor, parsed.data.limit);
   return Response.json(
-    { items, nextCursor: items.at(-1)?.publishDate ?? null },
+    { items, nextCursor: getNextCursor(items) },
     { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } }
   );
 }

@@ -21,6 +21,7 @@ export default async function BlogPage({ params }: PageProps<"/[locale]/blog">) 
     <div className="flex flex-col justify-center">
       <Breadcrumbs items={[{ name: "blog", url: "/blog" }]} />
       <BlogIndex
+        initialCursor={data.nextCursor}
         initialPosts={data.posts ?? []}
         locale={locale}
         totalCount={data.totalCount ?? 0}

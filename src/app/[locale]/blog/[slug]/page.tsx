@@ -28,7 +28,14 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/blog/[sl
     locale,
     path: `/blog/${slug}`,
     site: siteMetadata,
-    title: data.current.title
+    title: data.current.title,
+    localizedPaths: Object.fromEntries(
+      Object.entries(data.current.localizedSlugs).map(([candidateLocale, candidateSlug]) => [
+        candidateLocale,
+        `/blog/${candidateSlug}`
+      ])
+    ),
+    ogImage: { type: "post", id: data.current.id }
   });
 }
 

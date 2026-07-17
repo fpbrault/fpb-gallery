@@ -103,19 +103,19 @@ const postSummaryProjection = `{
 
 export const POST_LIST_QUERY = defineQuery(`{
   "posts": *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]
-    | order(publishDate desc) [0...$limit] ${postSummaryProjection},
+    | order(publishDate desc, _id desc) [0...$limit] ${postSummaryProjection},
   "totalCount": count(*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))])
 }`);
 
 export const POST_CURSOR_QUERY = defineQuery(`
 *[_type == "post" && (defined(slug.current) || defined(slug_fr.current)) &&
-  (!defined($cursor) || publishDate < $cursor)]
-  | order(publishDate desc) [0...$limit] ${postSummaryProjection}
+  (publishDate < $cursorDate || (publishDate == $cursorDate && _id < $cursorId))]
+  | order(publishDate desc, _id desc) [0...$limit] ${postSummaryProjection}
 `);
 
 export const LATEST_POST_QUERY = defineQuery(`
 *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]
-  | order(publishDate desc) [0] ${postSummaryProjection}
+  | order(publishDate desc, _id desc) [0] ${postSummaryProjection}
 `);
 
 export const POST_QUERY = defineQuery(`
@@ -124,6 +124,8 @@ export const POST_QUERY = defineQuery(`
     _id,
     publishDate,
     coverImage,
+    "blurDataURL": coverImage.asset->metadata.lqip,
+    "slugs": {"en": slug.current, "fr": slug_fr.current},
     "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),
     "title": title[_key == $locale][0].value,
     "content": postContent[_key == $locale][0].value
@@ -157,9 +159,9 @@ export const PAGE_SLUGS_QUERY = defineQuery(`
 `);
 
 export const OG_POST_IMAGE_QUERY = defineQuery(`
-*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0].coverImage
+*[_type == "post" && _id == $id][0].coverImage
 `);
 
 export const OG_ALBUM_IMAGE_QUERY = defineQuery(`
-*[_type == "album" && slug.current == $slug][0].images[0]
+*[_type == "album" && _id == $id][0].images[0]
 `);

@@ -2,7 +2,7 @@
 
 This backlog tracks work discovered after the App Router cutover. Preserve public URLs, bilingual behavior, content, Studio authoring, and the existing visual design throughout.
 
-## Active slice: typed content pipeline
+## Completed slice: typed content pipeline
 
 - [x] Replace generic query casting in `src/sanity/data.ts` with generated Sanity query-result types.
 - [x] Split content access into domain modules for site shell, albums, blog, and pages.
@@ -12,11 +12,15 @@ This backlog tracks work discovered after the App Router cutover. Preserve publi
 - [x] Add unit tests for domain mapping and legacy fallbacks.
 - [x] Re-enable strict lint rules for application code where this slice removes `any` and unsafe casts.
 
+## Active slice: public-content correctness
+
+- [x] Make blog cursor pagination deterministic with an opaque `publishDate` plus `_id` cursor.
+- [x] Generate localized canonical alternatives using the actual English and French slugs.
+- [x] Pass post and album identifiers to the OG endpoint so content-specific images are used.
+- [x] Use blur placeholders only when Sanity provides a usable LQIP.
+
 ## Correctness and public behavior
 
-- [ ] Make blog cursor pagination deterministic with an opaque `publishDate` plus `_id` cursor.
-- [ ] Generate localized canonical alternatives using the actual English and French slugs.
-- [ ] Pass post and album identifiers to the OG endpoint so content-specific images are used.
 - [x] Localize Portable Text internal links.
 - [x] Correct Portable Text external-link target and `rel` behavior.
 - [ ] Build a complete Portable Text image collection so rich-content lightboxes navigate between images.

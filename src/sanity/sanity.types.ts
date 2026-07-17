@@ -992,7 +992,7 @@ export type FEATURED_IMAGES_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: POST_LIST_QUERY
-// Query: {  "posts": *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]    | order(publishDate desc) [0...$limit] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."},  "totalCount": count(*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))])}
+// Query: {  "posts": *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]    | order(publishDate desc, _id desc) [0...$limit] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."},  "totalCount": count(*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))])}
 export type POST_LIST_QUERY_RESULT = {
   posts: Array<{
     _id: string;
@@ -1015,7 +1015,7 @@ export type POST_LIST_QUERY_RESULT = {
 
 // Source: src/sanity/queries.ts
 // Variable: POST_CURSOR_QUERY
-// Query: *[_type == "post" && (defined(slug.current) || defined(slug_fr.current)) &&  (!defined($cursor) || publishDate < $cursor)]  | order(publishDate desc) [0...$limit] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}
+// Query: *[_type == "post" && (defined(slug.current) || defined(slug_fr.current)) &&  (publishDate < $cursorDate || (publishDate == $cursorDate && _id < $cursorId))]  | order(publishDate desc, _id desc) [0...$limit] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}
 export type POST_CURSOR_QUERY_RESULT = Array<{
   _id: string;
   publishDate: string | null;
@@ -1035,7 +1035,7 @@ export type POST_CURSOR_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: LATEST_POST_QUERY
-// Query: *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]  | order(publishDate desc) [0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}
+// Query: *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]  | order(publishDate desc, _id desc) [0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}
 export type LATEST_POST_QUERY_RESULT = {
   _id: string;
   publishDate: string | null;
@@ -1055,7 +1055,7 @@ export type LATEST_POST_QUERY_RESULT = {
 
 // Source: src/sanity/queries.ts
 // Variable: POST_QUERY
-// Query: *[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{  "current": {    _id,    publishDate,    coverImage,    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),    "title": title[_key == $locale][0].value,    "content": postContent[_key == $locale][0].value  },  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."},  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}}
+// Query: *[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{  "current": {    _id,    publishDate,    coverImage,    "blurDataURL": coverImage.asset->metadata.lqip,    "slugs": {"en": slug.current, "fr": slug_fr.current},    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),    "title": title[_key == $locale][0].value,    "content": postContent[_key == $locale][0].value  },  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."},  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}}
 export type POST_QUERY_RESULT = {
   current: {
     _id: string;
@@ -1068,6 +1068,11 @@ export type POST_QUERY_RESULT = {
       alt?: string;
       _type: "image";
     } | null;
+    blurDataURL: string | null;
+    slugs: {
+      en: string | null;
+      fr: string | null;
+    };
     slug: Slug | null;
     title: string | null;
     content: BlockContent | null;
@@ -1140,7 +1145,7 @@ export type PAGE_SLUGS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: OG_POST_IMAGE_QUERY
-// Query: *[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0].coverImage
+// Query: *[_type == "post" && _id == $id][0].coverImage
 export type OG_POST_IMAGE_QUERY_RESULT = {
   asset?: SanityImageAssetReference;
   media?: unknown;
@@ -1152,7 +1157,7 @@ export type OG_POST_IMAGE_QUERY_RESULT = {
 
 // Source: src/sanity/queries.ts
 // Variable: OG_ALBUM_IMAGE_QUERY
-// Query: *[_type == "album" && slug.current == $slug][0].images[0]
+// Query: *[_type == "album" && _id == $id][0].images[0]
 export type OG_ALBUM_IMAGE_QUERY_RESULT = {
   asset?: SanityImageAssetReference;
   media?: unknown;
@@ -1207,14 +1212,14 @@ declare module "@sanity/client" {
     '\n*[_type == "album" && defined(slug.current)]{"slug": slug.current}\n': ALBUM_SLUGS_QUERY_RESULT;
     '\n*[_type == "album"].images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n': ALL_IMAGES_QUERY_RESULT;
     '\n*[_type == "album"].images[featured == true]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n': FEATURED_IMAGES_QUERY_RESULT;
-    '{\n  "posts": *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]\n    | order(publishDate desc) [0...$limit] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "totalCount": count(*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))])\n}': POST_LIST_QUERY_RESULT;
-    '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current)) &&\n  (!defined($cursor) || publishDate < $cursor)]\n  | order(publishDate desc) [0...$limit] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n': POST_CURSOR_QUERY_RESULT;
-    '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]\n  | order(publishDate desc) [0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n': LATEST_POST_QUERY_RESULT;
-    '\n*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{\n  "current": {\n    _id,\n    publishDate,\n    coverImage,\n    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),\n    "title": title[_key == $locale][0].value,\n    "content": postContent[_key == $locale][0].value\n  },\n  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n}': POST_QUERY_RESULT;
+    '{\n  "posts": *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]\n    | order(publishDate desc, _id desc) [0...$limit] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "totalCount": count(*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))])\n}': POST_LIST_QUERY_RESULT;
+    '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current)) &&\n  (publishDate < $cursorDate || (publishDate == $cursorDate && _id < $cursorId))]\n  | order(publishDate desc, _id desc) [0...$limit] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n': POST_CURSOR_QUERY_RESULT;
+    '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]\n  | order(publishDate desc, _id desc) [0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n': LATEST_POST_QUERY_RESULT;
+    '\n*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{\n  "current": {\n    _id,\n    publishDate,\n    coverImage,\n    "blurDataURL": coverImage.asset->metadata.lqip,\n    "slugs": {"en": slug.current, "fr": slug_fr.current},\n    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),\n    "title": title[_key == $locale][0].value,\n    "content": postContent[_key == $locale][0].value\n  },\n  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n}': POST_QUERY_RESULT;
     '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]{\n  "slug": slug.current,\n  "slugFr": slug_fr.current\n}': POST_SLUGS_QUERY_RESULT;
     '\n*[_type == "page" && slug.current == $slug && language == $locale][0]{\n  _id,\n  title,\n  slug,\n  language,\n  content,\n  "_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{\n    language,\n    title,\n    slug\n  }\n}': PAGE_QUERY_RESULT;
     '\n*[_type == "page" && defined(slug.current)]{language, "slug": slug.current}\n': PAGE_SLUGS_QUERY_RESULT;
-    '\n*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0].coverImage\n': OG_POST_IMAGE_QUERY_RESULT;
-    '\n*[_type == "album" && slug.current == $slug][0].images[0]\n': OG_ALBUM_IMAGE_QUERY_RESULT;
+    '\n*[_type == "post" && _id == $id][0].coverImage\n': OG_POST_IMAGE_QUERY_RESULT;
+    '\n*[_type == "album" && _id == $id][0].images[0]\n': OG_ALBUM_IMAGE_QUERY_RESULT;
   }
 }

@@ -21,7 +21,17 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/[...slug
     getSiteShellData(locale)
   ]);
   if (!page) return {};
-  return createPageMetadata({ locale, path: `/${path}`, site: siteMetadata, title: page.title });
+  const localizedPaths = Object.fromEntries([
+    [page.locale, `/${page.slug}`],
+    ...page.translations.map((translation) => [translation.locale, `/${translation.slug}`])
+  ]);
+  return createPageMetadata({
+    locale,
+    path: `/${path}`,
+    site: siteMetadata,
+    title: page.title,
+    localizedPaths
+  });
 }
 
 export default async function CustomPage({ params }: PageProps<"/[locale]/[...slug]">) {

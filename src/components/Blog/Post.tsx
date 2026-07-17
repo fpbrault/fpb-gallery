@@ -15,8 +15,8 @@ export default function Post({ post }: { post: PostData }) {
           {image ? (
             <Image
               className="mx-auto rounded shadow-2xl max-h-[750px] object-contain max-w-fit"
-              blurDataURL={post?.blurDataURL ?? ""}
-              placeholder="blur"
+              blurDataURL={post.blurDataURL}
+              placeholder={post.blurDataURL ? "blur" : "empty"}
               height={image?.imageHeight ?? ""}
               width={image?.imageWidth ?? ""}
               alt={post.title}

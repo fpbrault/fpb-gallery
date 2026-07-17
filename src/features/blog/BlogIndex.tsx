@@ -8,17 +8,19 @@ import type { Locale } from "@/i18n/config";
 
 export function BlogIndex({
   initialPosts,
+  initialCursor,
   locale,
   totalCount
 }: {
   initialPosts: PostSummary[];
+  initialCursor: string | null;
   locale: Locale;
   totalCount: number;
 }) {
   const [posts, setPosts] = useState(initialPosts);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string>();
-  const [nextCursor, setNextCursor] = useState(initialPosts.at(-1)?.publishDate ?? null);
+  const [nextCursor, setNextCursor] = useState(initialCursor);
   const requestRef = useRef<AbortController | null>(null);
 
   useEffect(() => () => requestRef.current?.abort(), []);

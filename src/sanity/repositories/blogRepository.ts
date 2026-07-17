@@ -7,6 +7,7 @@ import {
   mapPostSummaries
 } from "@/features/blog/blogMapper";
 import type { Locale } from "@/i18n/config";
+import { encodeBlogCursor } from "@/lib/pagination";
 import { getSanityClient } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
@@ -25,19 +26,31 @@ export async function getPosts(locale: Locale, limit = 3) {
       params: { locale, limit },
       tags: ["posts"]
     });
-    return mapPostList(data);
+    const result = mapPostList(data);
+    return { ...result, nextCursor: getNextCursor(result.posts) };
   });
 }
 
-export async function getPostsAfter(locale: Locale, cursor: string | null, limit: number) {
+export async function getPostsAfter(
+  locale: Locale,
+  cursor: { id: string; publishDate: string },
+  limit: number
+) {
   return runSanityRequest("post-cursor", async () => {
     const { data } = await sanityFetch({
       query: POST_CURSOR_QUERY,
-      params: { locale, cursor, limit },
+      params: { locale, cursorDate: cursor.publishDate, cursorId: cursor.id, limit },
       tags: ["posts"]
     });
     return mapPostSummaries(data);
   });
+}
+
+export function getNextCursor(posts: Array<{ id: string; publishDate: string | null }>) {
+  const lastPost = posts.at(-1);
+  return lastPost?.publishDate
+    ? encodeBlogCursor({ id: lastPost.id, publishDate: lastPost.publishDate })
+    : null;
 }
 
 export async function getLatestPost(locale: Locale) {

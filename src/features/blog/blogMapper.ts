@@ -45,9 +45,14 @@ export function mapPostPage(input: POST_QUERY_RESULT): PostPage | null {
 
   const current: Post = {
     id: input.current._id,
+    blurDataURL: input.current.blurDataURL ?? undefined,
     coverImage: mapContentImage(input.current.coverImage, `${input.current._id}-cover`),
     content: input.current.content ?? [],
     excerpt: "",
+    localizedSlugs: {
+      ...(input.current.slugs.en ? { en: input.current.slugs.en } : {}),
+      ...(input.current.slugs.fr ? { fr: input.current.slugs.fr } : {})
+    },
     publishDate: input.current.publishDate,
     slug,
     title: input.current.title ?? "Untitled post"

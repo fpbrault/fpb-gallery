@@ -14,27 +14,42 @@ export function createPageMetadata({
   path,
   site,
   title,
-  description = site.description
+  description = site.description,
+  localizedPaths,
+  ogImage
 }: {
   locale: Locale;
   path: string;
   site: SiteMetadata;
   title: string;
   description?: string;
+  localizedPaths?: Partial<Record<Locale, string>>;
+  ogImage?: { type: "album" | "post"; id: string };
 }): Metadata {
-  const localizedPath = localizePath(path, locale);
+  const localizedPath = localizePath(localizedPaths?.[locale] ?? path, locale);
   const canonical = new URL(localizedPath, getSiteUrl());
   const fullTitle = title === site.siteTitle ? title : `${site.siteTitle} - ${title}`;
+  const imageUrl = new URL("/api/og", getSiteUrl());
+  imageUrl.searchParams.set("title", title);
+  if (ogImage) imageUrl.searchParams.set(`${ogImage.type}Id`, ogImage.id);
+
+  const languages = Object.fromEntries(
+    (["en", "fr"] as const).flatMap((candidateLocale) => {
+      const candidatePath = localizedPaths
+        ? localizedPaths[candidateLocale]
+        : localizePath(path, candidateLocale);
+      return candidatePath
+        ? [[candidateLocale, new URL(localizePath(candidatePath, candidateLocale), getSiteUrl())]]
+        : [];
+    })
+  );
 
   return {
     title: fullTitle,
     description,
     alternates: {
       canonical,
-      languages: {
-        en: new URL(localizePath(path, "en"), getSiteUrl()),
-        fr: new URL(localizePath(path, "fr"), getSiteUrl())
-      }
+      languages
     },
     openGraph: {
       type: "website",
@@ -42,13 +57,13 @@ export function createPageMetadata({
       url: canonical,
       title: fullTitle,
       description,
-      images: [{ url: new URL(`/api/og?title=${encodeURIComponent(title)}`, getSiteUrl()) }]
+      images: [{ url: imageUrl }]
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [new URL(`/api/og?title=${encodeURIComponent(title)}`, getSiteUrl())]
+      images: [imageUrl]
     }
   };
 }
