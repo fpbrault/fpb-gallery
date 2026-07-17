@@ -16,13 +16,6 @@ export const SITE_METADATA_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
   siteTitle,
   description,
   author,
-  customFont,
-  customDisplayFont,
-  "themes": {darkThemeName, lightThemeName},
-  "customThemes": {
-    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},
-    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}
-  },
   socialLinks[]{name, type, url}
 }`);
 

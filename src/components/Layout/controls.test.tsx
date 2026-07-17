@@ -4,7 +4,6 @@ import { axe } from "jest-axe";
 import { describe, expect, it, vi } from "vitest";
 
 import { LocaleProvider } from "@/components/context/LocaleContext";
-import { SiteMetadataProvider } from "@/components/context/SiteMetadataContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import ThemeSelector from "./ThemeSelector";
 
@@ -16,14 +15,6 @@ vi.mock("next/link", () => ({
     </a>
   )
 }));
-
-const siteMetadata = {
-  author: "Photographer",
-  description: "Portfolio",
-  siteTitle: "Gallery",
-  socialLinks: [],
-  themes: { darkThemeName: "dark", lightThemeName: "light" }
-};
 
 describe("site controls", () => {
   it("exposes the localized language destination", async () => {
@@ -42,14 +33,12 @@ describe("site controls", () => {
   it("labels and persists the theme control", async () => {
     window.matchMedia = vi.fn().mockReturnValue({ matches: false });
     const user = userEvent.setup();
-    const view = render(
-      <SiteMetadataProvider siteMetadata={siteMetadata}>
-        <ThemeSelector />
-      </SiteMetadataProvider>
-    );
+    document.documentElement.dataset.theme = "light";
+    const view = render(<ThemeSelector />);
     const control = screen.getByRole("checkbox", { name: "Toggle light and dark theme" });
     await user.click(control);
-    expect(localStorage.getItem("theme")).toBe("dark");
+    expect(localStorage.getItem("theme")).toBe("mytheme");
+    expect(document.documentElement.dataset.theme).toBe("mytheme");
     expect(await axe(view.container)).toHaveNoViolations();
   });
 });

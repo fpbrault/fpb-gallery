@@ -1,12 +1,4 @@
-import {
-  FaImages,
-  FaFile,
-  FaUsers,
-  FaGear,
-  FaCircleInfo,
-  FaHouse,
-  FaPalette
-} from "react-icons/fa6";
+import { FaImages, FaFile, FaUsers, FaGear, FaCircleInfo, FaHouse } from "react-icons/fa6";
 import { MdOutlineArticle } from "react-icons/md";
 import type { StructureResolver } from "sanity/structure";
 
@@ -121,11 +113,7 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title("Main Navigation")
                 .icon(FaHouse)
-                .child(S.document().schemaType("pageList").documentId("mainNavigation")),
-              S.listItem()
-                .title("Custom Theme Colors")
-                .icon(FaPalette)
-                .child(S.documentTypeList("customTheme").title("Custom Themes Colors"))
+                .child(S.document().schemaType("pageList").documentId("mainNavigation"))
             ])
         ),
       ...S.documentTypeListItems().filter(
@@ -138,8 +126,7 @@ export const structure: StructureResolver = (S) =>
             "category",
             "pageList",
             "author",
-            "translation.metadata",
-            "customTheme"
+            "translation.metadata"
           ].includes(listItem.getId() ?? "")
       )
     ]);

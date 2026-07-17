@@ -1,26 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { useSiteMetadata } from "../context/SiteMetadataContext";
+import {
+  isThemeName,
+  presentationConfig,
+  resolveTheme,
+  type ThemeName
+} from "@/config/presentation";
 
 const ThemeSelector = () => {
-  const siteMetadata = useSiteMetadata();
-  const [darkThemeName] = useState(siteMetadata?.themes.darkThemeName ?? "mytheme");
-  const [lightThemeName] = useState(siteMetadata?.themes.lightThemeName ?? "garden");
-  const [isDarkTheme, setIsDarkTheme] = useState(() => {
-    if (typeof document === "undefined") return true;
-    return document.documentElement.dataset.theme === darkThemeName;
+  const [theme, setTheme] = useState<ThemeName>(() => {
+    if (typeof document === "undefined") return presentationConfig.themes.dark;
+    const activeTheme = document.documentElement.dataset.theme;
+    if (isThemeName(activeTheme)) return activeTheme;
+    return resolveTheme(null, window.matchMedia("(prefers-color-scheme: dark)").matches);
   });
 
-  // Function to toggle the theme
   const toggleTheme = () => {
-    const newTheme = !isDarkTheme ? darkThemeName : lightThemeName;
+    const newTheme =
+      theme === presentationConfig.themes.dark
+        ? presentationConfig.themes.light
+        : presentationConfig.themes.dark;
     document.documentElement.setAttribute("data-theme", newTheme);
-    setIsDarkTheme(!isDarkTheme);
-
-    // Save the selected theme to local storage
-    localStorage.setItem("theme", newTheme);
-    //applyCustomTheme();
+    setTheme(newTheme);
+    localStorage.setItem(presentationConfig.themes.storageKey, newTheme);
   };
 
   return (
@@ -28,7 +31,7 @@ const ThemeSelector = () => {
       <input
         type="checkbox"
         aria-label="Toggle light and dark theme"
-        checked={isDarkTheme}
+        checked={theme === presentationConfig.themes.dark}
         onChange={toggleTheme}
         className="col-span-2 col-start-1 row-start-1 toggle theme-controller bg-base-content"
       />
