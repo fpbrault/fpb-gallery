@@ -9,13 +9,13 @@
       description: "Group non-major production updates",
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch", "digest"],
-      groupName: "production dependencies",
+      groupName: "production dependencies"
     },
     {
       description: "Group non-major development updates",
       matchDepTypes: ["devDependencies"],
       matchUpdateTypes: ["minor", "patch", "digest"],
-      groupName: "development dependencies",
+      groupName: "development dependencies"
     },
     {
       description: "Keep the Next and React cutover aligned",
@@ -25,9 +25,9 @@
         "react",
         "react-dom",
         "@types/react",
-        "@types/react-dom",
+        "@types/react-dom"
       ],
-      groupName: "next and react",
+      groupName: "next and react"
     },
     {
       description: "Keep the Sanity integration aligned",
@@ -36,8 +36,8 @@
         "@sanity/{/,}**",
         "next-sanity{/,}**",
         "sanity{/,}**",
-        "sanity-plugin-{/,}**",
-      ],
-    },
-  ],
+        "sanity-plugin-{/,}**"
+      ]
+    }
+  ]
 }
