@@ -45,6 +45,7 @@ describe("PTImage", () => {
 
     await user.click(screen.getByRole("button", { name: "Open image: nested alt" }));
 
+    expect(screen.getByRole("img").closest("[data-sanity-edit-target]")).not.toBeNull();
     expect(screen.getByRole("status")).toHaveAttribute("data-index", "1");
     expect(screen.getByRole("status")).toHaveAttribute("data-slide-count", "3");
   });

@@ -21,6 +21,7 @@ export function AlbumCardImage({
 
   return (
     <div
+      data-sanity-edit-target=""
       className={`cover group mx-auto rounded${limitHeight ? " max-h-150" : ""}`}
       style={{ height, position: "relative", width, ...limitHeightStyle }}
     >

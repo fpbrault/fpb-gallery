@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { stegaClean } from "next-sanity";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
 
@@ -16,10 +17,11 @@ export function PTInternalLink({
   children: ReactNode;
 }) {
   const { locale } = useLocale();
-  const slug = typeof value.slug === "string" ? value.slug : value.slug?.current;
+  const slug = stegaClean(typeof value.slug === "string" ? value.slug : value.slug?.current);
+  const type = stegaClean(value.type);
   if (!slug) return <>{children}</>;
 
-  const prefix = value.type === "album" ? "/album" : value.type === "post" ? "/blog" : "";
+  const prefix = type === "album" ? "/album" : type === "post" ? "/blog" : "";
   return (
     <Link className="link link-primary" href={localizePath(`${prefix}/${slug}`, locale)}>
       {children}

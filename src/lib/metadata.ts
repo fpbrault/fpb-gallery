@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { localizePath } from "@/i18n/config";
 import type { Locale } from "@/i18n/config";
 import type { SiteMetadata } from "@/features/site/models";
+import { stegaClean } from "next-sanity";
 
 export function getSiteUrl(): URL {
   const value = process.env.NEXT_PUBLIC_SITE_URL ?? "https://fpbrault.com";
@@ -28,9 +29,13 @@ export function createPageMetadata({
 }): Metadata {
   const localizedPath = localizePath(localizedPaths?.[locale] ?? path, locale);
   const canonical = new URL(localizedPath, getSiteUrl());
-  const fullTitle = title === site.siteTitle ? title : `${site.siteTitle} - ${title}`;
+  const cleanTitle = stegaClean(title);
+  const cleanSiteTitle = stegaClean(site.siteTitle);
+  const cleanDescription = stegaClean(description);
+  const fullTitle =
+    cleanTitle === cleanSiteTitle ? cleanTitle : `${cleanSiteTitle} - ${cleanTitle}`;
   const imageUrl = new URL("/api/og", getSiteUrl());
-  imageUrl.searchParams.set("title", title);
+  imageUrl.searchParams.set("title", cleanTitle);
   if (ogImage) imageUrl.searchParams.set(`${ogImage.type}Id`, ogImage.id);
 
   const languages = Object.fromEntries(
@@ -46,7 +51,7 @@ export function createPageMetadata({
 
   return {
     title: fullTitle,
-    description,
+    description: cleanDescription,
     alternates: {
       canonical,
       languages
@@ -56,13 +61,13 @@ export function createPageMetadata({
       locale: locale === "fr" ? "fr_CA" : "en_CA",
       url: canonical,
       title: fullTitle,
-      description,
+      description: cleanDescription,
       images: [{ url: imageUrl }]
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
-      description,
+      description: cleanDescription,
       images: [imageUrl]
     }
   };

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { mapPage } from "@/features/pages/pageMapper";
 import type { PAGE_QUERY_RESULT } from "@/sanity/sanity.types";
+import { withTestStega } from "@/test/stega";
 
 describe("mapPage", () => {
   it("normalizes content and filters unusable translations", () => {
@@ -42,5 +43,19 @@ describe("mapPage", () => {
     } satisfies PAGE_QUERY_RESULT;
 
     expect(mapPage(input)).toBeNull();
+  });
+
+  it("cleans structural preview values while preserving editable text", () => {
+    const title = withTestStega("About");
+    const input = {
+      _id: "page-1",
+      title,
+      slug: { _type: "slug", current: withTestStega("about") },
+      language: withTestStega("en"),
+      content: null,
+      _translations: []
+    } satisfies PAGE_QUERY_RESULT;
+
+    expect(mapPage(input)).toMatchObject({ locale: "en", slug: "about", title });
   });
 });

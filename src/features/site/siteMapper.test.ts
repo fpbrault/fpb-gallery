@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { mapHeaderData, mapSiteMetadata } from "@/features/site/siteMapper";
 import type { HEADER_QUERY_RESULT, SITE_METADATA_QUERY_RESULT } from "@/sanity/sanity.types";
+import { withTestStega } from "@/test/stega";
 
 describe("site mappers", () => {
   it("uses safe metadata defaults when settings are missing", () => {
@@ -51,5 +52,43 @@ describe("site mappers", () => {
     } satisfies SITE_METADATA_QUERY_RESULT;
 
     expect(mapSiteMetadata(input).socialLinks).toEqual([]);
+  });
+
+  it("cleans navigation and link controls while preserving their labels", () => {
+    const label = withTestStega("Instagram");
+    const metadata = {
+      siteTitle: "Gallery",
+      description: "Photos",
+      author: "Author",
+      socialLinks: [
+        {
+          name: label,
+          type: withTestStega("instagram"),
+          url: withTestStega("https://example.com")
+        }
+      ]
+    } satisfies SITE_METADATA_QUERY_RESULT;
+    const header = {
+      showHome: true,
+      pages: [
+        {
+          _type: "reference",
+          title: "About",
+          slug: withTestStega("about"),
+          translations: [
+            {
+              language: withTestStega("fr"),
+              title: "À propos",
+              slug: withTestStega("a-propos")
+            }
+          ]
+        }
+      ]
+    } satisfies HEADER_QUERY_RESULT;
+
+    expect(mapSiteMetadata(metadata).socialLinks).toEqual([
+      { name: label, type: "instagram", url: "https://example.com" }
+    ]);
+    expect(mapHeaderData(header, "fr").pages).toEqual([{ title: "À propos", slug: "a-propos" }]);
   });
 });

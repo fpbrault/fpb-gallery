@@ -1,5 +1,6 @@
 import type { LightboxSlideModel } from "@/features/gallery/models";
 import { getResizedImage } from "@/sanity/lib/image";
+import { stegaClean } from "next-sanity";
 
 export type PortableImageValue = {
   _key?: string;
@@ -23,7 +24,7 @@ export function collectPortableImages(value?: unknown[]): PortableImageRegistryE
 }
 
 export function getPortableImageId(value: PortableImageValue): string | null {
-  return value._key ?? value.asset?._ref ?? null;
+  return stegaClean(value._key ?? value.asset?._ref) ?? null;
 }
 
 function collectPortableImage(value: unknown): PortableImageRegistryEntry[] {
@@ -35,9 +36,13 @@ function collectPortableImage(value: unknown): PortableImageRegistryEntry[] {
     if (!id || !image.asset?._ref) return [];
 
     try {
-      const thumbnail = getResizedImage(image, 75, 1000);
-      const lightbox = getResizedImage(image, 80, 2048);
-      const lqip = image.blurDataURL ?? image.placeholders?.metadata?.lqip;
+      const imageSource = {
+        ...image,
+        asset: { ...image.asset, _ref: stegaClean(image.asset._ref) }
+      };
+      const thumbnail = getResizedImage(imageSource, 75, 1000);
+      const lightbox = getResizedImage(imageSource, 80, 2048);
+      const lqip = stegaClean(image.blurDataURL ?? image.placeholders?.metadata?.lqip);
       return [
         {
           id,

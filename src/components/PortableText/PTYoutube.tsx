@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import type { Youtube } from "@/sanity/sanity.types";
+import { stegaClean } from "next-sanity";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
@@ -15,7 +16,7 @@ export function PTYoutube({ value }: { value: Youtube }) {
               </div>
             );
           }}
-          src={value?.url ?? ""}
+          src={stegaClean(value?.url) ?? ""}
         />
       </div>
     </div>

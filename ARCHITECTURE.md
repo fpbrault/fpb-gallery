@@ -16,6 +16,8 @@ Typography and theme palettes are deployment configuration in `src/config/presen
 
 Sanity remains the editorial source of truth for the site title, description, author, social links, navigation, and page content. It does not control fonts or themes. Legacy presentation fields and custom-theme documents may remain in the remote dataset for rollback, but the application and current Studio schema ignore them.
 
+The embedded Studio has one Presentation integration. Typed resolvers map bilingual public routes to their owning documents and provide document-location links without issuing application reads. Draft content is fetched with the server-only Viewer token; the browser receives stega source markers but no API token. Presentation mutation messages refresh the App Router immediately and after the Content Lake consistency window, while standalone previews can clear draft mode through `/api/exit-preview`.
+
 ## Application features
 
 - `src/components/Layout`: shared shell, navigation, language, and theme controls

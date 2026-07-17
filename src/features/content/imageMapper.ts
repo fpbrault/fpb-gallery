@@ -1,4 +1,5 @@
 import type { ContentImage, ImageDescription } from "@/features/content/models";
+import { stegaClean } from "next-sanity";
 import type { SanityImageAssetReference } from "@/sanity/sanity.types";
 
 type ImageInput = {
@@ -20,14 +21,16 @@ export function mapContentImage(
   if (!input?.asset?._ref) return null;
 
   return {
-    _key: input._key ?? fallbackKey,
+    _key: stegaClean(input._key) ?? fallbackKey,
     _type: "image",
     alt: input.decorative ? "" : (input.alt ?? ""),
-    asset: input.asset,
+    asset: { ...input.asset, _ref: stegaClean(input.asset._ref) },
     decorative: input.decorative ?? false,
     description: input.description ?? [],
     featured: input.featured ?? false,
-    placeholders: { metadata: { lqip: input.placeholders?.metadata?.lqip ?? undefined } },
+    placeholders: {
+      metadata: { lqip: stegaClean(input.placeholders?.metadata?.lqip) ?? undefined }
+    },
     title: input.title ?? ""
   };
 }

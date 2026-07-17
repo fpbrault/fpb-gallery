@@ -23,7 +23,7 @@ export function LightboxSlideImage({ rect, slide }: RenderSlideProps) {
     : Math.round(Math.min(rect.height, (rect.width / slide.width) * slide.height));
 
   return (
-    <div style={{ height, position: "relative", width }}>
+    <div data-sanity-edit-target="" style={{ height, position: "relative", width }}>
       <Image
         fill
         alt={slide.alt}

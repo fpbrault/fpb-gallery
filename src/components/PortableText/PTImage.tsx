@@ -33,7 +33,7 @@ export function PTImage({ value }: { value: PortableImageValue }) {
   if (!entry || currentIndex < 0) return null;
 
   return (
-    <div>
+    <div data-sanity-edit-target="">
       <button
         type="button"
         className="block rounded focus-visible:outline focus-visible:outline-primary"

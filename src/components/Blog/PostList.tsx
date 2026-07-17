@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { PostSummary } from "@/features/blog/models";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
+import { stegaClean } from "next-sanity";
 
 export default function PostList({ posts }: { posts: PostSummary[] }) {
   const { locale } = useLocale();
@@ -21,7 +22,10 @@ export default function PostList({ posts }: { posts: PostSummary[] }) {
             : null;
           return (
             <div className="" key={post.slug}>
-              <article className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side">
+              <article
+                className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side"
+                data-sanity-edit-group=""
+              >
                 <Link href={localizePath("/blog/" + post.slug, locale)}>
                   <Image
                     className="max-w-lg mx-auto rounded shadow-lg lg:max-w-lg sm:max-w-md "
@@ -33,9 +37,9 @@ export default function PostList({ posts }: { posts: PostSummary[] }) {
                       imageUrl ??
                       "https://placehold.co/1000x750/jpg?text=" +
                         (post.title
-                          ? (post.title.length >= 60
-                              ? post.title.substring(0, 60) + "..."
-                              : post.title
+                          ? (stegaClean(post.title).length >= 60
+                              ? stegaClean(post.title).substring(0, 60) + "..."
+                              : stegaClean(post.title)
                             ).replace(/ /g, "+")
                           : "No+Image")
                     }
