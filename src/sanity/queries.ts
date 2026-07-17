@@ -71,7 +71,7 @@ export const ALBUM_QUERY = defineQuery(`
   slug,
   display,
   columns,
-  "description": albumContent[_key == $locale][0].value,
+  "description": albumContent[language == $locale || _key == $locale][0].value,
   "category": category->{categoryName, slug},
   "images": images[]${imageProjection}
 }`);
@@ -96,9 +96,9 @@ const postSummaryProjection = `{
     $locale == "fr" => coalesce(slug_fr, slug),
     coalesce(slug, slug_fr)
   ),
-  "title": title[_key == $locale][0].value,
+  "title": title[language == $locale || _key == $locale][0].value,
   "blurDataURL": coverImage.asset->metadata.lqip,
-  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."
+  "excerpt": array::join(string::split(pt::text(postContent[language == $locale || _key == $locale][0].value), "")[0...255], "") + "..."
 }`;
 
 export const POST_LIST_QUERY = defineQuery(`{
@@ -127,8 +127,8 @@ export const POST_QUERY = defineQuery(`
     "blurDataURL": coverImage.asset->metadata.lqip,
     "slugs": {"en": slug.current, "fr": slug_fr.current},
     "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),
-    "title": title[_key == $locale][0].value,
-    "content": postContent[_key == $locale][0].value
+    "title": title[language == $locale || _key == $locale][0].value,
+    "content": postContent[language == $locale || _key == $locale][0].value
   },
   "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] ${postSummaryProjection},
   "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] ${postSummaryProjection}

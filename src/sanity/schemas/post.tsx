@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType, type PreviewValue } from "sanity";
 import { MdOutlineArticle } from "react-icons/md";
 import Image from "next/image";
+import { getLocalizedString } from "@/sanity/localizedValue";
 
 export const post = defineType({
   name: "post",
@@ -21,7 +22,7 @@ export const post = defineType({
       title: "Post slug",
       validation: (Rule) => Rule.required(),
       options: {
-        source: (document) => getLocalizedTitle(document.title, "en"),
+        source: (document) => getLocalizedString(document.title, "en"),
         maxLength: 96,
         slugify: (input) => {
           return (input || "untitled")
@@ -38,7 +39,7 @@ export const post = defineType({
       title: "Post slug (FR)",
       validation: (Rule) => Rule.required(),
       options: {
-        source: (document) => getLocalizedTitle(document.title, "fr"),
+        source: (document) => getLocalizedString(document.title, "fr"),
         maxLength: 96,
         slugify: (input) => {
           return (input || "sans-titre")
@@ -167,17 +168,3 @@ export const post = defineType({
     }
   }
 });
-
-function getLocalizedTitle(value: unknown, locale: "en" | "fr"): string {
-  if (!Array.isArray(value)) return "";
-  const entries = value.filter(
-    (entry): entry is { _key: string; value: string } =>
-      typeof entry === "object" &&
-      entry !== null &&
-      "_key" in entry &&
-      typeof entry._key === "string" &&
-      "value" in entry &&
-      typeof entry.value === "string"
-  );
-  return entries.find((entry) => entry._key === locale)?.value ?? entries[0]?.value ?? "";
-}
