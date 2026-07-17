@@ -8,9 +8,6 @@ import { myPortableTextComponents } from "@/components/PortableText/myPortableTe
 export function RichText({ value }: { value?: unknown[] }) {
   if (!value?.length) return null;
   return (
-    <PortableText
-      value={value as PortableTextBlock[]}
-      components={myPortableTextComponents as any}
-    />
+    <PortableText value={value as PortableTextBlock[]} components={myPortableTextComponents} />
   );
 }

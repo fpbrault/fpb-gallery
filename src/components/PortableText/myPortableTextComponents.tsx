@@ -1,61 +1,41 @@
 "use client";
 
 import React, { useEffect, type ReactNode } from "react";
+import type { PortableTextComponents } from "@portabletext/react";
 import { PTYoutube } from "./PTYoutube";
-import { PTRelatedPost } from "./PTRelatedPost";
-import { PTRelatedAlbum } from "./PTRelatedAlbum";
-import { PTLayoutCol } from "./PTLayoutCol";
-import { PTImage } from "./PTImage";
-import { PTInternalLink } from "./PTInternalLink";
+import { PTRelatedPost, type RelatedPostValue } from "./PTRelatedPost";
+import { PTRelatedAlbum, type RelatedAlbumValue } from "./PTRelatedAlbum";
+import { PTLayoutCol, type LayoutColumnValue } from "./PTLayoutCol";
+import { PTImage, type PortableImageValue } from "./PTImage";
+import { PTInternalLink, type InternalLinkValue } from "./PTInternalLink";
 import { PTRoughNotation } from "./PTRoughNotation";
-import { PTExternalLink } from "./PTExternalLink";
-import { PTAlbumCard } from "./PTAlbumCard";
+import { PTExternalLink, type ExternalLinkValue } from "./PTExternalLink";
+import { PTAlbumCard, type AlbumCardValue } from "./PTAlbumCard";
+import type { Youtube } from "@/sanity/sanity.types";
 
-export const myPortableTextComponents = {
+export const myPortableTextComponents: PortableTextComponents = {
   marks: {
-    internalLink: ({ value, children }: { value: any; children: any }) => {
-      return PTInternalLink(value, children);
-    },
-    link: ({ value, children }: { value: any; children: any }) => {
-      return PTExternalLink(value, children);
-    },
-    rough: (props: any) => {
-      return PTRoughNotation(props);
-    }
+    internalLink: ({ value, children }) => (
+      <PTInternalLink value={value as InternalLinkValue}>{children}</PTInternalLink>
+    ),
+    link: ({ value, children }) => (
+      <PTExternalLink value={value as ExternalLinkValue}>{children}</PTExternalLink>
+    ),
+    rough: ({ children }) => <PTRoughNotation>{children}</PTRoughNotation>
   },
   block: {
-    justify: ({ children }: { children: any }) => {
-      return <div className="text-justify">{children}</div>;
-    },
-    center: ({ children }: { children: any }) => {
-      return <div className="text-center">{children}</div>;
-    },
-    h1: ({ children }: { children: ReactNode }) => (
-      <PortableHeading level={1}>{children}</PortableHeading>
-    ),
-    h2: ({ children }: { children: ReactNode }) => (
-      <PortableHeading level={2}>{children}</PortableHeading>
-    )
+    justify: ({ children }) => <div className="text-justify">{children}</div>,
+    center: ({ children }) => <div className="text-center">{children}</div>,
+    h1: ({ children }) => <PortableHeading level={1}>{children}</PortableHeading>,
+    h2: ({ children }) => <PortableHeading level={2}>{children}</PortableHeading>
   },
   types: {
-    youtube: ({ value }: { value: any }) => {
-      return PTYoutube(value);
-    },
-    image: ({ value }: any) => {
-      return PTImage(value);
-    },
-    "layout-col-2": ({ value }: any) => {
-      return PTLayoutCol(value);
-    },
-    album: ({ value }: any) => {
-      return PTRelatedAlbum(value);
-    },
-    albumCard: ({ value }: any) => {
-      return PTAlbumCard(value);
-    },
-    Post: ({ value }: any) => {
-      return PTRelatedPost(value);
-    }
+    youtube: ({ value }) => <PTYoutube value={value as Youtube} />,
+    image: ({ value }) => <PTImage value={value as PortableImageValue} />,
+    "layout-col-2": ({ value }) => <PTLayoutCol value={value as LayoutColumnValue} />,
+    album: ({ value }) => <PTRelatedAlbum value={value as RelatedAlbumValue} />,
+    albumCard: ({ value }) => <PTAlbumCard value={value as AlbumCardValue} />,
+    Post: ({ value }) => <PTRelatedPost value={value as RelatedPostValue} />
   }
 };
 
@@ -83,7 +63,7 @@ function PortableHeading({ children, level }: { children: ReactNode; level: 1 | 
     </h2>
   );
 }
-function scrollToElement(element: HTMLElement | null, id: any) {
+function scrollToElement(element: HTMLElement, id: string) {
   if (element) {
     window.scrollTo({
       top: element?.offsetTop - 150,

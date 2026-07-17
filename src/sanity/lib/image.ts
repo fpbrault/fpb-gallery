@@ -1,5 +1,4 @@
-import { createImageUrlBuilder } from "@sanity/image-url";
-import type { Image } from "sanity";
+import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
 
 import { dataset, projectId } from "@/sanity/env";
 
@@ -8,8 +7,13 @@ const imageBuilder = createImageUrlBuilder({
   dataset: dataset || ""
 });
 
-export const urlForImage = (source: Image) => {
-  return imageBuilder?.image(source).auto("format").fit("max");
+export type ImageSource = { asset?: { _ref: string } };
+
+export const urlForImage = (source: ImageSource) => {
+  return imageBuilder
+    .image(source as SanityImageSource)
+    .auto("format")
+    .fit("max");
 };
 
 export type ImageDimensions = { width: number; height: number; aspectRatio: number };
@@ -33,13 +37,18 @@ function calculateNewWidth(originalWidth: number, originalHeight: number, newHei
   return Math.floor(newWidth);
 }
 
-export function getResizedImage(image: Image, quality?: number, height?: number, blur?: boolean) {
+export function getResizedImage(
+  image: ImageSource,
+  quality?: number,
+  height?: number,
+  blur?: boolean
+) {
   try {
     if (image.asset) {
       const dimensions = getImageDimensions(image.asset._ref);
       let imageBuilder = urlForImage(image);
-      let imageHeight = height ? height : dimensions.height;
-      let imageWidth = calculateNewWidth(dimensions.width, dimensions.height, imageHeight);
+      const imageHeight = height ? height : dimensions.height;
+      const imageWidth = calculateNewWidth(dimensions.width, dimensions.height, imageHeight);
 
       imageBuilder = imageBuilder.height(height ? height : imageHeight).width(imageWidth);
 
@@ -62,7 +71,7 @@ export function getResizedImage(image: Image, quality?: number, height?: number,
 }
 
 export function getResizedImageSquare(
-  image: Image,
+  image: ImageSource,
   size: number,
   quality?: number,
   blur?: boolean
@@ -71,8 +80,8 @@ export function getResizedImageSquare(
     if (image.asset) {
       let imageBuilder = urlForImage(image);
 
-      let imageHeight = size;
-      let imageWidth = size;
+      const imageHeight = size;
+      const imageWidth = size;
 
       imageBuilder = imageBuilder.height(size).width(size);
 

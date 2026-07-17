@@ -1,12 +1,5 @@
-import React, { useRef } from "react";
-import { useInView } from "react-intersection-observer";
+import type { ReactNode } from "react";
 
-export function PTRoughNotation(props: any) {
-  const { ref, inView } = useInView({
-    triggerOnce: true, // Only trigger once
-    rootMargin: "-100px 0px", // Adjust this margin based on your needs
-    delay: 0
-  });
-
-  return <span ref={ref}>{<>{props.children}</>}</span>;
+export function PTRoughNotation({ children }: { children: ReactNode }) {
+  return <span>{children}</span>;
 }

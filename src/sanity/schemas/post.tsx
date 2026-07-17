@@ -1,5 +1,4 @@
-import { PreviewValue } from "sanity";
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType, type PreviewValue } from "sanity";
 import { MdOutlineArticle } from "react-icons/md";
 import Image from "next/image";
 
@@ -22,14 +21,10 @@ export const post = defineType({
       title: "Post slug",
       validation: (Rule) => Rule.required(),
       options: {
-        source: "title",
+        source: (document) => getLocalizedTitle(document.title, "en"),
         maxLength: 96,
-        slugify: (input: any) => {
-          const title =
-            input.find(
-              (element: { _key: string; _type: string; value: string }) => element._key == "en"
-            )?.value ?? input[0]?.value;
-          return title
+        slugify: (input) => {
+          return (input || "untitled")
             .toLowerCase()
             .replace(/\s+/g, "-")
             .replace(/[^\w-]+/g, "");
@@ -43,14 +38,10 @@ export const post = defineType({
       title: "Post slug (FR)",
       validation: (Rule) => Rule.required(),
       options: {
-        source: "title",
+        source: (document) => getLocalizedTitle(document.title, "fr"),
         maxLength: 96,
-        slugify: (input: any) => {
-          const title =
-            input.find(
-              (element: { _key: string; _type: string; value: string }) => element._key == "fr"
-            )?.value ?? input[0]?.value;
-          return title
+        slugify: (input) => {
+          return (input || "sans-titre")
             .toLowerCase()
             .replace(/\s+/g, "-")
             .replace(/[^\w-]+/g, "");
@@ -154,10 +145,14 @@ export const post = defineType({
       publishDate: "publishDate",
       coverImage: "coverImage"
     },
-    prepare(value: Record<string, any>): PreviewValue {
+    prepare(value: {
+      title?: Array<{ value?: string }>;
+      publishDate?: string;
+      coverImage?: React.ReactNode;
+    }): PreviewValue {
       const { publishDate } = value;
       return {
-        title: value.title[0].value,
+        title: value.title?.[0]?.value ?? "Untitled post",
         subtitle: publishDate && `${new Date(publishDate).toLocaleString()}`,
         media: value.coverImage ?? (
           <Image
@@ -172,3 +167,17 @@ export const post = defineType({
     }
   }
 });
+
+function getLocalizedTitle(value: unknown, locale: "en" | "fr"): string {
+  if (!Array.isArray(value)) return "";
+  const entries = value.filter(
+    (entry): entry is { _key: string; value: string } =>
+      typeof entry === "object" &&
+      entry !== null &&
+      "_key" in entry &&
+      typeof entry._key === "string" &&
+      "value" in entry &&
+      typeof entry.value === "string"
+  );
+  return entries.find((entry) => entry._key === locale)?.value ?? entries[0]?.value ?? "";
+}

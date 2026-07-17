@@ -1,8 +1,7 @@
 "use client";
 
-import { PortableText } from "@portabletext/react";
 import Image from "next/image";
-import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import { RichText } from "@/components/PortableText/RichText";
 import { getResizedImage } from "@/sanity/lib/image";
 import type { Post as PostData } from "@/features/blog/models";
 
@@ -33,7 +32,7 @@ export default function Post({ post }: { post: PostData }) {
         <div className="divider"></div>
 
         <div className="px-4 mx-auto prose text-left lg:prose-xl prose-headings:text-center">
-          <PortableText value={post.content} components={myPortableTextComponents as any} />
+          <RichText value={post.content} />
         </div>
       </article>
     </div>

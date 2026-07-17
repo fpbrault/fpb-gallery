@@ -8,8 +8,9 @@ import {
   FaPalette
 } from "react-icons/fa6";
 import { MdOutlineArticle } from "react-icons/md";
+import type { StructureResolver } from "sanity/structure";
 
-export const structure = (S: any) =>
+export const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
@@ -35,7 +36,7 @@ export const structure = (S: any) =>
                 .child(
                   S.documentTypeList("category")
                     .title("Albums By Category")
-                    .child((categoryId: any) =>
+                    .child((categoryId) =>
                       S.documentList()
                         .title("Albums")
                         .filter('_type == "album" && $categoryId == category._ref')
@@ -66,7 +67,7 @@ export const structure = (S: any) =>
                     .filter('_type == "translation.metadata"')
                     .defaultLayout("default")
 
-                    .child((documentId: any) =>
+                    .child((documentId) =>
                       S.document()
                         .title(documentId)
                         .documentId(documentId)
@@ -128,7 +129,7 @@ export const structure = (S: any) =>
             ])
         ),
       ...S.documentTypeListItems().filter(
-        (listItem: { getId: () => any }) =>
+        (listItem) =>
           ![
             "siteSettings",
             "album",

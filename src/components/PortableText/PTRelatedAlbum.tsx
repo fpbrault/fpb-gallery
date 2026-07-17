@@ -6,9 +6,17 @@ import { urlForImage } from "@/sanity/lib/image";
 import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
+import type { Image as SanityImage } from "sanity";
 
-export function PTRelatedAlbum(value: any) {
+export type RelatedAlbumValue = {
+  albumName?: string;
+  images?: SanityImage;
+  slug?: string;
+};
+
+export function PTRelatedAlbum({ value }: { value: RelatedAlbumValue }) {
   const { locale, t } = useLocale();
+  if (!value.images?.asset || !value.slug) return null;
   const src = urlForImage(value.images).width(128).height(64).url();
   return (
     <div className="w-full max-w-sm mx-auto shadow-xl">
@@ -19,7 +27,7 @@ export function PTRelatedAlbum(value: any) {
       >
         <div className="flex w-full max-w-sm mx-auto transition-all border justify-evenly rounded-xl bg-secondary text-secondary-content border-secondary hover:bg-secondary-content hover:text-secondary">
           <span className="self-center flex-grow px-2 font-bold text-center ">
-            {value.albumName}
+            {value.albumName ?? "Album"}
           </span>
           <Image
             style={{ margin: 0 }}

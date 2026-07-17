@@ -1,12 +1,11 @@
 "use client";
 
-import { PortableText } from "@portabletext/react";
-import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
+import { RichText } from "@/components/PortableText/RichText";
 import ImageContext from "./PortableText/ImageContext";
 import type { CustomPage } from "@/features/pages/models";
 
 export default function Page({ page }: { page: CustomPage }) {
-  const imageUrls: any[] = [];
+  const imageUrls: string[] = [];
 
   return (
     <ImageContext.Provider value={imageUrls}>
@@ -15,7 +14,7 @@ export default function Page({ page }: { page: CustomPage }) {
           className="max-w-5xl px-4 mx-auto prose text-left lg:prose-xl prose-headings:text-center"
           key={page.slug}
         >
-          <PortableText value={page.content} components={myPortableTextComponents as any} />
+          <RichText value={page.content} />
         </div>
       </div>
     </ImageContext.Provider>

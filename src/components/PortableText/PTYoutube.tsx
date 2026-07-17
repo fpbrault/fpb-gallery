@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
-import React from "react";
+import type { Youtube } from "@/sanity/sanity.types";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
-export function PTYoutube(value: any) {
+export function PTYoutube({ value }: { value: Youtube }) {
   return (
     <div className="flex justify-center py-2">
       <div className="w-full ">

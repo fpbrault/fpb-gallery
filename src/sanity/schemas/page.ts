@@ -47,9 +47,9 @@ export const page = {
       title: "title",
       language: "language"
     },
-    prepare(value: any) {
+    prepare(value: { title?: string; language?: string }) {
       const { title, language } = value;
-      const flagEmoji = getFlagEmoji(language); // Add a function to get the flag emoji based on the language
+      const flagEmoji = language ? getFlagEmoji(language) : null;
 
       return {
         title: title,

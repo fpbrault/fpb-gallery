@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Card, Select, Stack, Text } from "@sanity/ui";
-import { set, unset } from "sanity";
+import { set, unset, type StringInputProps } from "sanity";
 
 const fontFamilies: Record<string, string> = {
   comfortaa: "Comfortaa, sans-serif",
@@ -17,7 +17,7 @@ const fontFamilies: Record<string, string> = {
   vollkorn: "Vollkorn, serif"
 };
 
-export default function FontPreview(props: any) {
+export default function FontPreview(props: StringInputProps) {
   const { onChange, value = "" } = props;
   const [testText, setTestText] = useState("My voice is my passport");
   const fontFamily = fontFamilies[value] ?? fontFamilies.raleway;
@@ -32,11 +32,17 @@ export default function FontPreview(props: any) {
   return (
     <Stack space={3}>
       <Select onChange={handleChange} value={value}>
-        {props.schemaType.options.list.map((option: { title: string; value: string }) => (
-          <option key={option.value} value={option.value}>
-            {option.title}
-          </option>
-        ))}
+        {(props.schemaType.options?.list ?? []).map((option) =>
+          typeof option === "string" ? (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ) : (
+            <option key={option.value} value={option.value}>
+              {option.title}
+            </option>
+          )
+        )}
       </Select>
       <label htmlFor="textPreviewInput">Font preview</label>
       <input

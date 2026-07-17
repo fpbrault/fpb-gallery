@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSiteMetadata } from "../context/SiteMetadataContext";
 
 const ThemeSelector = () => {
   const siteMetadata = useSiteMetadata();
   const [darkThemeName] = useState(siteMetadata?.themes.darkThemeName ?? "mytheme");
   const [lightThemeName] = useState(siteMetadata?.themes.lightThemeName ?? "garden");
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    if (typeof document === "undefined") return true;
+    return document.documentElement.dataset.theme === darkThemeName;
+  });
 
   // Function to toggle the theme
   const toggleTheme = () => {
@@ -19,25 +22,6 @@ const ThemeSelector = () => {
     localStorage.setItem("theme", newTheme);
     //applyCustomTheme();
   };
-
-  // useEffect to load the theme from local storage on component mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Check if localStorage is available
-      const savedTheme = localStorage.getItem("theme");
-
-      if (savedTheme && (savedTheme === darkThemeName || savedTheme === lightThemeName)) {
-        document.documentElement.setAttribute("data-theme", savedTheme);
-        setIsDarkTheme(savedTheme === darkThemeName);
-      } else {
-        const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const newTheme = prefersDarkMode ? darkThemeName : lightThemeName;
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-        setIsDarkTheme(prefersDarkMode);
-      }
-    }
-  }, [darkThemeName, lightThemeName]);
 
   return (
     <label className="grid cursor-pointer place-items-center">

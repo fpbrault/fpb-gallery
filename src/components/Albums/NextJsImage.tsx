@@ -3,21 +3,25 @@
 import Image from "next/image";
 import { isImageFitCover, isImageSlide, useLightboxProps } from "yet-another-react-lightbox";
 
-import type { RenderPhotoProps } from "react-photo-album";
+import type { Photo, RenderPhotoProps } from "react-photo-album";
 import { getResizedImage } from "@/sanity/lib/image";
 import Link from "next/link";
+import type { ContentImage } from "@/features/content/models";
+import type { ReactNode } from "react";
 
-interface CustomRenderPhotoProps extends RenderPhotoProps {
-  photo: any;
+export type AlbumPhoto = Photo & { blurDataURL?: string; href: string };
+export type GalleryPhoto = Photo & Omit<ContentImage, "description"> & { description?: ReactNode };
+
+interface AlbumRenderPhotoProps extends RenderPhotoProps<AlbumPhoto> {
   limitHeight?: boolean;
 }
 
 export function NextJsImageAlbum({
   limitHeight,
   photo,
-  imageProps: { alt, title, sizes, className, onClick },
+  imageProps: { alt, title, sizes, onClick },
   wrapperStyle
-}: CustomRenderPhotoProps) {
+}: AlbumRenderPhotoProps) {
   const limitHeightStyle = limitHeight
     ? {
         width: photo.width,
@@ -56,9 +60,9 @@ export function NextJsImageAlbum({
 export function NextJsImageElement({
   limitHeight,
   photo,
-  imageProps: { alt, title, sizes, className, onClick },
+  imageProps: { alt, sizes, onClick },
   wrapperStyle
-}: CustomRenderPhotoProps) {
+}: RenderPhotoProps<GalleryPhoto> & { limitHeight?: boolean }) {
   const { imageUrl: thumbnailUrl, imageWidth, imageHeight } = getResizedImage(photo, 80, 1000);
 
   return (

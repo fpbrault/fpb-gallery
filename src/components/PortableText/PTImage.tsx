@@ -7,9 +7,11 @@ import "yet-another-react-lightbox/styles.css";
 
 import { urlForImage } from "@/sanity/lib/image";
 import ImageContext from "./ImageContext";
-import type { ContentImage } from "@/features/content/models";
+import type { Image as SanityImage } from "sanity";
 
-export function PTImage(value: ContentImage & { blurDataURL?: string }) {
+export type PortableImageValue = SanityImage & { alt?: string; blurDataURL?: string };
+
+export function PTImage({ value }: { value: PortableImageValue }) {
   const [isOpen, setIsOpen] = useState(false);
   const imageUrls = useContext(ImageContext);
   const thumbnailSrc = urlForImage(value).width(1000).quality(75).format("webp").url();
