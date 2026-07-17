@@ -27,11 +27,10 @@ export function PTAlbumCard(value: any) {
             draggable={false}
             className="transition-all duration-300 rounded border-primary group-hover:brightness-90 group-hover:border-4"
             src={src}
-            loading="eager"
+            loading="lazy"
             //blurDataURL={photo.blurDataURL}
             //placeholder={"blur"}
             //sizes={sizes}
-            unoptimized
             alt={value.albumName}
             //{...{ alt, title, onClick }}
           />

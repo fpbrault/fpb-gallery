@@ -9,7 +9,7 @@ export const category = {
       name: "categoryName",
       type: "string",
       title: "Category Name",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required()
     }),
     defineField({
       name: "slug",
@@ -35,7 +35,7 @@ export const category = {
         hotspot: true
       },
       title: "Cover Image"
-    }),
+    })
   ]
 };
 

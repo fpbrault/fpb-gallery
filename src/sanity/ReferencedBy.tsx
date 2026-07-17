@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { getPublishedId, useDocumentOperation } from "sanity";
-import { client } from "./lib/client";
+import { browserClient as client } from "./lib/browserClient";
 
 export const ReferencedBy = (props: any) => {
   const { patch } = useDocumentOperation(props.document._id.replace("drafts.", ""), "post");

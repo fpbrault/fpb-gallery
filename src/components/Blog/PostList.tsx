@@ -1,25 +1,29 @@
+"use client";
+
 import Image from "next/image";
-import { SanityDocument } from "next-sanity";
 import { urlForImage } from "@/sanity/lib/image";
 import Link from "next/link";
+import type { PostSummary } from "@/sanity/types";
+import { useLocale } from "@/components/context/LocaleContext";
+import { localizePath } from "@/i18n/config";
 
-export default function Post({ posts }: { posts: SanityDocument }) {
+export default function PostList({ posts }: { posts: PostSummary[] }) {
+  const { locale } = useLocale();
   const width = 1000;
   const height = 600;
   return (
-    (<div className="text-center text-base-content text-sans">
+    <div className="text-center text-base-content text-sans">
       <h2 className="pb-4 text-4xl font-bold font-display"></h2>
       {posts.length > 0 &&
-        posts?.map((post: any, index: number) => {
+        posts?.map((post, index) => {
           const imageUrl = post.coverImage
             ? urlForImage(post.coverImage).height(height).width(width).quality(80).url()
             : null;
           return (
-            (<div className="" key={post.slug.current}>
+            <div className="" key={post.slug.current}>
               <article className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side">
-                <Link href={"/blog/" + post.slug.current}>
+                <Link href={localizePath("/blog/" + post.slug.current, locale)}>
                   <Image
-                    unoptimized
                     className="max-w-lg mx-auto rounded shadow-lg lg:max-w-lg sm:max-w-md "
                     blurDataURL={post.blurDataURL}
                     placeholder={post.blurDataURL ? "blur" : "empty"}
@@ -29,35 +33,30 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                       imageUrl ??
                       "https://placehold.co/1000x750/jpg?text=" +
                         (post.title
-                          ? (post.title[0].length >= 60
-                              ? post.title[0].substring(0, 60) + "..."
-                              : post.title[0]
+                          ? (post.title.length >= 60
+                              ? post.title.substring(0, 60) + "..."
+                              : post.title
                             ).replace(/ /g, "+")
                           : "No+Image")
                     }
-                    alt="cover image placeholder"
+                    alt={post.title}
                   />
                 </Link>
                 <div className="items-center max-w-lg mx-auto card-body">
                   <h2 className="card-title font-display">
                     <Link
                       className="text-2xl font-bold text-center link link-hover link-primary"
-                      href={"/blog/" + post.slug.current}
+                      href={localizePath("/blog/" + post.slug.current, locale)}
                     >
                       {post?.title ?? "Untitled"}
                     </Link>
                   </h2>
-                  <span className="badge badge-outline">
-                    {new Date(post.publishDate).toDateString()}
-                  </span>
-                  <div className="justify-end card-actions">
-                    {post.tags &&
-                      post.tags.map((tag: string) => (
-                        <div key={tag} className="badge badge-secondary badge-outline">
-                          {tag}
-                        </div>
-                      ))}
-                  </div>
+                  {post.publishDate ? (
+                    <span className="badge badge-outline">
+                      {new Date(post.publishDate).toDateString()}
+                    </span>
+                  ) : null}
+                  <div className="justify-end card-actions"></div>
                   <p className="w-full max-w-sm pt-8 leading-relaxed text-left">
                     {post.excerpt ?? "No excerpt"}
                   </p>
@@ -68,9 +67,9 @@ export default function Post({ posts }: { posts: SanityDocument }) {
                   <div className="divider divider-primary"></div>
                 </div>
               )}
-            </div>)
+            </div>
           );
         })}
-    </div>)
+    </div>
   );
 }

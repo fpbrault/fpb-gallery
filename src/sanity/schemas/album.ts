@@ -27,7 +27,7 @@ export const album = {
       type: "string",
       title: "Album Name",
       group: "metadata",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required()
     }),
     defineField({
       name: "slug",
@@ -134,7 +134,21 @@ export const album = {
             defineField({
               name: "alt",
               type: "string",
-              title: "Alternative text"
+              title: "Alternative text",
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const parent = context.parent as { decorative?: boolean } | undefined;
+                  return parent?.decorative ||
+                    (typeof value === "string" && value.trim().length > 0)
+                    ? true
+                    : "Alternative text is required unless the image is decorative";
+                })
+            }),
+            defineField({
+              name: "decorative",
+              type: "boolean",
+              title: "Decorative image",
+              initialValue: false
             }),
             defineField({
               name: "title",
@@ -159,7 +173,8 @@ export const album = {
       ],
       options: {
         layout: "grid"
-      }
+      },
+      validation: (Rule) => Rule.required().min(1).error("Add at least one image")
     })
   ],
   orderings: [

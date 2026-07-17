@@ -1,10 +1,9 @@
-import { UseNextSanityImageDimensions } from 'next-sanity-image';
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import type { Image } from "sanity";
 
 import { dataset, projectId } from "@/sanity/env";
 
-const imageBuilder = imageUrlBuilder({
+const imageBuilder = createImageUrlBuilder({
   projectId: projectId || "",
   dataset: dataset || ""
 });
@@ -13,8 +12,9 @@ export const urlForImage = (source: Image) => {
   return imageBuilder?.image(source).auto("format").fit("max");
 };
 
+export type ImageDimensions = { width: number; height: number; aspectRatio: number };
 
-export function getImageDimensions(id: string): UseNextSanityImageDimensions {
+export function getImageDimensions(id: string): ImageDimensions {
   const dimensions = id.split("-")[2];
 
   const [width, height] = dimensions.split("x").map((num: string) => parseInt(num, 10));

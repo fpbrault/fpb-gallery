@@ -5,7 +5,7 @@ import { getSocialIcon } from "../lib/getSocialIcon";
 import ThemeSelector from "../Layout/ThemeSelector";
 import { LanguageSwitcher } from "../Layout/LanguageSwitcher";
 
-export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata; context: any }) {
+export function Footer({ metadata }: { metadata: Layout.LayoutMetadata }) {
   return (
     <footer className="relative bottom-0 z-40 flex flex-col-reverse items-center justify-between gap-3 px-8 py-4 font-sans text-xs sm:flex-row sm:text-sm footer bg-neutral text-neutral-content">
       <aside className="flex items-center lg:w-5/12 ">
@@ -25,7 +25,7 @@ export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata;
         </span>
       </aside>
       <div className="justify-center hidden gap-4 md:flex sm:w-2/12">
-        <LanguageSwitcher context={context}></LanguageSwitcher>
+        <LanguageSwitcher />
         <ThemeSelector></ThemeSelector>
       </div>
 
@@ -37,6 +37,8 @@ export function Footer({ metadata, context }: { metadata: Layout.LayoutMetadata;
               target="_blank"
               className="w-6 h-6 transition link hover:link-primary link-hover"
               href={socialLink.url}
+              aria-label={socialLink.name || socialLink.type}
+              rel="noreferrer"
             >
               {getSocialIcon(socialLink.type)}
             </Link>

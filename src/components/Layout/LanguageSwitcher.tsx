@@ -1,27 +1,19 @@
-import { useRouter } from "next/router";
-import React from "react";
-import { usePageProps } from "../context/PagePropsContext";
+"use client";
 
-export function LanguageSwitcher(props: any) {
-  const router = useRouter();
-  const pageProps = usePageProps();
+import Link from "next/link";
+import { useLocale } from "../context/LocaleContext";
+
+export function LanguageSwitcher() {
+  const { alternatePath, otherLocale } = useLocale();
   return (
-    <button
+    <Link
       className="flex flex-row justify-end gap-2 text-lg font-bold no-underline uppercase rounded-full link hover:text-accent"
-      onClick={() => {
-        router.push(
-          pageProps?.otherLocale?.slug?.current ?? router.asPath,
-          pageProps?.otherLocale?.slug?.current ?? router.asPath,
-          {
-            locale: pageProps?.locales?.find((locale: string) => locale != pageProps.locale)
-          }
-        );
-      }}
+      href={alternatePath}
+      hrefLang={otherLocale}
+      lang={otherLocale}
+      aria-label={`Switch language to ${otherLocale === "fr" ? "French" : "English"}`}
     >
-      {/*    <span className="w-6 h-6 mt-0.5">
-        <FontAwesomeIcon icon={faEarth}></FontAwesomeIcon>{" "}
-      </span> */}
-      {pageProps?.locales?.find((locale: string) => locale != pageProps?.locale)}
-    </button>
+      {otherLocale}
+    </Link>
   );
 }

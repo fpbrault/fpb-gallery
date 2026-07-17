@@ -17,7 +17,7 @@ export const page = {
       name: "title",
       type: "string",
       title: "Page Title",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required()
     }),
     defineField({
       name: "slug",

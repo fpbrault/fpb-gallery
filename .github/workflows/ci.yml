@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.CI_SANITY_PROJECT_ID }}
+  NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.CI_SANITY_DATASET }}
+  NEXT_PUBLIC_SANITY_API_VERSION: 2026-07-01
+  NEXT_PUBLIC_SANITY_USE_CDN: "true"
+  NEXT_PUBLIC_SITE_URL: https://fpbrault.com
+  SANITY_API_READ_TOKEN: ${{ secrets.CI_SANITY_API_READ_TOKEN }}
+  SANITY_WEBHOOK_SECRET: ci-not-used-for-live-requests
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:run
+      - run: npm run build
+
+  e2e:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -- --project=chromium

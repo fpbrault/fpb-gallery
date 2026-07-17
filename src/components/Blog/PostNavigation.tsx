@@ -1,12 +1,21 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { getResizedImageSquare } from "@/sanity/lib/image";
 import React from "react";
-import { useTranslation } from "next-i18next";
+import { useLocale } from "@/components/context/LocaleContext";
+import { localizePath } from "@/i18n/config";
+import type { PostPage, PostSummary } from "@/sanity/types";
 
-function PostNavigationItem(props: any) {
+function PostNavigationItem(props: {
+  data?: PostSummary;
+  label: string;
+  relatedPostImage?: { imageUrl: string; imageHeight: number; imageWidth: number } | null;
+}) {
+  const { locale } = useLocale();
   return (
-    (<div className="flex w-full nav-item indicator">
+    <div className="flex w-full nav-item indicator">
       {props.data?.slug && (
         <>
           <div className="indicator-item indicator-center badge-sm badge badge-primary backdrop-blur-xl">
@@ -14,11 +23,10 @@ function PostNavigationItem(props: any) {
           </div>
           <Link
             className="w-full group-[&>:nth-of-type(even)]:ml-auto"
-            href={"/blog/" + props.data.slug.current}
+            href={localizePath("/blog/" + props.data.slug.current, locale)}
           >
             <div className="flex justify-start text-center group-[&>:nth-of-type(even)]:flex-row-reverse rounded-2xl w-full bg-base-300">
               <Image
-                unoptimized
                 className="w-1/3 max-w-[100px] shadow-md group-[&>:nth-of-type(even)]:rounded-r-2xl group-[&>:nth-of-type(odd)]:rounded-l-2xl"
                 alt="Previous post"
                 src={
@@ -41,36 +49,31 @@ function PostNavigationItem(props: any) {
           </Link>
         </>
       )}
-    </div>)
+    </div>
   );
 }
 
-export function PostNavigation(props: any) {
-  const { t } = useTranslation("common");
+export function PostNavigation({ data }: { data: PostPage }) {
+  const { t } = useLocale();
   const height = 100;
   const relatedPostImages = {
-    previous: props.data.previous?.coverImage
-      ? getResizedImageSquare(props.data.previous?.coverImage, height, 80)
+    previous: data.previous?.coverImage
+      ? getResizedImageSquare(data.previous.coverImage, height, 80)
       : null,
-    next: props.data.next?.coverImage
-      ? getResizedImageSquare(props.data.next?.coverImage, height, 80)
-      : null
+    next: data.next?.coverImage ? getResizedImageSquare(data.next.coverImage, height, 80) : null
   };
 
-  if (!props.data) {
-    return null;
-  }
   return (
     <nav className="flex-col w-full max-w-2xl px-4 mx-auto my-8 space-y-6 sm:flex group lg:max-w-3xl sm:flex-row">
       <span className="flex divider sm:hidden"></span>
       <PostNavigationItem
-        data={props.data.previous}
+        data={data.previous}
         relatedPostImage={relatedPostImages.previous}
         label={"← " + t("blog.previousPost")}
       ></PostNavigationItem>
       <span className="hidden my-2 sm:w-2/12 sm:flex divider divider-horizontal"></span>
       <PostNavigationItem
-        data={props.data.next}
+        data={data.next}
         relatedPostImage={relatedPostImages.next}
         label={t("blog.nextPost") + " →"}
       ></PostNavigationItem>
