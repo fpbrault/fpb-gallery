@@ -48,7 +48,7 @@ export function NextJsImageAlbum({
           src={photo.src}
           loading="lazy"
           blurDataURL={photo.blurDataURL}
-          placeholder={"blur"}
+          placeholder={photo.blurDataURL ? "blur" : "empty"}
           sizes={sizes}
           {...{ alt, title, onClick }}
         />
@@ -77,8 +77,8 @@ export function NextJsImageElement({
         className="object-contain rounded"
         src={thumbnailUrl}
         loading="lazy"
-        blurDataURL={photo?.placeholders?.metadata.lqip}
-        placeholder={"blur"}
+        blurDataURL={photo.placeholders.metadata.lqip}
+        placeholder={photo.placeholders.metadata.lqip ? "blur" : "empty"}
         sizes={sizes}
         {...{ alt, onClick }}
       />
@@ -128,9 +128,9 @@ export function NextJsImage({ slide, rect }: NextJsImageProps) {
         title={slide.alt}
         src={slide.src}
         loading="lazy"
-        blurDataURL={slide?.placeholders?.metadata.lqip}
+        blurDataURL={slide.placeholders?.metadata.lqip}
         draggable={false}
-        placeholder={"blur"}
+        placeholder={slide.placeholders?.metadata.lqip ? "blur" : "empty"}
         style={{ objectFit: cover ? "cover" : "contain" }}
         sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
       />

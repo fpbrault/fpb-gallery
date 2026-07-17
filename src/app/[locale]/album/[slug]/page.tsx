@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/album/[s
     locale,
     path: `/album/${slug}`,
     site: siteMetadata,
-    title: album.name
+    title: album.name,
+    ogImage: { type: "album", id: album.id }
   });
 }
 

@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 
 const querySchema = z.object({
   albumId: z.string().max(120).optional(),
-  slug: z.string().max(120).optional(),
+  postId: z.string().max(120).optional(),
   title: z.string().max(120).default("Felix Perron-Brault Photographe")
 });
 
@@ -18,12 +18,12 @@ export async function GET(request: Request) {
   const parsed = querySchema.safeParse(Object.fromEntries(new URL(request.url).searchParams));
   if (!parsed.success) return new Response("Invalid query", { status: 400 });
 
-  const { albumId, slug, title } = parsed.data;
+  const { albumId, postId, title } = parsed.data;
   let image: { asset?: { _ref: string; _type: "reference" } } | null = null;
   try {
-    if (slug) image = await getSanityClient().fetch(OG_POST_IMAGE_QUERY, { slug });
+    if (postId) image = await getSanityClient().fetch(OG_POST_IMAGE_QUERY, { id: postId });
     if (!image && albumId)
-      image = await getSanityClient().fetch(OG_ALBUM_IMAGE_QUERY, { slug: albumId });
+      image = await getSanityClient().fetch(OG_ALBUM_IMAGE_QUERY, { id: albumId });
   } catch (error) {
     console.error(
       JSON.stringify({

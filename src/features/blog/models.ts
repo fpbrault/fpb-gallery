@@ -1,4 +1,5 @@
 import type { ContentImage, PortableContent } from "@/features/content/models";
+import type { Locale } from "@/i18n/config";
 
 export type PostSummary = {
   id: string;
@@ -12,6 +13,7 @@ export type PostSummary = {
 
 export type Post = PostSummary & {
   content: PortableContent;
+  localizedSlugs: Partial<Record<Locale, string>>;
 };
 
 export type PostPage = {
