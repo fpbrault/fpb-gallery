@@ -7,33 +7,14 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { FaBars } from "react-icons/fa6";
 import { localizePath } from "@/i18n/config";
 import { useLocale } from "../context/LocaleContext";
-import type { HeaderData } from "@/sanity/types";
-
-type HeaderLink = {
-  title: string;
-  title_fr?: string;
-  slug: string;
-  slug_fr?: string;
-  _translations?: HeaderData["pages"][number]["_translations"];
-};
+import type { HeaderData, NavigationItem } from "@/features/site/models";
 
 type Props = {
   title: string;
-  contactUrl: string;
-  contactText: string;
-  contactType: string;
   headerData: HeaderData;
-  context: any;
 };
 
-export default function Header({
-  title,
-  contactUrl,
-  contactText,
-  contactType,
-  headerData,
-  context
-}: Props) {
+export default function Header({ title, headerData }: Props) {
   const { locale } = useLocale();
   return (
     <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:pt-4 bg-base-200/70 backdrop-blur-lg ">
@@ -67,13 +48,13 @@ export default function Header({
                   className="mx-auto link link-hover link-primary"
                   href={localizePath("/", locale)}
                 >
-                  {context?.locale == "en" ? "Home" : "Accueil"}
+                  {locale === "en" ? "Home" : "Accueil"}
                 </Link>
               </li>
             )}
-            {headerData?.pages ? (
-              headerData?.pages.map((headerLink) => {
-                return CustomHeaderLink(headerData, headerLink, context);
+            {headerData.pages.length ? (
+              headerData.pages.map((headerLink) => {
+                return <CustomHeaderLink key={headerLink.slug} item={headerLink} />;
               })
             ) : (
               <li>
@@ -97,7 +78,7 @@ export default function Header({
   );
 }
 
-export function HeaderSideBar({ headerData, context }: { headerData: HeaderData; context: any }) {
+export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
   const { locale } = useLocale();
   return (
     <div className="z-50 h-screen drawer-side md:hidden">
@@ -115,13 +96,13 @@ export function HeaderSideBar({ headerData, context }: { headerData: HeaderData;
                 className="mx-auto link link-hover link-primary"
                 href={localizePath("/", locale)}
               >
-                {context?.locale == "en" ? "Home" : "Accueil"}
+                {locale === "en" ? "Home" : "Accueil"}
               </Link>
             </li>
           )}
-          {headerData?.pages ? (
-            headerData?.pages.map((headerLink) => {
-              return CustomHeaderLink(headerData, headerLink, context);
+          {headerData.pages.length ? (
+            headerData.pages.map((headerLink) => {
+              return <CustomHeaderLink key={headerLink.slug} item={headerLink} />;
             })
           ) : (
             <li>
@@ -151,30 +132,12 @@ export function HeaderSideBar({ headerData, context }: { headerData: HeaderData;
   );
 }
 
-function CustomHeaderLink(headerData: any, headerLink: HeaderLink, context: any) {
-  const translations = headerData.pages.find(
-    (data: { slug: string }) => data.slug == headerLink.slug
-  )?._translations?._translations;
-  const translatedHeaderLink =
-    translations?.find(
-      (translation: { language: any }) => translation.language == context?.locale
-    ) ?? null;
-
-  const translatedHeaderText =
-    (context?.locale == "fr" ? headerLink.title_fr : headerLink.title) ?? null;
+function CustomHeaderLink({ item }: { item: NavigationItem }) {
+  const { locale } = useLocale();
   return (
-    <li key={headerLink?.slug}>
-      <Link
-        className="link link-hover link-primary"
-        href={localizePath(
-          "/" + (translatedHeaderLink?.slug?.current ?? headerLink?.slug),
-          context?.locale ?? "en"
-        )}
-      >
-        {translatedHeaderLink?.title ??
-          translatedHeaderText ??
-          headerLink?.title ??
-          headerLink.slug}
+    <li>
+      <Link className="link link-hover link-primary" href={localizePath(`/${item.slug}`, locale)}>
+        {item.title}
       </Link>
     </li>
   );

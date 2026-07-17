@@ -19,5 +19,12 @@ export default defineConfig([
       "prefer-const": "off"
     }
   },
+  {
+    files: ["src/features/**/*.{ts,tsx}", "src/sanity/repositories/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }]
+    }
+  },
   globalIgnores([".next/**", "coverage/**", "playwright-report/**", "schema.json"])
 ]);

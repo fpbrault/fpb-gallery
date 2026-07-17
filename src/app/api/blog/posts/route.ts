@@ -1,4 +1,4 @@
-import { getPostsAfter } from "@/sanity/data";
+import { getPostsAfter } from "@/sanity/repositories/blogRepository";
 import { blogCursorQuerySchema } from "@/lib/pagination";
 
 export async function GET(request: Request) {

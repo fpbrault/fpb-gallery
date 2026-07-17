@@ -2,12 +2,13 @@ import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import { BlogIndex } from "@/features/blog/BlogIndex";
 import { isLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getPosts, getSiteShellData } from "@/sanity/data";
+import { getPosts } from "@/sanity/repositories/blogRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/blog">) {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const { siteMetadata } = await getSiteShellData();
+  const { siteMetadata } = await getSiteShellData(locale);
   return createPageMetadata({ locale, path: "/blog", site: siteMetadata, title: "Blog" });
 }
 

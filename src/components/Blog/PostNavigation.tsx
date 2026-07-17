@@ -6,10 +6,10 @@ import { getResizedImageSquare } from "@/sanity/lib/image";
 import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
-import type { PostPage, PostSummary } from "@/sanity/types";
+import type { PostPage, PostSummary } from "@/features/blog/models";
 
 function PostNavigationItem(props: {
-  data?: PostSummary;
+  data?: PostSummary | null;
   label: string;
   relatedPostImage?: { imageUrl: string; imageHeight: number; imageWidth: number } | null;
 }) {
@@ -23,7 +23,7 @@ function PostNavigationItem(props: {
           </div>
           <Link
             className="w-full group-[&>:nth-of-type(even)]:ml-auto"
-            href={localizePath("/blog/" + props.data.slug.current, locale)}
+            href={localizePath("/blog/" + props.data.slug, locale)}
           >
             <div className="flex justify-start text-center group-[&>:nth-of-type(even)]:flex-row-reverse rounded-2xl w-full bg-base-300">
               <Image

@@ -4,7 +4,8 @@ import Page from "@/components/Page";
 import { LocaleProvider } from "@/components/context/LocaleContext";
 import { getAlternateLocale, isLocale, localizePath } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getPage, getPageSlugs, getSiteShellData } from "@/sanity/data";
+import { getPage, getPageSlugs } from "@/sanity/repositories/pageRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateStaticParams() {
   const pages = await getPageSlugs();
@@ -15,7 +16,10 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/[...slug
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
   const path = slug.join("/");
-  const [page, { siteMetadata }] = await Promise.all([getPage(path, locale), getSiteShellData()]);
+  const [page, { siteMetadata }] = await Promise.all([
+    getPage(path, locale),
+    getSiteShellData(locale)
+  ]);
   if (!page) return {};
   return createPageMetadata({ locale, path: `/${path}`, site: siteMetadata, title: page.title });
 }
@@ -27,12 +31,12 @@ export default async function CustomPage({ params }: PageProps<"/[locale]/[...sl
   const page = await getPage(path, locale);
   if (!page) notFound();
 
-  if (page.slug.current !== path) permanentRedirect(localizePath(`/${page.slug.current}`, locale));
+  if (page.slug !== path) permanentRedirect(localizePath(`/${page.slug}`, locale));
 
   const otherLocale = getAlternateLocale(locale);
-  const translation = page._translations?.find((item) => item.language === otherLocale);
+  const translation = page.translations.find((item) => item.locale === otherLocale);
   const alternatePath = translation
-    ? localizePath(`/${translation.slug.current}`, otherLocale)
+    ? localizePath(`/${translation.slug}`, otherLocale)
     : localizePath(`/${path}`, otherLocale);
 
   return (

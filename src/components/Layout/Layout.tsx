@@ -8,7 +8,8 @@ import type { Layout } from "@/types/layout";
 import { SiteMetadataProvider } from "../context/SiteMetadataContext";
 import { getFontFamily } from "./FontLoader";
 import { LocaleProvider } from "../context/LocaleContext";
-import type { HeaderData, Locale, SiteMetadata } from "@/sanity/types";
+import type { HeaderData, SiteMetadata } from "@/features/site/models";
+import type { Locale } from "@/i18n/config";
 
 type Props = {
   children: ReactNode;
@@ -66,20 +67,13 @@ const Layout: React.FC<Props> = (props) => {
             <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
             <div className="flex flex-col drawer-content">
               {/* Navbar */}
-              <Header
-                title={metadata.title}
-                contactText={metadata?.socialLinks[0]?.name ?? ""}
-                contactType={metadata?.socialLinks[0]?.type ?? ""}
-                contactUrl={metadata?.socialLinks[0]?.url ?? ""}
-                headerData={props && props.headerData}
-                context={{ locale: props.locale }}
-              />
+              <Header title={metadata.title} headerData={props && props.headerData} />
 
               <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
                 {props.children}
               </main>
             </div>
-            <HeaderSideBar headerData={props.headerData} context={{ locale: props.locale }} />
+            <HeaderSideBar headerData={props.headerData} />
           </div>
 
           <ScrollToTopButton></ScrollToTopButton>

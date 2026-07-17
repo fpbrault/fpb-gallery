@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 
-import { localizePath } from "@/i18n/config";
+import { isLocale, localizePath } from "@/i18n/config";
 import { getSiteUrl } from "@/lib/metadata";
-import { getAlbumSlugs, getCategorySlugs, getPageSlugs, getPostSlugs } from "@/sanity/data";
+import { getAlbumSlugs, getCategorySlugs } from "@/sanity/repositories/albumRepository";
+import { getPostSlugs } from "@/sanity/repositories/blogRepository";
+import { getPageSlugs } from "@/sanity/repositories/pageRepository";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [albums, categories, pages, posts] = await Promise.all([
@@ -26,7 +28,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     urls.add(`/category/${slug}`);
     urls.add(`/fr/category/${slug}`);
   }
-  for (const page of pages) urls.add(localizePath(`/${page.slug}`, page.language));
+  for (const page of pages) {
+    if (isLocale(page.language)) urls.add(localizePath(`/${page.slug}`, page.language));
+  }
   for (const post of posts) {
     if (post.slug) urls.add(`/blog/${post.slug}`);
     if (post.slugFr) urls.add(`/fr/blog/${post.slugFr}`);

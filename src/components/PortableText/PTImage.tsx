@@ -7,9 +7,9 @@ import "yet-another-react-lightbox/styles.css";
 
 import { urlForImage } from "@/sanity/lib/image";
 import ImageContext from "./ImageContext";
-import type { SanityImage } from "@/sanity/types";
+import type { ContentImage } from "@/features/content/models";
 
-export function PTImage(value: SanityImage & { blurDataURL?: string }) {
+export function PTImage(value: ContentImage & { blurDataURL?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const imageUrls = useContext(ImageContext);
   const thumbnailSrc = urlForImage(value).width(1000).quality(75).format("webp").url();

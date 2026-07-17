@@ -5,7 +5,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import Layout from "@/components/Layout/Layout";
 import { isLocale, locales } from "@/i18n/config";
 import { getSiteUrl } from "@/lib/metadata";
-import { getSiteShellData } from "@/sanity/data";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 import { SanityLive } from "@/sanity/lib/live";
 
 export function generateStaticParams() {
@@ -16,7 +16,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const [{ isEnabled }, shell] = await Promise.all([draftMode(), getSiteShellData()]);
+  const [{ isEnabled }, shell] = await Promise.all([draftMode(), getSiteShellData(locale)]);
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",

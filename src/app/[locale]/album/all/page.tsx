@@ -2,12 +2,13 @@ import PhotoGallery from "@/components/Albums/PhotoGallery";
 import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import { isLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getAllImages, getSiteShellData } from "@/sanity/data";
+import { getAllImages } from "@/sanity/repositories/albumRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/album/all">) {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const { siteMetadata } = await getSiteShellData();
+  const { siteMetadata } = await getSiteShellData(locale);
   return createPageMetadata({
     locale,
     path: "/album/all",

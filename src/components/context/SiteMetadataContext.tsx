@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, type ReactNode } from "react";
-import type { SiteMetadata } from "@/sanity/types";
+import type { SiteMetadata } from "@/features/site/models";
 
 const SiteMetadataContext = createContext<SiteMetadata>({} as SiteMetadata);
 

@@ -5,7 +5,8 @@ import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import { RichText } from "@/components/PortableText/RichText";
 import { isLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getAlbum, getAlbumSlugs, getSiteShellData } from "@/sanity/data";
+import { getAlbum, getAlbumSlugs } from "@/sanity/repositories/albumRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateStaticParams() {
   const albums = await getAlbumSlugs();
@@ -18,13 +19,16 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[locale]/album/[slug]">) {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
-  const [album, { siteMetadata }] = await Promise.all([getAlbum(slug, locale), getSiteShellData()]);
+  const [album, { siteMetadata }] = await Promise.all([
+    getAlbum(slug, locale),
+    getSiteShellData(locale)
+  ]);
   if (!album) return {};
   return createPageMetadata({
     locale,
     path: `/album/${slug}`,
     site: siteMetadata,
-    title: album.albumName
+    title: album.name
   });
 }
 
@@ -39,20 +43,16 @@ export default async function AlbumPage({ params }: PageProps<"/[locale]/album/[
       <Breadcrumbs
         items={[
           album.category
-            ? { name: album.category.categoryName, url: `/category/${album.category.slug.current}` }
+            ? { name: album.category.name, url: `/category/${album.category.slug}` }
             : { name: "gallery", url: "/gallery" },
-          { name: album.albumName }
+          { name: album.name }
         ]}
       />
       <div className="max-w-xl pb-8 mx-auto prose text-center text-sans">
-        <h1 className="text-5xl font-display">{album.albumName}</h1>
+        <h1 className="text-5xl font-display">{album.name}</h1>
         <RichText value={album.description} />
       </div>
-      <PhotoGallery
-        mode={album.display ?? "rows"}
-        columns={album.columns}
-        images={album.images ?? []}
-      />
+      <PhotoGallery mode={album.display} columns={album.columns} images={album.images} />
     </div>
   );
 }

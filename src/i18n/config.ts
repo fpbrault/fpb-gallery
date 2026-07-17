@@ -1,7 +1,7 @@
 import en from "../../public/locales/en/common.json";
 import fr from "../../public/locales/fr/common.json";
 
-import type { Locale } from "@/sanity/types";
+export type Locale = "en" | "fr";
 
 export const locales: Locale[] = ["en", "fr"];
 export const defaultLocale: Locale = "en";

@@ -6,6 +6,7 @@ const imageProjection = `{
   alt,
   asset,
   description,
+  decorative,
   featured,
   title,
   "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}
@@ -17,7 +18,7 @@ export const SITE_METADATA_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
   author,
   customFont,
   customDisplayFont,
-  themes{darkThemeName, lightThemeName},
+  "themes": {darkThemeName, lightThemeName},
   "customThemes": {
     "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},
     "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}
@@ -27,13 +28,18 @@ export const SITE_METADATA_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
 
 export const HEADER_QUERY = defineQuery(`*[_type == "pageList" && defined(pages)][0]{
   showHome,
-  pages[]->{
-    title,
-    title_fr,
-    "slug": slug.current,
-    "slug_fr": slug_fr.current,
-    "_translations": *[_type == "translation.metadata" && references(^._id)][0]{
-      "_translations": translations[].value->{language, title, slug}
+  pages[]{
+    _type,
+    _type == "reference" => @->{
+      title,
+      "slug": slug.current,
+      "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{language, title, "slug": slug.current}
+    },
+    _type == "hardcodedPage" => {
+      title,
+      title_fr,
+      slug,
+      slug_fr
     }
   }
 }`);
@@ -127,7 +133,7 @@ export const POST_QUERY = defineQuery(`
     coverImage,
     "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),
     "title": title[_key == $locale][0].value,
-    "postContent": postContent[_key == $locale][0]
+    "content": postContent[_key == $locale][0].value
   },
   "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] ${postSummaryProjection},
   "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] ${postSummaryProjection}

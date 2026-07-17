@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 
 import PostList from "@/components/Blog/PostList";
-import type { Locale, PostSummary } from "@/sanity/types";
+import type { PostSummary } from "@/features/blog/models";
+import type { Locale } from "@/i18n/config";
 
 export function BlogIndex({
   initialPosts,

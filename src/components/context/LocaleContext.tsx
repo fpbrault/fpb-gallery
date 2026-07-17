@@ -4,7 +4,7 @@ import { createContext, useContext, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import { dictionaries, getAlternateLocale, localizePath } from "@/i18n/config";
-import type { Locale } from "@/sanity/types";
+import type { Locale } from "@/i18n/config";
 
 type TranslationKey =
   | "home.readPost"

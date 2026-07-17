@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
-import type { PostSummary } from "@/sanity/types";
+import type { PostSummary } from "@/features/blog/models";
 
 export default function HomePostMessage({ post }: { post: PostSummary }) {
   const { locale, t } = useLocale();
@@ -12,7 +12,7 @@ export default function HomePostMessage({ post }: { post: PostSummary }) {
       <p>{t("home.readPost")}</p>
       <Link
         className="text-2xl font-bold text-center font-display link link-hover link-primary"
-        href={localizePath("/blog/" + post.slug.current, locale)}
+        href={localizePath("/blog/" + post.slug, locale)}
       >
         {post?.title ?? "Untitled"}
       </Link>

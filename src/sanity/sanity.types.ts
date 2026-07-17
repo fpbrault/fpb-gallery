@@ -694,7 +694,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries.ts
 // Variable: SITE_METADATA_QUERY
-// Query: *[_type == "siteSettings"][0]{  siteTitle,  description,  author,  customFont,  customDisplayFont,  themes{darkThemeName, lightThemeName},  "customThemes": {    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}  },  socialLinks[]{name, type, url}}
+// Query: *[_type == "siteSettings"][0]{  siteTitle,  description,  author,  customFont,  customDisplayFont,  "themes": {darkThemeName, lightThemeName},  "customThemes": {    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}  },  socialLinks[]{name, type, url}}
 export type SITE_METADATA_QUERY_RESULT = {
   siteTitle: string | null;
   description: string | null;
@@ -727,7 +727,32 @@ export type SITE_METADATA_QUERY_RESULT = {
     | "spaceGrotesk"
     | "vollkorn"
     | null;
-  themes: null;
+  themes: {
+    darkThemeName:
+      | "black"
+      | "business"
+      | "dark"
+      | "dim"
+      | "dracula"
+      | "mytheme"
+      | "night"
+      | "sunset"
+      | "synthwave"
+      | null;
+    lightThemeName:
+      | "autumn"
+      | "cmyk"
+      | "cupcake"
+      | "cyberpunk"
+      | "emerald"
+      | "garden"
+      | "light"
+      | "lofi"
+      | "nord"
+      | "retro"
+      | "winter"
+      | null;
+  };
   customThemes: {
     darkTheme: {
       p: {
@@ -861,27 +886,33 @@ export type SITE_METADATA_QUERY_RESULT = {
 
 // Source: src/sanity/queries.ts
 // Variable: HEADER_QUERY
-// Query: *[_type == "pageList" && defined(pages)][0]{  showHome,  pages[]->{    title,    title_fr,    "slug": slug.current,    "slug_fr": slug_fr.current,    "_translations": *[_type == "translation.metadata" && references(^._id)][0]{      "_translations": translations[].value->{language, title, slug}    }  }}
+// Query: *[_type == "pageList" && defined(pages)][0]{  showHome,  pages[]{    _type,    _type == "reference" => @->{      title,      "slug": slug.current,      "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{language, title, "slug": slug.current}    },    _type == "hardcodedPage" => {      title,      title_fr,      slug,      slug_fr    }  }}
 export type HEADER_QUERY_RESULT = {
   showHome: boolean | null;
-  pages: Array<{
-    title: string | null;
-    title_fr: null;
-    slug: string | null;
-    slug_fr: null;
-    _translations: {
-      _translations: Array<{
-        language: string | null;
+  pages: Array<
+    | {
+        _type: "hardcodedPage";
         title: string | null;
-        slug: Slug | null;
-      } | null> | null;
-    } | null;
-  } | null>;
+        title_fr: string | null;
+        slug: string | null;
+        slug_fr: string | null;
+      }
+    | {
+        _type: "reference";
+        title: string | null;
+        slug: string | null;
+        translations: Array<{
+          language: string | null;
+          title: string | null;
+          slug: string | null;
+        } | null> | null;
+      }
+  >;
 } | null;
 
 // Source: src/sanity/queries.ts
 // Variable: CATEGORY_INDEX_QUERY
-// Query: *[_type == "category" && count(*[_type == "album" && references(^._id)]) > 0]{  _id,  categoryName,  slug,  "coverImage": coverImage{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}},  "albums": *[_type == "album" && references(^._id)] | order(coalesce(publishDate, "") desc){    _id,    albumName,    slug,    "images": images[0...1]{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}},    "cover": images[0]{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}  }}
+// Query: *[_type == "category" && count(*[_type == "album" && references(^._id)]) > 0]{  _id,  categoryName,  slug,  "coverImage": coverImage{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}},  "albums": *[_type == "album" && references(^._id)] | order(coalesce(publishDate, "") desc){    _id,    albumName,    slug,    "images": images[0...1]{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}},    "cover": images[0]{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}  }}
 export type CATEGORY_INDEX_QUERY_RESULT = Array<{
   _id: string;
   categoryName: string | null;
@@ -892,6 +923,7 @@ export type CATEGORY_INDEX_QUERY_RESULT = Array<{
     alt: null;
     asset: SanityImageAssetReference | null;
     description: null;
+    decorative: null;
     featured: null;
     title: null;
     placeholders: {
@@ -937,6 +969,7 @@ export type CATEGORY_INDEX_QUERY_RESULT = Array<{
             _key: string;
           }
       > | null;
+      decorative: boolean | null;
       featured: boolean | null;
       title: string | null;
       placeholders: {
@@ -978,6 +1011,7 @@ export type CATEGORY_INDEX_QUERY_RESULT = Array<{
             _key: string;
           }
       > | null;
+      decorative: boolean | null;
       featured: boolean | null;
       title: string | null;
       placeholders: {
@@ -991,7 +1025,7 @@ export type CATEGORY_INDEX_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: CATEGORY_QUERY
-// Query: *[_type == "album" && category->slug.current == $slug] | order(coalesce(publishDate, "") desc){  _id,  albumName,  slug,  "images": images[]{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}}
+// Query: *[_type == "album" && category->slug.current == $slug] | order(coalesce(publishDate, "") desc){  _id,  albumName,  slug,  "images": images[]{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}}
 export type CATEGORY_QUERY_RESULT = Array<{
   _id: string;
   albumName: string | null;
@@ -1029,6 +1063,7 @@ export type CATEGORY_QUERY_RESULT = Array<{
           _key: string;
         }
     > | null;
+    decorative: boolean | null;
     featured: boolean | null;
     title: string | null;
     placeholders: {
@@ -1048,7 +1083,7 @@ export type CATEGORY_SLUGS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: ALBUM_QUERY
-// Query: *[_type == "album" && slug.current == $slug][0]{  _id,  albumName,  slug,  display,  columns,  "description": albumContent[_key == $locale][0].value,  "category": category->{categoryName, slug},  "images": images[]{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}}
+// Query: *[_type == "album" && slug.current == $slug][0]{  _id,  albumName,  slug,  display,  columns,  "description": albumContent[_key == $locale][0].value,  "category": category->{categoryName, slug},  "images": images[]{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}}
 export type ALBUM_QUERY_RESULT = {
   _id: string;
   albumName: string | null;
@@ -1093,6 +1128,7 @@ export type ALBUM_QUERY_RESULT = {
           _key: string;
         }
     > | null;
+    decorative: boolean | null;
     featured: boolean | null;
     title: string | null;
     placeholders: {
@@ -1112,7 +1148,7 @@ export type ALBUM_SLUGS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: ALL_IMAGES_QUERY
-// Query: *[_type == "album"].images[]{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}
+// Query: *[_type == "album"].images[]{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}
 export type ALL_IMAGES_QUERY_RESULT = Array<{
   _key: string;
   _type: "image";
@@ -1146,6 +1182,7 @@ export type ALL_IMAGES_QUERY_RESULT = Array<{
         _key: string;
       }
   > | null;
+  decorative: boolean | null;
   featured: boolean | null;
   title: string | null;
   placeholders: {
@@ -1157,7 +1194,7 @@ export type ALL_IMAGES_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: FEATURED_IMAGES_QUERY
-// Query: *[_type == "album"].images[featured == true]{  _key,  _type,  alt,  asset,  description,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}
+// Query: *[_type == "album"].images[featured == true]{  _key,  _type,  alt,  asset,  description,  decorative,  featured,  title,  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}}
 export type FEATURED_IMAGES_QUERY_RESULT = Array<{
   _key: string;
   _type: "image";
@@ -1191,6 +1228,7 @@ export type FEATURED_IMAGES_QUERY_RESULT = Array<{
         _key: string;
       }
   > | null;
+  decorative: boolean | null;
   featured: true;
   title: string | null;
   placeholders: {
@@ -1265,7 +1303,7 @@ export type LATEST_POST_QUERY_RESULT = {
 
 // Source: src/sanity/queries.ts
 // Variable: POST_QUERY
-// Query: *[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{  "current": {    _id,    publishDate,    coverImage,    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),    "title": title[_key == $locale][0].value,    "postContent": postContent[_key == $locale][0]  },  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."},  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}}
+// Query: *[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{  "current": {    _id,    publishDate,    coverImage,    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),    "title": title[_key == $locale][0].value,    "content": postContent[_key == $locale][0].value  },  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."},  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {  _id,  publishDate,  coverImage,  "slug": select(    $locale == "fr" => coalesce(slug_fr, slug),    coalesce(slug, slug_fr)  ),  "title": title[_key == $locale][0].value,  "blurDataURL": coverImage.asset->metadata.lqip,  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."}}
 export type POST_QUERY_RESULT = {
   current: {
     _id: string;
@@ -1280,11 +1318,7 @@ export type POST_QUERY_RESULT = {
     } | null;
     slug: Slug | null;
     title: string | null;
-    postContent:
-      | ({
-          _key: string;
-        } & InternationalizedArrayBlockContentValue)
-      | null;
+    content: BlockContent | null;
   };
   previous: {
     _id: string;
@@ -1412,19 +1446,19 @@ export type OG_ALBUM_IMAGE_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "siteSettings"][0]{\n  siteTitle,\n  description,\n  author,\n  customFont,\n  customDisplayFont,\n  themes{darkThemeName, lightThemeName},\n  "customThemes": {\n    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},\n    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}\n  },\n  socialLinks[]{name, type, url}\n}': SITE_METADATA_QUERY_RESULT;
-    '*[_type == "pageList" && defined(pages)][0]{\n  showHome,\n  pages[]->{\n    title,\n    title_fr,\n    "slug": slug.current,\n    "slug_fr": slug_fr.current,\n    "_translations": *[_type == "translation.metadata" && references(^._id)][0]{\n      "_translations": translations[].value->{language, title, slug}\n    }\n  }\n}': HEADER_QUERY_RESULT;
-    '\n*[_type == "category" && count(*[_type == "album" && references(^._id)]) > 0]{\n  _id,\n  categoryName,\n  slug,\n  "coverImage": coverImage{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n},\n  "albums": *[_type == "album" && references(^._id)] | order(coalesce(publishDate, "") desc){\n    _id,\n    albumName,\n    slug,\n    "images": images[0...1]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n},\n    "cover": images[0]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n  }\n}': CATEGORY_INDEX_QUERY_RESULT;
-    '\n*[_type == "album" && category->slug.current == $slug] | order(coalesce(publishDate, "") desc){\n  _id,\n  albumName,\n  slug,\n  "images": images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n}': CATEGORY_QUERY_RESULT;
+    '*[_type == "siteSettings"][0]{\n  siteTitle,\n  description,\n  author,\n  customFont,\n  customDisplayFont,\n  "themes": {darkThemeName, lightThemeName},\n  "customThemes": {\n    "darkTheme": customDarkTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}},\n    "lightTheme": customLightTheme->{p{hex},pc{hex},s{hex},sc{hex},a{hex},ac{hex},n{hex},nc{hex},b1{hex},b2{hex},b3{hex},bc{hex},in{hex},su{hex},wa{hex},er{hex}}\n  },\n  socialLinks[]{name, type, url}\n}': SITE_METADATA_QUERY_RESULT;
+    '*[_type == "pageList" && defined(pages)][0]{\n  showHome,\n  pages[]{\n    _type,\n    _type == "reference" => @->{\n      title,\n      "slug": slug.current,\n      "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{language, title, "slug": slug.current}\n    },\n    _type == "hardcodedPage" => {\n      title,\n      title_fr,\n      slug,\n      slug_fr\n    }\n  }\n}': HEADER_QUERY_RESULT;
+    '\n*[_type == "category" && count(*[_type == "album" && references(^._id)]) > 0]{\n  _id,\n  categoryName,\n  slug,\n  "coverImage": coverImage{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n},\n  "albums": *[_type == "album" && references(^._id)] | order(coalesce(publishDate, "") desc){\n    _id,\n    albumName,\n    slug,\n    "images": images[0...1]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n},\n    "cover": images[0]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n  }\n}': CATEGORY_INDEX_QUERY_RESULT;
+    '\n*[_type == "album" && category->slug.current == $slug] | order(coalesce(publishDate, "") desc){\n  _id,\n  albumName,\n  slug,\n  "images": images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n}': CATEGORY_QUERY_RESULT;
     '\n*[_type == "category" && defined(slug.current)]{"slug": slug.current}\n': CATEGORY_SLUGS_QUERY_RESULT;
-    '\n*[_type == "album" && slug.current == $slug][0]{\n  _id,\n  albumName,\n  slug,\n  display,\n  columns,\n  "description": albumContent[_key == $locale][0].value,\n  "category": category->{categoryName, slug},\n  "images": images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n}': ALBUM_QUERY_RESULT;
+    '\n*[_type == "album" && slug.current == $slug][0]{\n  _id,\n  albumName,\n  slug,\n  display,\n  columns,\n  "description": albumContent[_key == $locale][0].value,\n  "category": category->{categoryName, slug},\n  "images": images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n}': ALBUM_QUERY_RESULT;
     '\n*[_type == "album" && defined(slug.current)]{"slug": slug.current}\n': ALBUM_SLUGS_QUERY_RESULT;
-    '\n*[_type == "album"].images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n': ALL_IMAGES_QUERY_RESULT;
-    '\n*[_type == "album"].images[featured == true]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n': FEATURED_IMAGES_QUERY_RESULT;
+    '\n*[_type == "album"].images[]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n': ALL_IMAGES_QUERY_RESULT;
+    '\n*[_type == "album"].images[featured == true]{\n  _key,\n  _type,\n  alt,\n  asset,\n  description,\n  decorative,\n  featured,\n  title,\n  "placeholders": {"metadata": {"lqip": asset->metadata.lqip}}\n}\n': FEATURED_IMAGES_QUERY_RESULT;
     '{\n  "posts": *[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]\n    | order(publishDate desc) [0...$limit] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "totalCount": count(*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))])\n}': POST_LIST_QUERY_RESULT;
     '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current)) &&\n  (!defined($cursor) || publishDate < $cursor)]\n  | order(publishDate desc) [0...$limit] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n': POST_CURSOR_QUERY_RESULT;
     '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]\n  | order(publishDate desc) [0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n': LATEST_POST_QUERY_RESULT;
-    '\n*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{\n  "current": {\n    _id,\n    publishDate,\n    coverImage,\n    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),\n    "title": title[_key == $locale][0].value,\n    "postContent": postContent[_key == $locale][0]\n  },\n  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n}': POST_QUERY_RESULT;
+    '\n*[_type == "post" && (slug.current == $slug || slug_fr.current == $slug)][0]{\n  "current": {\n    _id,\n    publishDate,\n    coverImage,\n    "slug": select($locale == "fr" => coalesce(slug_fr, slug), coalesce(slug, slug_fr)),\n    "title": title[_key == $locale][0].value,\n    "content": postContent[_key == $locale][0].value\n  },\n  "previous": *[_type == "post" && publishDate < ^.publishDate] | order(publishDate desc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n},\n  "next": *[_type == "post" && publishDate > ^.publishDate] | order(publishDate asc)[0] {\n  _id,\n  publishDate,\n  coverImage,\n  "slug": select(\n    $locale == "fr" => coalesce(slug_fr, slug),\n    coalesce(slug, slug_fr)\n  ),\n  "title": title[_key == $locale][0].value,\n  "blurDataURL": coverImage.asset->metadata.lqip,\n  "excerpt": array::join(string::split(pt::text(postContent[_key == $locale][0].value), "")[0...255], "") + "..."\n}\n}': POST_QUERY_RESULT;
     '\n*[_type == "post" && (defined(slug.current) || defined(slug_fr.current))]{\n  "slug": slug.current,\n  "slugFr": slug_fr.current\n}': POST_SLUGS_QUERY_RESULT;
     '\n*[_type == "page" && slug.current == $slug && language == $locale][0]{\n  _id,\n  title,\n  slug,\n  language,\n  content,\n  "_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{\n    language,\n    title,\n    slug\n  }\n}': PAGE_QUERY_RESULT;
     '\n*[_type == "page" && defined(slug.current)]{language, "slug": slug.current}\n': PAGE_SLUGS_QUERY_RESULT;

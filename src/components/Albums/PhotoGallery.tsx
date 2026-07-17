@@ -15,7 +15,7 @@ import { getResizedImage } from "@/sanity/lib/image";
 import PhotoAlbum, { ClickHandler } from "react-photo-album";
 import { PortableText } from "@portabletext/react";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
-import type { SanityImage } from "@/sanity/types";
+import type { ContentImage } from "@/features/content/models";
 
 const mobileQuery = "(max-width: 768px)";
 
@@ -30,7 +30,7 @@ function getMobileSnapshot() {
 }
 
 type Props = {
-  images: SanityImage[];
+  images: ContentImage[];
   mode: "rows" | "columns" | "masonry";
   columns: number | undefined;
 };

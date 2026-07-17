@@ -4,7 +4,8 @@ import AlbumGallery from "@/components/Albums/AlbumGallery";
 import Breadcrumbs from "@/components/Layout/BreadCrumbs";
 import { isLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getCategory, getCategorySlugs, getSiteShellData } from "@/sanity/data";
+import { getCategory, getCategorySlugs } from "@/sanity/repositories/albumRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateStaticParams() {
   const categories = await getCategorySlugs();
@@ -17,7 +18,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[locale]/category/[slug]">) {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
-  const { siteMetadata } = await getSiteShellData();
+  const { siteMetadata } = await getSiteShellData(locale);
   return createPageMetadata({ locale, path: `/category/${slug}`, site: siteMetadata, title: slug });
 }
 

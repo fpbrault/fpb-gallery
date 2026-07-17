@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { localizePath } from "@/i18n/config";
-import type { Locale, SiteMetadata } from "@/sanity/types";
+import type { Locale } from "@/i18n/config";
+import type { SiteMetadata } from "@/features/site/models";
 
 export function getSiteUrl(): URL {
   const value = process.env.NEXT_PUBLIC_SITE_URL ?? "https://fpbrault.com";

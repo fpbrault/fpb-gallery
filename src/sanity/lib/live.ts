@@ -14,9 +14,7 @@ const live = defineLive({
 
 export const SanityLive = live.SanityLive;
 
-export async function sanityFetch(
-  ...args: Parameters<typeof live.sanityFetch>
-): ReturnType<typeof live.sanityFetch> {
+export const sanityFetch: typeof live.sanityFetch = (options) => {
   getSanityEnvironment();
-  return live.sanityFetch(...args);
-}
+  return live.sanityFetch(options);
+};

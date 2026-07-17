@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { urlForImage } from "@/sanity/lib/image";
 import Link from "next/link";
-import type { PostSummary } from "@/sanity/types";
+import type { PostSummary } from "@/features/blog/models";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
 
@@ -20,9 +20,9 @@ export default function PostList({ posts }: { posts: PostSummary[] }) {
             ? urlForImage(post.coverImage).height(height).width(width).quality(80).url()
             : null;
           return (
-            <div className="" key={post.slug.current}>
+            <div className="" key={post.slug}>
               <article className="max-w-xl mx-auto lg:max-w-5xl card lg:card-side">
-                <Link href={localizePath("/blog/" + post.slug.current, locale)}>
+                <Link href={localizePath("/blog/" + post.slug, locale)}>
                   <Image
                     className="max-w-lg mx-auto rounded shadow-lg lg:max-w-lg sm:max-w-md "
                     blurDataURL={post.blurDataURL}
@@ -46,7 +46,7 @@ export default function PostList({ posts }: { posts: PostSummary[] }) {
                   <h2 className="card-title font-display">
                     <Link
                       className="text-2xl font-bold text-center link link-hover link-primary"
-                      href={localizePath("/blog/" + post.slug.current, locale)}
+                      href={localizePath("/blog/" + post.slug, locale)}
                     >
                       {post?.title ?? "Untitled"}
                     </Link>

@@ -6,7 +6,7 @@ import { NextJsImageAlbum } from "../Albums/NextJsImage";
 import { getResizedImage } from "@/sanity/lib/image";
 import { localizePath } from "@/i18n/config";
 import { useLocale } from "@/components/context/LocaleContext";
-import type { AlbumSummary, CategorySummary } from "@/sanity/types";
+import type { AlbumSummary, CategorySummary } from "@/features/albums/models";
 
 // Define the AlbumGallery component
 type AlbumGalleryProps = {
@@ -23,33 +23,32 @@ const AlbumGallery: React.FC<AlbumGalleryProps> = ({ albums, categories }) => {
           const cover = album.images[0]!;
           const { imageUrl, imageWidth, imageHeight } = getResizedImage(cover, 75, 600);
           return {
-            href: localizePath("/album/" + album.slug.current, locale),
+            href: localizePath("/album/" + album.slug, locale),
             src: imageUrl,
             width: imageWidth,
             height: imageHeight,
             blurDataURL: cover.placeholders?.metadata?.lqip,
-            title: album.albumName,
-            description: album.albumDescription
+            title: album.name
           };
         })
     : (albums as CategorySummary[])
         .filter((category) => category.albums?.[0])
         .map((category) => {
           const firstAlbum = category.albums[0]!;
-          const cover = category.coverImage ?? firstAlbum.cover ?? firstAlbum.images[0];
+          const cover = category.coverImage ?? firstAlbum.images[0];
           if (!cover) return null;
           const { imageUrl, imageWidth, imageHeight } = getResizedImage(cover, 75, 600);
           return {
             href: localizePath(
               category.albums.length > 1
-                ? "/category/" + category.slug.current
-                : "/album/" + firstAlbum.slug.current,
+                ? "/category/" + category.slug
+                : "/album/" + firstAlbum.slug,
               locale
             ),
             src: imageUrl,
             width: imageWidth,
             height: imageHeight,
-            title: category.categoryName,
+            title: category.name,
             blurDataURL: cover.placeholders?.metadata?.lqip
           };
         })

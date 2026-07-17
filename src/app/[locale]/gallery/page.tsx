@@ -2,12 +2,14 @@ import AlbumGallery from "@/components/Albums/AlbumGallery";
 import HomePostMessage from "@/components/HomePostMessage";
 import { isLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getCategories, getLatestPost, getSiteShellData } from "@/sanity/data";
+import { getCategories } from "@/sanity/repositories/albumRepository";
+import { getLatestPost } from "@/sanity/repositories/blogRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/gallery">) {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const { siteMetadata } = await getSiteShellData();
+  const { siteMetadata } = await getSiteShellData(locale);
   return createPageMetadata({ locale, path: "/gallery", site: siteMetadata, title: "Gallery" });
 }
 

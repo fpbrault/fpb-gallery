@@ -4,14 +4,14 @@ import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";
 import { getResizedImage } from "@/sanity/lib/image";
-import type { Post as PostData } from "@/sanity/types";
+import type { Post as PostData } from "@/features/blog/models";
 
 export default function Post({ post }: { post: PostData }) {
   const height = 1000;
   const image = post?.coverImage ? getResizedImage(post.coverImage, 80, height) : null;
   return (
     <div className="max-w-6xl mx-auto font-sans text-center text-base-content">
-      <article key={post?.slug.current}>
+      <article key={post.slug}>
         <div className="max-w-4xl mx-auto">
           {image ? (
             <Image
@@ -33,10 +33,7 @@ export default function Post({ post }: { post: PostData }) {
         <div className="divider"></div>
 
         <div className="px-4 mx-auto prose text-left lg:prose-xl prose-headings:text-center">
-          <PortableText
-            value={post?.postContent?.value ?? []}
-            components={myPortableTextComponents as any}
-          />
+          <PortableText value={post.content} components={myPortableTextComponents as any} />
         </div>
       </article>
     </div>

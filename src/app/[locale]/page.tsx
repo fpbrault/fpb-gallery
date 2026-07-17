@@ -3,12 +3,15 @@ import HomePostMessage from "@/components/HomePostMessage";
 import Page from "@/components/Page";
 import { isLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
-import { getCategories, getLatestPost, getPage, getSiteShellData } from "@/sanity/data";
+import { getCategories } from "@/sanity/repositories/albumRepository";
+import { getLatestPost } from "@/sanity/repositories/blogRepository";
+import { getPage } from "@/sanity/repositories/pageRepository";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const { siteMetadata } = await getSiteShellData();
+  const { siteMetadata } = await getSiteShellData(locale);
   return createPageMetadata({ locale, path: "/", site: siteMetadata, title: "Home" });
 }
 
