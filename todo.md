@@ -62,6 +62,7 @@ The original project exposed presentation settings in Sanity so non-technical ad
 
 ## Operations and observability
 
+- [ ] Remove the temporary `/sw.js` retirement worker after legacy browser registrations have expired.
 - [ ] Configure the read-only CI Sanity project, dataset, and token secrets.
 - [ ] Configure and verify the signed Sanity webhook in Preview and Production.
 - [ ] Add provider-backed error monitoring for Sanity reads, preview, revalidation, OG generation, and builds.
