@@ -63,7 +63,7 @@
     "eslint-config-next": "16.2.10",
     "eslint-config-prettier": "^10.1.8",
     "jest-axe": "^10.0.0",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.0",
     "postcss": "^8.5.19",
     "prettier": "^3.9.5",
     "tailwindcss": "^4.3.3",
