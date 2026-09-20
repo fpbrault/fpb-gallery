@@ -33,8 +33,9 @@ jobs:
       - name: Audit production dependencies (critical)
         run: npm audit --omit=dev --audit-level=critical
 
-      - run: npm run format:check
-      - run: npm run lint
+      - name: Run Biome checks
+        run: npm run check
+
       - run: npm run typecheck
       - run: npm run test:run
       - run: npm run build
