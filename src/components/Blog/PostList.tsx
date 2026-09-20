@@ -14,7 +14,6 @@ export default function PostList({ posts }: { posts: PostSummary[] }) {
   const height = 600;
   return (
     <div className="text-center text-base-content text-sans">
-      <h2 className="pb-4 text-4xl font-bold font-display"></h2>
       {posts.length > 0 &&
         posts?.map((post, index) => {
           const imageUrl = post.coverImage

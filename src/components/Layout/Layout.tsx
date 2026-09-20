@@ -30,8 +30,15 @@ const Layout = (props: Props) => {
   return (
     <LocaleProvider locale={props.locale}>
       <div className="min-h-screen bg-base-200 text-base-content w-full h-full font-sans transition text-sans flex flex-col">
-        <div className="flex-grow h-full drawer ">
-          <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+        <div className="flex-grow h-full drawer">
+          <input
+            id="my-drawer-3"
+            type="checkbox"
+            className="drawer-toggle"
+            aria-label="Toggle navigation drawer"
+            aria-hidden="true"
+            tabIndex={-1}
+          />
           <div className="flex flex-col drawer-content">
             {/* Navbar */}
             <Header title={metadata.title} headerData={props && props.headerData} />
