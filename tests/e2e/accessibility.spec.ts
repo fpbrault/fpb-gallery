@@ -19,7 +19,7 @@ async function expectNoAccessibilityViolations(page: Page) {
 
   const violations = await page.evaluate(async () => {
     const axe = (
-      window as Window & {
+      window as unknown as {
         axe: {
           run: () => Promise<{ violations: AxeViolation[] }>;
         };
