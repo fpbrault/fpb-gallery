@@ -1,43 +1,114 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
-  extends: ["config:recommended", "security:minimumReleaseAgeNpm"],
+
+  // Keep Renovate's curated defaults, plus the low-noise/security pieces of
+  // config:best-practices that are useful for this application.
+  extends: [
+    "config:recommended",
+    ":configMigration",
+    "helpers:pinGitHubActionDigests",
+    "abandonments:recommended",
+  ],
+
+  timezone: "America/Toronto",
   schedule: ["before 6am on monday"],
-  minimumReleaseAge: "7 days",
-  dependencyDashboard: true,
+
+  // Avoid adopting freshly-published npm versions immediately. Security fixes
+  // detected through vulnerability alerts still bypass minimumReleaseAge.
   packageRules: [
     {
-      description: "Group non-major production updates",
+      description: "Require a seven-day npm release cooldown",
+      matchDatasources: ["npm"],
+      minimumReleaseAge: "7 days",
+      internalChecksFilter: "strict",
+    },
+
+    // Catch-all groups come first. More specific ecosystem rules below
+    // override groupName when they also match.
+    {
+      description: "Group remaining non-major production updates",
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch", "digest"],
-      groupName: "production dependencies"
+      groupName: "production dependencies",
+      groupSlug: "production-dependencies",
     },
     {
-      description: "Group non-major development updates",
+      description: "Group remaining non-major development updates",
       matchDepTypes: ["devDependencies"],
       matchUpdateTypes: ["minor", "patch", "digest"],
-      groupName: "development dependencies"
+      groupName: "development dependencies",
+      groupSlug: "development-dependencies",
     },
+
     {
-      description: "Keep the Next and React cutover aligned",
+      description: "Keep the Next.js and React ecosystem aligned",
       matchPackageNames: [
         "next",
         "eslint-config-next",
         "react",
         "react-dom",
         "@types/react",
-        "@types/react-dom"
+        "@types/react-dom",
       ],
-      groupName: "next and react"
+      groupName: "next and react",
+      groupSlug: "next-react",
     },
     {
-      description: "Keep the Sanity integration aligned",
-      groupName: "sanity",
+      description: "Keep the Sanity ecosystem aligned",
       matchPackageNames: [
-        "@sanity/{/,}**",
-        "next-sanity{/,}**",
-        "sanity{/,}**",
-        "sanity-plugin-{/,}**"
-      ]
-    }
-  ]
+        "@sanity/**",
+        "next-sanity",
+        "sanity",
+        "sanity-plugin-**",
+      ],
+      groupName: "sanity",
+      groupSlug: "sanity",
+    },
+    {
+      description: "Group DOM and accessibility test tooling",
+      matchPackageNames: [
+        "@testing-library/**",
+        "jsdom",
+        "jest-axe",
+        "@types/jest-axe",
+      ],
+      groupName: "dom test tooling",
+      groupSlug: "dom-test-tooling",
+    },
+    {
+      description: "Keep Vitest packages aligned",
+      matchPackageNames: ["vitest", "@vitest/**"],
+      groupName: "vitest",
+      groupSlug: "vitest",
+    },
+    {
+      description: "Group linting and formatting tooling",
+      matchPackageNames: ["eslint", "eslint-config-prettier", "prettier"],
+      groupName: "linting and formatting",
+      groupSlug: "lint-format",
+    },
+    {
+      description: "Keep the Tailwind/PostCSS toolchain aligned",
+      matchPackageNames: [
+        "tailwindcss",
+        "@tailwindcss/**",
+        "postcss",
+        "autoprefixer",
+      ],
+      groupName: "css toolchain",
+      groupSlug: "css-toolchain",
+    },
+    {
+      description: "Group GitHub Actions updates",
+      matchManagers: ["github-actions"],
+      groupName: "github actions",
+      groupSlug: "github-actions",
+    },
+  ],
+
+  // The default is 10, which is exactly how many Renovate PRs are currently
+  // open. Keep the queue small; security PRs can still skip this limit.
+  prConcurrentLimit: 5,
+
+  dependencyDashboard: true,
 }
