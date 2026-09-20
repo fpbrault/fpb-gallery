@@ -11,7 +11,7 @@ vi.mock("next/image", () => ({
   }: ComponentProps<"img"> & { blurDataURL?: string; placeholder?: string }) => {
     void blurDataURL;
     return (
-      // eslint-disable-next-line @next/next/no-img-element -- test double exposes Next Image props.
+      // biome-ignore lint/performance/noImgElement: Test double exposes Next Image props to jsdom.
       <img {...props} alt={alt} data-placeholder={placeholder} />
     );
   }
