@@ -48,12 +48,7 @@ describe("BlogIndex", () => {
     const user = userEvent.setup();
 
     render(
-      <BlogIndex
-        initialPosts={[firstPost]}
-        initialCursor="cursor-1"
-        locale="fr"
-        totalCount={2}
-      />
+      <BlogIndex initialPosts={[firstPost]} initialCursor="cursor-1" locale="fr" totalCount={2} />
     );
 
     await user.click(screen.getByRole("button", { name: "Load More" }));
@@ -71,12 +66,7 @@ describe("BlogIndex", () => {
     const user = userEvent.setup();
 
     render(
-      <BlogIndex
-        initialPosts={[firstPost]}
-        initialCursor="cursor-1"
-        locale="en"
-        totalCount={2}
-      />
+      <BlogIndex initialPosts={[firstPost]} initialCursor="cursor-1" locale="en" totalCount={2} />
     );
 
     await user.click(screen.getByRole("button", { name: "Load More" }));
@@ -101,12 +91,7 @@ describe("BlogIndex", () => {
     const user = userEvent.setup();
 
     const view = render(
-      <BlogIndex
-        initialPosts={[firstPost]}
-        initialCursor="cursor-1"
-        locale="en"
-        totalCount={2}
-      />
+      <BlogIndex initialPosts={[firstPost]} initialCursor="cursor-1" locale="en" totalCount={2} />
     );
 
     await user.click(screen.getByRole("button", { name: "Load More" }));

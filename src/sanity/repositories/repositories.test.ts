@@ -114,11 +114,7 @@ describe("Sanity repositories", () => {
       mocks.mapPostSummaries.mockReturnValue(mapped);
 
       await expect(
-        getPostsAfter(
-          "en",
-          { id: "post-1", publishDate: "2026-07-17T00:00:00.000Z" },
-          3
-        )
+        getPostsAfter("en", { id: "post-1", publishDate: "2026-07-17T00:00:00.000Z" }, 3)
       ).resolves.toBe(mapped);
       expect(mocks.sanityFetch).toHaveBeenCalledWith({
         query: POST_CURSOR_QUERY,
