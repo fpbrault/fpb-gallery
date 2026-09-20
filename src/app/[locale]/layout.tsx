@@ -1,3 +1,4 @@
+// biome-ignore-all lint/security/noDangerouslySetInnerHtml: This layout emits trusted JSON-LD serialized on the server and escapes "<".
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 
@@ -31,7 +32,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
 
   return (
     <Layout locale={locale} headerData={shell.headerData} siteMetadata={shell.siteMetadata}>
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized from trusted structured data and escapes "<". */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
