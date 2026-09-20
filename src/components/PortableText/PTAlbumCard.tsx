@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { stegaClean } from "next-sanity";
-import React from "react";
 import type { Image as SanityImage } from "sanity";
 import { urlForImage } from "@/sanity/lib/image";
 
