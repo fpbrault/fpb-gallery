@@ -1,14 +1,18 @@
 import type { SanityImageAssetReference } from "@/sanity/sanity.types";
+import type { SanityData } from "@/sanity/types";
 
-export type PortableContent = NonNullable<
+type AlbumDescription = NonNullable<
   NonNullable<import("@/sanity/sanity.types").ALBUM_QUERY_RESULT>["description"]
 >;
 
-export type ImageDescription = NonNullable<
+type AlbumImageDescription = NonNullable<
   NonNullable<
     NonNullable<import("@/sanity/sanity.types").ALBUM_QUERY_RESULT>["images"]
   >[number]["description"]
 >;
+
+export type PortableContent = SanityData<AlbumDescription>;
+export type ImageDescription = SanityData<AlbumImageDescription>;
 
 export type ContentImage = {
   _key: string;

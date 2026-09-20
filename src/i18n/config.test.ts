@@ -7,6 +7,8 @@ describe("localization paths", () => {
     expect(localizePath("/gallery", "en")).toBe("/gallery");
     expect(localizePath("/gallery", "fr")).toBe("/fr/gallery");
     expect(localizePath("/fr/gallery", "en")).toBe("/gallery");
+    expect(localizePath("/en/gallery", "fr")).toBe("/fr/gallery");
+    expect(localizePath("/en/album/lady-knight", "fr")).toBe("/fr/album/lady-knight");
   });
 
   it("only accepts configured locales", () => {

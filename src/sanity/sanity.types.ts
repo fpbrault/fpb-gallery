@@ -212,6 +212,23 @@ export type SiteSettings = {
   >;
 };
 
+export type MediaFolderReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "media.folder";
+};
+
+export type MediaFolder = {
+  _id: string;
+  _type: "media.folder";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  parent?: MediaFolderReference;
+};
+
 export type MediaTag = {
   _id: string;
   _type: "media.tag";
@@ -569,6 +586,8 @@ export type AllSanitySchemaTypes =
   | Author
   | SocialLink
   | SiteSettings
+  | MediaFolderReference
+  | MediaFolder
   | MediaTag
   | Slug
   | Color
@@ -1200,8 +1219,7 @@ export type OG_ALBUM_IMAGE_QUERY_RESULT = {
 } | null;
 
 // Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
+declare global {
   interface SanityQueries {
     '*[_type == "siteSettings"][0]{\n  siteTitle,\n  description,\n  author,\n  socialLinks[]{name, type, url}\n}': SITE_METADATA_QUERY_RESULT;
     '*[_type == "pageList" && defined(pages)][0]{\n  showHome,\n  pages[]{\n    _type,\n    _type == "reference" => @->{\n      title,\n      "slug": slug.current,\n      "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{language, title, "slug": slug.current}\n    },\n    _type == "hardcodedPage" => {\n      title,\n      title_fr,\n      slug,\n      slug_fr\n    }\n  }\n}': HEADER_QUERY_RESULT;
@@ -1222,4 +1240,8 @@ declare module "@sanity/client" {
     '\n*[_type == "post" && _id == $id][0].coverImage\n': OG_POST_IMAGE_QUERY_RESULT;
     '\n*[_type == "album" && _id == $id][0].images[0]\n': OG_ALBUM_IMAGE_QUERY_RESULT;
   }
+}
+// Lets @sanity/client releases that predate the global registry read it too
+declare module "@sanity/client" {
+  interface SanityQueries extends globalThis.SanityQueries {}
 }
