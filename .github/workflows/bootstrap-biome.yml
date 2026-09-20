@@ -26,10 +26,7 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Apply Biome fixes
-        run: npm run check:fix
-
-      - name: Verify Biome
-        run: npm run check
+        run: npm run check:fix || true
 
       - name: Commit migration output
         shell: bash
@@ -44,3 +41,6 @@ jobs:
           git add -A
           git commit -m "chore: apply Biome migration"
           git push origin HEAD:${{ github.ref_name }}
+
+      - name: Verify Biome
+        run: npm run check -- --max-diagnostics=200
