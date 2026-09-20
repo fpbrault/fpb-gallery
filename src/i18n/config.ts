@@ -14,7 +14,11 @@ export function isLocale(value: string): value is Locale {
 
 export function localizePath(path: string, locale: Locale): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  const withoutLocale = normalized.replace(/^\/fr(?=\/|$)/, "") || "/";
+  // The proxy rewrites unprefixed English URLs internally to /en/..., so
+  // client components can observe either public (/gallery) or internal
+  // (/en/gallery) pathnames. Normalize both locale prefixes before applying
+  // the requested public locale.
+  const withoutLocale = normalized.replace(/^\/(?:en|fr)(?=\/|$)/, "") || "/";
   return locale === "fr" ? `/fr${withoutLocale === "/" ? "" : withoutLocale}` : withoutLocale;
 }
 

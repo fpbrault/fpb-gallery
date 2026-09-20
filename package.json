@@ -7,6 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -14,15 +15,16 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "sanity:schema": "sanity schema extract --path schema.json",
-    "sanity:typegen": "sanity typegen generate"
+    "sanity:schema": "sanity schemas extract --force --path schema.json",
+    "sanity:typegen": "sanity typegen generate",
+    "sanity:validate": "sanity schemas validate --level error"
   },
   "engines": {
     "node": ">=22.0.0"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",
-    "@sanity/client": "7.23.2",
+    "@sanity/client": "7.27.0",
     "@sanity/color-input": "^6.0.15",
     "@sanity/document-internationalization": "^6.2.20",
     "@sanity/image-url": "^2.1.1",
@@ -32,13 +34,13 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "next": "16.3.3",
-    "next-sanity": "13.1.3",
+    "next-sanity": "13.3.4",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "react-icons": "^5.7.0",
     "react-photo-album": "^3.6.0",
     "react-player": "^3.4.0",
-    "sanity": "6.5.0",
+    "sanity": "6.14.1",
     "sanity-plugin-internationalized-array": "^5.1.20",
     "sanity-plugin-media": "^6.0.2",
     "sharp": "^0.35.3",
