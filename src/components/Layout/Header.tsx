@@ -87,10 +87,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
         aria-label="close sidebar"
         className="drawer-overlay !bg-transparent"
       ></label>
-      <nav
-        aria-label="Mobile navigation links"
-        className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl"
-      >
+      <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
           {headerData?.showHome != false && (
@@ -130,7 +127,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
             </div>
           </div>
         </div>
-      </nav>
+      </div>
     </aside>
   );
 }
