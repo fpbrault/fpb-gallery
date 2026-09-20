@@ -62,23 +62,13 @@
     },
     {
       description: "Keep the Sanity ecosystem aligned",
-      matchPackageNames: [
-        "@sanity/**",
-        "next-sanity",
-        "sanity",
-        "sanity-plugin-**"
-      ],
+      matchPackageNames: ["@sanity/**", "next-sanity", "sanity", "sanity-plugin-**"],
       groupName: "sanity",
       groupSlug: "sanity"
     },
     {
       description: "Group DOM and accessibility test tooling",
-      matchPackageNames: [
-        "@testing-library/**",
-        "jsdom",
-        "jest-axe",
-        "@types/jest-axe"
-      ],
+      matchPackageNames: ["@testing-library/**", "jsdom", "jest-axe", "@types/jest-axe"],
       groupName: "dom test tooling",
       groupSlug: "dom-test-tooling"
     },
@@ -96,12 +86,7 @@
     },
     {
       description: "Keep the Tailwind/PostCSS toolchain aligned",
-      matchPackageNames: [
-        "tailwindcss",
-        "@tailwindcss/**",
-        "postcss",
-        "autoprefixer"
-      ],
+      matchPackageNames: ["tailwindcss", "@tailwindcss/**", "postcss", "autoprefixer"],
       groupName: "css toolchain",
       groupSlug: "css-toolchain"
     },
