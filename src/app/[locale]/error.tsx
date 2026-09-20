@@ -18,7 +18,7 @@ export default function ErrorPage({
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
       <h1 className="text-4xl font-display">Something went wrong</h1>
-      <button className="btn btn-primary" onClick={reset}>
+      <button type="button" className="btn btn-primary" onClick={reset}>
         Try again
       </button>
     </div>
