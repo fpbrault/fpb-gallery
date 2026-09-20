@@ -29,7 +29,10 @@ export function Footer({ metadata }: { metadata: Layout.LayoutMetadata }) {
         <ThemeSelector></ThemeSelector>
       </div>
 
-      <nav className="justify-end grid-flow-col gap-4 py-2 lg:w-5/12 md:place-self-center md:justify-self-end place-items-center">
+      <nav
+        aria-label="Social links"
+        className="justify-end grid-flow-col gap-4 py-2 lg:w-5/12 md:place-self-center md:justify-self-end place-items-center"
+      >
         {metadata.socialLinks.length > 0 &&
           metadata.socialLinks.map((socialLink, index) => (
             <Link

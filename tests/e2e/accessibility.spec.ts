@@ -58,12 +58,15 @@ test("an open album lightbox has no automated accessibility violations", async (
     .first();
   await expect(firstGalleryLink).toBeVisible();
   await firstGalleryLink.click();
+  await expect(page).toHaveURL(/\/(?:album|category)\/[^/?#]+/);
 
   if (new URL(page.url()).pathname.startsWith("/category/")) {
     const firstAlbumLink = page.locator('main a[href^="/album/"]').first();
     await expect(firstAlbumLink).toBeVisible();
     await firstAlbumLink.click();
   }
+
+  await expect(page).toHaveURL(/\/album\/[^/?#]+/);
 
   const firstImage = page.locator("main [data-sanity-edit-target] img").first();
   await expect(firstImage).toBeVisible();
