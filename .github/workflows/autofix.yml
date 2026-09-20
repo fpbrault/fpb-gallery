@@ -30,8 +30,8 @@ jobs:
       - name: Apply formatting fixes
         run: npm run format
 
-      - name: Apply ESLint fixes
-        run: npm run lint -- --fix
+      - name: Apply lint fixes
+        run: npm run lint:fix
 
       - name: Commit autofixes
         shell: bash
