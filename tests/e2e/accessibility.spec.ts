@@ -11,6 +11,13 @@ type AxeViolation = {
   }>;
 };
 
+async function waitForAnimationsToFinish(page: Page, selector: string) {
+  await page.locator(selector).evaluate(async (element) => {
+    const animations = element.getAnimations({ subtree: true });
+    await Promise.all(animations.map((animation) => animation.finished.catch(() => undefined)));
+  });
+}
+
 async function expectNoAccessibilityViolations(page: Page) {
   await page.addScriptTag({ content: axeCore.source });
 
@@ -45,8 +52,9 @@ for (const path of ["/", "/gallery", "/blog", "/fr", "/fr/gallery", "/fr/blog"])
 test("the open mobile navigation has no automated accessibility violations", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await page.getByLabel("open sidebar").click();
-  await expect(page.getByLabel("close sidebar")).toBeVisible();
+  await page.getByRole("button", { name: "open sidebar" }).click();
+  await expect(page.getByRole("button", { name: "close sidebar" })).toBeVisible();
+  await waitForAnimationsToFinish(page, ".drawer-side");
 
   await expectNoAccessibilityViolations(page);
 });
