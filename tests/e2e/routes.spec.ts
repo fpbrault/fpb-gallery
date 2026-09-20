@@ -19,7 +19,7 @@ test("theme selection persists without site metadata", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await page.locator('label[aria-label="open sidebar"]').click();
+  await page.getByRole("button", { name: "open sidebar" }).click();
   await page.getByRole("checkbox", { name: "Toggle light and dark theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "mytheme");
 

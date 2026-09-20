@@ -14,25 +14,33 @@ type Props = {
   headerData: HeaderData;
 };
 
+function setDrawerOpen(open: boolean) {
+  const drawerToggle = document.getElementById("my-drawer-3");
+  if (drawerToggle instanceof HTMLInputElement) {
+    drawerToggle.checked = open;
+  }
+}
+
 export default function Header({ title, headerData }: Props) {
   const { locale } = useLocale();
   return (
     <header className="sticky top-0 z-40 flex flex-col w-full px-4 py-1 mx-auto rounded mx-a md:pt-4 bg-base-200/70 backdrop-blur-lg ">
-      <h1 className="justify-center hidden py-1 text-2xl font-light text-center font-display md:flex md:text-4xl lg:text-5xl ">
+      <h1 className="sr-only justify-center py-1 text-2xl font-light text-center font-display md:not-sr-only md:flex md:text-4xl lg:text-5xl">
         <Link className="link link-hover" href={localizePath("/", locale)}>
           {title}
         </Link>
       </h1>
 
-      <nav className="font-bold uppercase navbar sm:justify-around">
+      <nav aria-label="Primary navigation" className="font-bold uppercase navbar sm:justify-around">
         <div className="w-full navbar-start md:hidden">
-          <label
-            htmlFor="my-drawer-3"
+          <button
+            type="button"
             aria-label="open sidebar"
+            onClick={() => setDrawerOpen(true)}
             className="text-3xl btn btn-square md:hidden btn-ghost"
           >
             <FaBars />
-          </label>
+          </button>
           <Link
             className="w-full text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3 font-display"
             href={localizePath("/", locale)}
@@ -81,12 +89,13 @@ export default function Header({ title, headerData }: Props) {
 export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
   const { locale } = useLocale();
   return (
-    <div className="z-50 h-screen drawer-side md:hidden">
-      <label
-        htmlFor="my-drawer-3"
+    <aside aria-label="Mobile navigation" className="z-50 h-screen drawer-side md:hidden">
+      <button
+        type="button"
         aria-label="close sidebar"
-        className="drawer-overlay !bg-transparent"
-      ></label>
+        onClick={() => setDrawerOpen(false)}
+        className="drawer-overlay !bg-transparent border-0 p-0"
+      ></button>
       <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
@@ -128,7 +137,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
 
