@@ -31,6 +31,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: This static initialization script is generated from local presentation config. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={`${bodyFont.variable} ${displayFont.variable}`}>
