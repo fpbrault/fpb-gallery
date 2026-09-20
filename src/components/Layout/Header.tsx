@@ -45,7 +45,7 @@ export default function Header({ title, headerData }: Props) {
             {headerData?.showHome != false && (
               <li>
                 <Link
-                  className="mx-auto link link-hover text-base-content md:link-primary"
+                  className="mx-auto link link-hover link-primary"
                   href={localizePath("/", locale)}
                 >
                   {locale === "en" ? "Home" : "Accueil"}
@@ -59,7 +59,7 @@ export default function Header({ title, headerData }: Props) {
             ) : (
               <li>
                 <Link
-                  className="mx-auto link link-hover text-base-content md:link-primary"
+                  className="mx-auto link link-hover link-primary"
                   href={localizePath("/blog", locale)}
                 >
                   Blog
@@ -89,14 +89,14 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
       ></label>
       <nav
         aria-label="Mobile navigation links"
-        className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl"
+        className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100"
       >
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
           {headerData?.showHome != false && (
             <li>
               <Link
-                className="mx-auto link link-hover text-base-content"
+                className="mx-auto link link-hover link-primary"
                 href={localizePath("/", locale)}
               >
                 {locale === "en" ? "Home" : "Accueil"}
@@ -110,7 +110,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
           ) : (
             <li>
               <Link
-                className="mx-auto link link-hover text-base-content"
+                className="mx-auto link link-hover link-primary"
                 href={localizePath("/blog", locale)}
               >
                 Blog
@@ -140,7 +140,7 @@ function CustomHeaderLink({ item }: { item: NavigationItem }) {
   return (
     <li>
       <Link
-        className="link link-hover text-base-content md:link-primary"
+        className="link link-hover link-primary"
         href={localizePath(`/${item.slug}`, locale)}
       >
         {item.title}
