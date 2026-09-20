@@ -7,8 +7,9 @@ import type {
   POST_LIST_QUERY_RESULT,
   POST_QUERY_RESULT
 } from "@/sanity/sanity.types";
+import type { SanityData } from "@/sanity/types";
 
-type PostSummaryInput = POST_CURSOR_QUERY_RESULT[number];
+type PostSummaryInput = SanityData<POST_CURSOR_QUERY_RESULT[number]>;
 
 function mapPostSummary(input: PostSummaryInput | null): PostSummary | null {
   const slug = stegaClean(input?.slug?.current);
@@ -25,22 +26,22 @@ function mapPostSummary(input: PostSummaryInput | null): PostSummary | null {
   };
 }
 
-export function mapPostList(input: POST_LIST_QUERY_RESULT) {
+export function mapPostList(input: SanityData<POST_LIST_QUERY_RESULT>) {
   return {
     posts: input.posts.map(mapPostSummary).filter((post) => post !== null),
     totalCount: input.totalCount
   };
 }
 
-export function mapPostSummaries(input: POST_CURSOR_QUERY_RESULT): PostSummary[] {
+export function mapPostSummaries(input: SanityData<POST_CURSOR_QUERY_RESULT>): PostSummary[] {
   return input.map(mapPostSummary).filter((post) => post !== null);
 }
 
-export function mapLatestPost(input: LATEST_POST_QUERY_RESULT): PostSummary | null {
+export function mapLatestPost(input: SanityData<LATEST_POST_QUERY_RESULT>): PostSummary | null {
   return mapPostSummary(input);
 }
 
-export function mapPostPage(input: POST_QUERY_RESULT): PostPage | null {
+export function mapPostPage(input: SanityData<POST_QUERY_RESULT>): PostPage | null {
   const slug = stegaClean(input?.current.slug?.current);
   if (!input || !slug) return null;
 

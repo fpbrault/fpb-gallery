@@ -7,5 +7,11 @@ export default defineConfig([
   ...nextVitals,
   ...nextTypeScript,
   prettier,
-  globalIgnores([".next/**", "coverage/**", "playwright-report/**", "schema.json"])
+  globalIgnores([
+    ".next/**",
+    "coverage/**",
+    "playwright-report/**",
+    "schema.json",
+    "src/sanity/sanity.types.ts"
+  ])
 ]);

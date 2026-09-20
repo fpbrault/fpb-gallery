@@ -7,6 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -14,8 +15,9 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "sanity:schema": "sanity schema extract --path schema.json",
-    "sanity:typegen": "sanity typegen generate"
+    "sanity:schema": "sanity schemas extract --force --path schema.json",
+    "sanity:typegen": "sanity typegen generate",
+    "sanity:validate": "sanity schemas validate --level error"
   },
   "engines": {
     "node": ">=22.0.0"

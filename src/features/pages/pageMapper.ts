@@ -2,8 +2,9 @@ import { isLocale } from "@/i18n/config";
 import { stegaClean } from "next-sanity";
 import type { CustomPage } from "@/features/pages/models";
 import type { PAGE_QUERY_RESULT } from "@/sanity/sanity.types";
+import type { SanityData } from "@/sanity/types";
 
-export function mapPage(input: PAGE_QUERY_RESULT): CustomPage | null {
+export function mapPage(input: SanityData<PAGE_QUERY_RESULT>): CustomPage | null {
   const slug = stegaClean(input?.slug?.current);
   const language = stegaClean(input?.language);
   if (!input || !slug || !language || !isLocale(language)) return null;
