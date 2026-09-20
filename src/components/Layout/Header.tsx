@@ -14,6 +14,13 @@ type Props = {
   headerData: HeaderData;
 };
 
+function activateDrawerLabel(event: React.KeyboardEvent<HTMLLabelElement>) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    event.currentTarget.click();
+  }
+}
+
 export default function Header({ title, headerData }: Props) {
   const { locale } = useLocale();
   return (
@@ -29,6 +36,9 @@ export default function Header({ title, headerData }: Props) {
           <label
             htmlFor="my-drawer-3"
             aria-label="open sidebar"
+            role="button"
+            tabIndex={0}
+            onKeyDown={activateDrawerLabel}
             className="text-3xl btn btn-square md:hidden btn-ghost"
           >
             <FaBars />
@@ -85,6 +95,9 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
       <label
         htmlFor="my-drawer-3"
         aria-label="close sidebar"
+        role="button"
+        tabIndex={0}
+        onKeyDown={activateDrawerLabel}
         className="drawer-overlay !bg-transparent"
       ></label>
       <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">

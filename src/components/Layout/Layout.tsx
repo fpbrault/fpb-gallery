@@ -37,6 +37,7 @@ const Layout = (props: Props) => {
             className="drawer-toggle"
             aria-label="Toggle navigation drawer"
             aria-hidden="true"
+            tabIndex={-1}
           />
           <div className="flex flex-col drawer-content">
             {/* Navbar */}
