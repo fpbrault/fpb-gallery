@@ -6,6 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
+    "ignoreUnknown": true,
     "includes": ["**", "!!public", "!schema.json", "!package-lock.json", "!renovate.json5"]
   },
   "formatter": {
