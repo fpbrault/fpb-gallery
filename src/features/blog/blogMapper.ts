@@ -1,6 +1,6 @@
-import { mapContentImage } from "@/features/content/imageMapper";
 import { stegaClean } from "next-sanity";
 import type { Post, PostPage, PostSummary } from "@/features/blog/models";
+import { mapContentImage } from "@/features/content/imageMapper";
 import type {
   LATEST_POST_QUERY_RESULT,
   POST_CURSOR_QUERY_RESULT,

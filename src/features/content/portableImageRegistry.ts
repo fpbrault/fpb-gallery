@@ -1,6 +1,6 @@
+import { stegaClean } from "next-sanity";
 import type { LightboxSlideModel } from "@/features/gallery/models";
 import { getResizedImage } from "@/sanity/lib/image";
-import { stegaClean } from "next-sanity";
 
 export type PortableImageValue = {
   _key?: string;

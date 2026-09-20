@@ -1,9 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
-import { urlForImage } from "@/sanity/lib/image";
-import React from "react";
-import type { Image as SanityImage } from "sanity";
+import Link from "next/link";
 import { stegaClean } from "next-sanity";
+import type { Image as SanityImage } from "sanity";
+import { urlForImage } from "@/sanity/lib/image";
 
 export type AlbumCardValue = {
   albumName?: string;

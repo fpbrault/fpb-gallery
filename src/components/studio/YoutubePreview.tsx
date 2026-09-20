@@ -1,5 +1,5 @@
-import type { PreviewProps } from "sanity";
 import ReactPlayer from "react-player";
+import type { PreviewProps } from "sanity";
 
 interface PreviewYouTubeProps extends PreviewProps {
   selection?: {

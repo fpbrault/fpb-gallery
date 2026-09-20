@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { createDataAttribute } from "next-sanity";
 import { RichText } from "@/components/PortableText/RichText";
-import { getResizedImage } from "@/sanity/lib/image";
 import type { Post as PostData } from "@/features/blog/models";
+import { getResizedImage } from "@/sanity/lib/image";
 
 export default function Post({ post }: { post: PostData }) {
   const height = 1000;

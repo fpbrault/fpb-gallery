@@ -6,7 +6,7 @@ import type {
   GalleryThumbnail,
   LightboxSlideModel
 } from "@/features/gallery/models";
-import { localizePath, type Locale } from "@/i18n/config";
+import { type Locale, localizePath } from "@/i18n/config";
 import { getResizedImage } from "@/sanity/lib/image";
 
 export function mapGalleryImages(images: ContentImage[]): GalleryPresentation {

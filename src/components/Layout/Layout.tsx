@@ -1,13 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Header, { HeaderSideBar } from "./Header";
-import ScrollToTopButton from "./ScrollToTop";
-import { Footer } from "./Footer";
-import type { Layout } from "@/types/layout";
-import { LocaleProvider } from "../context/LocaleContext";
 import type { HeaderData, SiteMetadata } from "@/features/site/models";
 import type { Locale } from "@/i18n/config";
+import type { Layout as LayoutTypes } from "@/types/layout";
+import { LocaleProvider } from "../context/LocaleContext";
+import { Footer } from "./Footer";
+import Header, { HeaderSideBar } from "./Header";
+import ScrollToTopButton from "./ScrollToTop";
 
 type Props = {
   children: ReactNode;
@@ -17,12 +17,12 @@ type Props = {
 };
 
 const Layout = (props: Props) => {
-  const metadata: Layout.LayoutMetadata = {
+  const metadata: LayoutTypes.LayoutMetadata = {
     title: props.siteMetadata?.siteTitle ?? "My Site",
     author: props.siteMetadata?.author ?? "Unknown Author",
     description: props.siteMetadata?.description ?? "Description",
     socialLinks: props.siteMetadata?.socialLinks
-      ? props.siteMetadata.socialLinks.map((socialLink: Layout.SocialLink) => {
+      ? props.siteMetadata.socialLinks.map((socialLink: LayoutTypes.SocialLink) => {
           return { name: socialLink.name, url: socialLink.url, type: socialLink.type };
         })
       : []
@@ -34,7 +34,7 @@ const Layout = (props: Props) => {
           <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
           <div className="flex flex-col drawer-content">
             {/* Navbar */}
-            <Header title={metadata.title} headerData={props && props.headerData} />
+            <Header title={metadata.title} headerData={props.headerData} />
 
             <main className="flex-grow w-full h-full px-4 mx-auto mb-8 sm:mb-16 max-w-7xl">
               {props.children}

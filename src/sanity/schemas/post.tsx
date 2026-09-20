@@ -1,6 +1,6 @@
-import { defineArrayMember, defineField, defineType, type PreviewValue } from "sanity";
-import { MdOutlineArticle } from "react-icons/md";
 import Image from "next/image";
+import { MdOutlineArticle } from "react-icons/md";
+import { defineArrayMember, defineField, defineType, type PreviewValue } from "sanity";
 import { getLocalizedString } from "@/sanity/localizedValue";
 
 export const post = defineType({

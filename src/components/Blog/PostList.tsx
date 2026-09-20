@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { urlForImage } from "@/sanity/lib/image";
 import Link from "next/link";
-import type { PostSummary } from "@/features/blog/models";
-import { useLocale } from "@/components/context/LocaleContext";
-import { localizePath } from "@/i18n/config";
 import { stegaClean } from "next-sanity";
+import { useLocale } from "@/components/context/LocaleContext";
+import type { PostSummary } from "@/features/blog/models";
+import { localizePath } from "@/i18n/config";
+import { urlForImage } from "@/sanity/lib/image";
 
 export default function PostList({ posts }: { posts: PostSummary[] }) {
   const { locale } = useLocale();
@@ -14,7 +14,6 @@ export default function PostList({ posts }: { posts: PostSummary[] }) {
   const height = 600;
   return (
     <div className="text-center text-base-content text-sans">
-      <h2 className="pb-4 text-4xl font-bold font-display"></h2>
       {posts.length > 0 &&
         posts?.map((post, index) => {
           const imageUrl = post.coverImage

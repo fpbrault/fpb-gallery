@@ -1,8 +1,8 @@
 "use client";
 
-import { useContext, useMemo } from "react";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
+import { useContext, useMemo } from "react";
 
 import ImageContext from "@/components/PortableText/ImageContext";
 import { myPortableTextComponents } from "@/components/PortableText/myPortableTextComponents";

@@ -4,8 +4,8 @@ import Image from "next/image";
 import {
   isImageFitCover,
   isImageSlide,
-  useLightboxProps,
-  type RenderSlideProps
+  type RenderSlideProps,
+  useLightboxProps
 } from "yet-another-react-lightbox";
 
 import type { LightboxSlideModel } from "@/features/gallery/models";

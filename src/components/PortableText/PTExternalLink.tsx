@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { stegaClean } from "next-sanity";
+import type { ReactNode } from "react";
 
 export type ExternalLinkValue = { blank?: boolean; href?: string };
 

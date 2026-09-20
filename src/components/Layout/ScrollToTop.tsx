@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 export function useScrollToTop(threshold: number = 300) {
   const [shown, setShown] = useState(false);
   useEffect(() => {
@@ -22,6 +22,7 @@ const ScrollToTopButton = () => {
   const { shown, scrollToTop } = useScrollToTop(300);
   return (
     <button
+      type="button"
       aria-label="scroll to top"
       onClick={scrollToTop}
       className={`${
@@ -35,6 +36,7 @@ const ScrollToTopButton = () => {
         viewBox="0 0 24 24"
         width="24px"
         fill="#000000"
+        aria-hidden="true"
       >
         <path d="M0 0h24v24H0V0z" fill="none" />
         <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z" />

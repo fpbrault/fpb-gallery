@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/image", () => ({
   default: ({ alt = "", ...props }: ComponentProps<"img">) => (
-    // eslint-disable-next-line @next/next/no-img-element -- test double exposes the image to jsdom.
+    // biome-ignore lint/performance/noImgElement: Test double exposes the image to jsdom.
     <img {...props} alt={alt} />
   )
 }));
@@ -15,9 +15,9 @@ vi.mock("yet-another-react-lightbox", () => ({
     open ? <output data-index={index} data-slide-count={slides.length} /> : null
 }));
 
+import type { PortableImageRegistryEntry } from "@/features/content/portableImageRegistry";
 import ImageContext from "./ImageContext";
 import { PTImage } from "./PTImage";
-import type { PortableImageRegistryEntry } from "@/features/content/portableImageRegistry";
 
 function entry(id: string): PortableImageRegistryEntry {
   return {

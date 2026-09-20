@@ -1,5 +1,5 @@
-import type { HeaderData, SiteMetadata } from "@/features/site/models";
 import { stegaClean } from "next-sanity";
+import type { HeaderData, SiteMetadata } from "@/features/site/models";
 import type { Locale } from "@/i18n/config";
 import type { HEADER_QUERY_RESULT, SITE_METADATA_QUERY_RESULT } from "@/sanity/sanity.types";
 import type { SanityData } from "@/sanity/types";

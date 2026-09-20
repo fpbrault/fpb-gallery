@@ -1,6 +1,6 @@
-import { PreviewImage } from "@/components/studio/PreviewImage";
-import { defineArrayMember, defineField, defineType } from "sanity";
 import { FaImages } from "react-icons/fa6";
+import { defineArrayMember, defineField, defineType } from "sanity";
+import { PreviewImage } from "@/components/studio/PreviewImage";
 
 export const album = defineType({
   name: "album",

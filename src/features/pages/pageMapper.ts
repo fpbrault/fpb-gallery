@@ -1,6 +1,6 @@
-import { isLocale } from "@/i18n/config";
 import { stegaClean } from "next-sanity";
 import type { CustomPage } from "@/features/pages/models";
+import { isLocale } from "@/i18n/config";
 import type { PAGE_QUERY_RESULT } from "@/sanity/sanity.types";
 import type { SanityData } from "@/sanity/types";
 

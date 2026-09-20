@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export function useGalleryUrlState(imageIds: string[]) {
   const pathname = usePathname() ?? "/";

@@ -27,11 +27,8 @@ jobs:
 
       - run: npm ci
 
-      - name: Apply formatting fixes
-        run: npm run format
-
-      - name: Apply lint fixes
-        run: npm run lint:fix
+      - name: Apply Biome fixes
+        run: npm run check:fix
 
       - name: Commit autofixes
         shell: bash
@@ -44,5 +41,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "style: apply automated lint fixes"
+          git commit -m "style: apply automated Biome fixes"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}

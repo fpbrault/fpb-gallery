@@ -65,6 +65,7 @@ export function BlogIndex({
       )}
       {posts.length < totalCount && (
         <button
+          type="button"
           className="mx-auto mt-12 mb-2 btn btn-primary"
           disabled={isPending}
           onClick={loadMore}

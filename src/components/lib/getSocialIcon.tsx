@@ -1,3 +1,4 @@
+import type { IconType } from "react-icons";
 import {
   FaBehance,
   FaDiscord,
@@ -21,7 +22,6 @@ import {
   FaXTwitter,
   FaYoutube
 } from "react-icons/fa6";
-import type { IconType } from "react-icons";
 
 const icons: Record<string, IconType> = {
   behance: FaBehance,

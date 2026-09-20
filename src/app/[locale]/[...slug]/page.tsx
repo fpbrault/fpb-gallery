@@ -1,7 +1,6 @@
 import { notFound, permanentRedirect } from "next/navigation";
-
-import Page from "@/components/Page";
 import { LocaleProvider } from "@/components/context/LocaleContext";
+import Page from "@/components/Page";
 import { getAlternateLocale, isLocale, localizePath } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
 import { getPage, getPageSlugs } from "@/sanity/repositories/pageRepository";

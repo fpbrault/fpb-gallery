@@ -12,7 +12,11 @@ vi.mock("next-sanity/hooks", () => ({
 vi.mock("@/lib/previewRefresh", () => ({ refreshPreview: mocks.refreshPreview }));
 vi.mock("next-sanity/visual-editing", () => ({
   VisualEditing: ({ refresh }: { refresh: (payload: { source: string }) => Promise<void> }) => (
-    <button data-testid="visual-editing" onClick={() => void refresh({ source: "mutation" })} />
+    <button
+      type="button"
+      data-testid="visual-editing"
+      onClick={() => void refresh({ source: "mutation" })}
+    />
   )
 }));
 
