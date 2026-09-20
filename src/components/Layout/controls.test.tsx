@@ -4,7 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 
 import { LocaleProvider } from "@/components/context/LocaleContext";
 import { expectNoAccessibilityViolations } from "@/test/accessibility";
-import { expectNoAccessibilityViolations } from "@/test/accessibility";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import ThemeSelector from "./ThemeSelector";
 
