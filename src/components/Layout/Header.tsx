@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 import { FaBars } from "react-icons/fa6";
 import type { HeaderData, NavigationItem } from "@/features/site/models";
 import { localizePath } from "@/i18n/config";
@@ -42,7 +41,7 @@ export default function Header({ title, headerData }: Props) {
         </div>
         <div className="justify-center hidden w-full navbar-center md:flex">
           <ul className="flex gap-8 px-1 py-0 text-2xl font-bold font-display">
-            {headerData?.showHome != false && (
+            {headerData?.showHome !== false && (
               <li>
                 <Link
                   className="mx-auto link link-hover link-primary"
@@ -90,7 +89,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
       <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
-          {headerData?.showHome != false && (
+          {headerData?.showHome !== false && (
             <li>
               <Link
                 className="mx-auto link link-hover link-primary"
