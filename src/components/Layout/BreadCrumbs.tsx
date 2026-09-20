@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 import { FaHouse } from "react-icons/fa6";
 import { localizePath } from "@/i18n/config";
 import { useLocale } from "../context/LocaleContext";
@@ -23,8 +22,8 @@ const Breadcrumbs = ({ items }: { items: BreadcrumbItem[] }) => {
               <FaHouse></FaHouse>
             </Link>
           </li>
-          {items.map((item, index) => (
-            <li key={index} className="inline-flex items-center">
+          {items.map((item) => (
+            <li key={`${item.url ?? ""}:${item.name ?? ""}`} className="inline-flex items-center">
               {item.url ? (
                 <Link
                   href={localizePath(String(item.url), locale)}
