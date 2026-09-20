@@ -96,7 +96,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
           {headerData?.showHome != false && (
             <li>
               <Link
-                className="mx-auto link link-hover link-primary"
+                className="mx-auto link link-hover text-base-content"
                 href={localizePath("/", locale)}
               >
                 {locale === "en" ? "Home" : "Accueil"}
@@ -110,7 +110,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
           ) : (
             <li>
               <Link
-                className="mx-auto link link-hover link-primary"
+                className="mx-auto link link-hover text-base-content"
                 href={localizePath("/blog", locale)}
               >
                 Blog
