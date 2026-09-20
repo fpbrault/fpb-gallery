@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { stegaClean } from "next-sanity";
-import React from "react";
 import type { Image as SanityImage } from "sanity";
 import { useLocale } from "@/components/context/LocaleContext";
 import { localizePath } from "@/i18n/config";
