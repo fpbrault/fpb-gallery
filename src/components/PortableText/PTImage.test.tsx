@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/image", () => ({
   default: ({ alt = "", ...props }: ComponentProps<"img">) => (
-    // eslint-disable-next-line @next/next/no-img-element -- test double exposes the image to jsdom.
+    // biome-ignore lint/performance/noImgElement: Test double exposes the image to jsdom.
     <img {...props} alt={alt} />
   )
 }));
