@@ -139,10 +139,7 @@ function CustomHeaderLink({ item }: { item: NavigationItem }) {
   const { locale } = useLocale();
   return (
     <li>
-      <Link
-        className="link link-hover link-primary"
-        href={localizePath(`/${item.slug}`, locale)}
-      >
+      <Link className="link link-hover link-primary" href={localizePath(`/${item.slug}`, locale)}>
         {item.title}
       </Link>
     </li>
