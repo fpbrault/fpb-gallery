@@ -7,7 +7,7 @@
     "config:recommended",
     ":configMigration",
     "helpers:pinGitHubActionDigests",
-    "abandonments:recommended",
+    "abandonments:recommended"
   ],
 
   timezone: "America/Toronto",
@@ -20,7 +20,14 @@
       description: "Require a seven-day npm release cooldown",
       matchDatasources: ["npm"],
       minimumReleaseAge: "7 days",
-      internalChecksFilter: "strict",
+      internalChecksFilter: "strict"
+    },
+    {
+      description: "Automerge low-risk dependency updates after CI",
+      matchUpdateTypes: ["patch", "digest", "pin", "pinDigest"],
+      automerge: true,
+      automergeType: "pr",
+      automergeStrategy: "squash"
     },
 
     // Catch-all groups come first. More specific ecosystem rules below
@@ -30,14 +37,14 @@
       matchDepTypes: ["dependencies"],
       matchUpdateTypes: ["minor", "patch", "digest"],
       groupName: "production dependencies",
-      groupSlug: "production-dependencies",
+      groupSlug: "production-dependencies"
     },
     {
       description: "Group remaining non-major development updates",
       matchDepTypes: ["devDependencies"],
       matchUpdateTypes: ["minor", "patch", "digest"],
       groupName: "development dependencies",
-      groupSlug: "development-dependencies",
+      groupSlug: "development-dependencies"
     },
 
     {
@@ -48,67 +55,52 @@
         "react",
         "react-dom",
         "@types/react",
-        "@types/react-dom",
+        "@types/react-dom"
       ],
       groupName: "next and react",
-      groupSlug: "next-react",
+      groupSlug: "next-react"
     },
     {
       description: "Keep the Sanity ecosystem aligned",
-      matchPackageNames: [
-        "@sanity/**",
-        "next-sanity",
-        "sanity",
-        "sanity-plugin-**",
-      ],
+      matchPackageNames: ["@sanity/**", "next-sanity", "sanity", "sanity-plugin-**"],
       groupName: "sanity",
-      groupSlug: "sanity",
+      groupSlug: "sanity"
     },
     {
       description: "Group DOM and accessibility test tooling",
-      matchPackageNames: [
-        "@testing-library/**",
-        "jsdom",
-        "jest-axe",
-        "@types/jest-axe",
-      ],
+      matchPackageNames: ["@testing-library/**", "jsdom", "jest-axe", "@types/jest-axe"],
       groupName: "dom test tooling",
-      groupSlug: "dom-test-tooling",
+      groupSlug: "dom-test-tooling"
     },
     {
       description: "Keep Vitest packages aligned",
       matchPackageNames: ["vitest", "@vitest/**"],
       groupName: "vitest",
-      groupSlug: "vitest",
+      groupSlug: "vitest"
     },
     {
       description: "Group linting and formatting tooling",
       matchPackageNames: ["eslint", "eslint-config-prettier", "prettier"],
       groupName: "linting and formatting",
-      groupSlug: "lint-format",
+      groupSlug: "lint-format"
     },
     {
       description: "Keep the Tailwind/PostCSS toolchain aligned",
-      matchPackageNames: [
-        "tailwindcss",
-        "@tailwindcss/**",
-        "postcss",
-        "autoprefixer",
-      ],
+      matchPackageNames: ["tailwindcss", "@tailwindcss/**", "postcss", "autoprefixer"],
       groupName: "css toolchain",
-      groupSlug: "css-toolchain",
+      groupSlug: "css-toolchain"
     },
     {
       description: "Group GitHub Actions updates",
       matchManagers: ["github-actions"],
       groupName: "github actions",
-      groupSlug: "github-actions",
-    },
+      groupSlug: "github-actions"
+    }
   ],
 
   // The default is 10, which is exactly how many Renovate PRs are currently
   // open. Keep the queue small; security PRs can still skip this limit.
   prConcurrentLimit: 5,
 
-  dependencyDashboard: true,
+  dependencyDashboard: true
 }

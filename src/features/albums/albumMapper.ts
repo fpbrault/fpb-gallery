@@ -9,8 +9,9 @@ import type {
   FEATURED_IMAGES_QUERY_RESULT
 } from "@/sanity/sanity.types";
 import type { ContentImage } from "@/features/content/models";
+import type { SanityData } from "@/sanity/types";
 
-type AlbumInput = CATEGORY_QUERY_RESULT[number];
+type AlbumInput = SanityData<CATEGORY_QUERY_RESULT[number]>;
 
 function mapAlbumSummary(input: AlbumInput): AlbumSummary | null {
   const slug = stegaClean(input.slug?.current);
@@ -26,11 +27,11 @@ function mapAlbumSummary(input: AlbumInput): AlbumSummary | null {
   };
 }
 
-export function mapAlbums(input: CATEGORY_QUERY_RESULT): AlbumSummary[] {
+export function mapAlbums(input: SanityData<CATEGORY_QUERY_RESULT>): AlbumSummary[] {
   return input.map(mapAlbumSummary).filter((album) => album !== null);
 }
 
-export function mapCategories(input: CATEGORY_INDEX_QUERY_RESULT): CategorySummary[] {
+export function mapCategories(input: SanityData<CATEGORY_INDEX_QUERY_RESULT>): CategorySummary[] {
   return input.flatMap((category) => {
     const slug = stegaClean(category.slug?.current);
     if (!slug) return [];
@@ -53,7 +54,7 @@ export function mapCategories(input: CATEGORY_INDEX_QUERY_RESULT): CategorySumma
   });
 }
 
-export function mapAlbum(input: ALBUM_QUERY_RESULT): Album | null {
+export function mapAlbum(input: SanityData<ALBUM_QUERY_RESULT>): Album | null {
   if (!input || !stegaClean(input.slug?.current)) return null;
 
   const summary = mapAlbumSummary(input);
@@ -75,7 +76,7 @@ export function mapAlbum(input: ALBUM_QUERY_RESULT): Album | null {
 }
 
 export function mapImageCollection(
-  input: ALL_IMAGES_QUERY_RESULT | FEATURED_IMAGES_QUERY_RESULT
+  input: SanityData<ALL_IMAGES_QUERY_RESULT | FEATURED_IMAGES_QUERY_RESULT>
 ): ContentImage[] {
   return input
     .map((image, index) => mapContentImage(image, `gallery-${index}`))
