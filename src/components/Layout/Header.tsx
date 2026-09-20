@@ -14,10 +14,10 @@ type Props = {
   headerData: HeaderData;
 };
 
-function activateDrawerLabel(event: React.KeyboardEvent<HTMLLabelElement>) {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    event.currentTarget.click();
+function setDrawerOpen(open: boolean) {
+  const drawerToggle = document.getElementById("my-drawer-3");
+  if (drawerToggle instanceof HTMLInputElement) {
+    drawerToggle.checked = open;
   }
 }
 
@@ -33,16 +33,14 @@ export default function Header({ title, headerData }: Props) {
 
       <nav aria-label="Primary navigation" className="font-bold uppercase navbar sm:justify-around">
         <div className="w-full navbar-start md:hidden">
-          <label
-            htmlFor="my-drawer-3"
+          <button
+            type="button"
             aria-label="open sidebar"
-            role="button"
-            tabIndex={0}
-            onKeyDown={activateDrawerLabel}
+            onClick={() => setDrawerOpen(true)}
             className="text-3xl btn btn-square md:hidden btn-ghost"
           >
             <FaBars />
-          </label>
+          </button>
           <Link
             className="w-full text-xl font-light text-center sm:text-2xl md:text-3xl link link-hover line-clamp-3 font-display"
             href={localizePath("/", locale)}
@@ -92,14 +90,12 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
   const { locale } = useLocale();
   return (
     <aside aria-label="Mobile navigation" className="z-50 h-screen drawer-side md:hidden">
-      <label
-        htmlFor="my-drawer-3"
+      <button
+        type="button"
         aria-label="close sidebar"
-        role="button"
-        tabIndex={0}
-        onKeyDown={activateDrawerLabel}
-        className="drawer-overlay !bg-transparent"
-      ></label>
+        onClick={() => setDrawerOpen(false)}
+        className="drawer-overlay !bg-transparent border-0 p-0"
+      ></button>
       <div className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl">
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
