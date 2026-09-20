@@ -1,14 +1,13 @@
 "use client";
 
-import { useContext, useMemo, useState } from "react";
 import Image from "next/image";
+import { useContext, useMemo, useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
-
-import ImageContext from "./ImageContext";
 import {
   getPortableImageId,
   type PortableImageValue
 } from "@/features/content/portableImageRegistry";
+import ImageContext from "./ImageContext";
 
 export type { PortableImageValue } from "@/features/content/portableImageRegistry";
 

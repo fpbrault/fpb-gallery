@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
+import React from "react";
 import { FaHouse } from "react-icons/fa6";
 import { localizePath } from "@/i18n/config";
 import { useLocale } from "../context/LocaleContext";

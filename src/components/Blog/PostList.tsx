@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { urlForImage } from "@/sanity/lib/image";
 import Link from "next/link";
-import type { PostSummary } from "@/features/blog/models";
-import { useLocale } from "@/components/context/LocaleContext";
-import { localizePath } from "@/i18n/config";
 import { stegaClean } from "next-sanity";
+import { useLocale } from "@/components/context/LocaleContext";
+import type { PostSummary } from "@/features/blog/models";
+import { localizePath } from "@/i18n/config";
+import { urlForImage } from "@/sanity/lib/image";
 
 export default function PostList({ posts }: { posts: PostSummary[] }) {
   const { locale } = useLocale();

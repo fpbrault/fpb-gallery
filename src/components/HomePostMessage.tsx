@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useLocale } from "@/components/context/LocaleContext";
-import { localizePath } from "@/i18n/config";
 import type { PostSummary } from "@/features/blog/models";
+import { localizePath } from "@/i18n/config";
 
 export default function HomePostMessage({ post }: { post: PostSummary }) {
   const { locale, t } = useLocale();

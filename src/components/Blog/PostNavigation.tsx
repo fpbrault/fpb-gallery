@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { getResizedImageSquare } from "@/sanity/lib/image";
+import Link from "next/link";
+import { stegaClean } from "next-sanity";
 import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
-import { localizePath } from "@/i18n/config";
 import type { PostPage, PostSummary } from "@/features/blog/models";
-import { stegaClean } from "next-sanity";
+import { localizePath } from "@/i18n/config";
+import { getResizedImageSquare } from "@/sanity/lib/image";
 
 function PostNavigationItem(props: {
   data?: PostSummary | null;

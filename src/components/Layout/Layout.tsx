@@ -1,13 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Header, { HeaderSideBar } from "./Header";
-import ScrollToTopButton from "./ScrollToTop";
-import { Footer } from "./Footer";
-import type { Layout } from "@/types/layout";
-import { LocaleProvider } from "../context/LocaleContext";
 import type { HeaderData, SiteMetadata } from "@/features/site/models";
 import type { Locale } from "@/i18n/config";
+import type { Layout } from "@/types/layout";
+import { LocaleProvider } from "../context/LocaleContext";
+import { Footer } from "./Footer";
+import Header, { HeaderSideBar } from "./Header";
+import ScrollToTopButton from "./ScrollToTop";
 
 type Props = {
   children: ReactNode;

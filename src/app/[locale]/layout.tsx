@@ -5,8 +5,8 @@ import Layout from "@/components/Layout/Layout";
 import { VisualEditingPreview } from "@/components/VisualEditingPreview";
 import { isLocale, locales } from "@/i18n/config";
 import { getSiteUrl } from "@/lib/metadata";
-import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 import { SanityLive } from "@/sanity/lib/live";
+import { getSiteShellData } from "@/sanity/repositories/siteRepository";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

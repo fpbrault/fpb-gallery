@@ -1,5 +1,5 @@
-import { getNextCursor, getPostsAfter } from "@/sanity/repositories/blogRepository";
 import { blogCursorQuerySchema } from "@/lib/pagination";
+import { getNextCursor, getPostsAfter } from "@/sanity/repositories/blogRepository";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);

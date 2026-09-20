@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
-import type { Youtube } from "@/sanity/sanity.types";
 import { stegaClean } from "next-sanity";
+import type { Youtube } from "@/sanity/sanity.types";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 

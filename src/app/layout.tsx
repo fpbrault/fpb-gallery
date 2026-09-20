@@ -2,14 +2,13 @@ import "../../styles/globals.css";
 import "react-photo-album/styles.css";
 import "yet-another-react-lightbox/styles.css";
 
-import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
-import { getSiteUrl } from "@/lib/metadata";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { bodyFont, displayFont } from "@/config/fonts";
 import { createThemeInitializationScript } from "@/config/presentation";
+import { getSiteUrl } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),

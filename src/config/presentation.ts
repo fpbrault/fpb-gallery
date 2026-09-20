@@ -12,7 +12,8 @@ export const presentationConfig = {
 } as const;
 
 export type ThemeName =
-  typeof presentationConfig.themes.dark | typeof presentationConfig.themes.light;
+  | typeof presentationConfig.themes.dark
+  | typeof presentationConfig.themes.light;
 
 export const isThemeName = (value: string | null | undefined): value is ThemeName =>
   value === presentationConfig.themes.dark || value === presentationConfig.themes.light;

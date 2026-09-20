@@ -1,5 +1,5 @@
+import { defineField, defineType } from "sanity";
 import { YouTubePreview } from "@/components/studio/YoutubePreview";
-import { defineType, defineField } from "sanity";
 
 export const youtube = defineType({
   name: "youtube",

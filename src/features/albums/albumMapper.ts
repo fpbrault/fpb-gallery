@@ -1,6 +1,7 @@
-import { mapContentImage } from "@/features/content/imageMapper";
 import { stegaClean } from "next-sanity";
 import type { Album, AlbumSummary, CategorySummary } from "@/features/albums/models";
+import { mapContentImage } from "@/features/content/imageMapper";
+import type { ContentImage } from "@/features/content/models";
 import type {
   ALBUM_QUERY_RESULT,
   ALL_IMAGES_QUERY_RESULT,
@@ -8,7 +9,6 @@ import type {
   CATEGORY_QUERY_RESULT,
   FEATURED_IMAGES_QUERY_RESULT
 } from "@/sanity/sanity.types";
-import type { ContentImage } from "@/features/content/models";
 import type { SanityData } from "@/sanity/types";
 
 type AlbumInput = SanityData<CATEGORY_QUERY_RESULT[number]>;

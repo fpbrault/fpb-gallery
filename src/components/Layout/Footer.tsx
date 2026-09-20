@@ -1,9 +1,9 @@
-import React from "react";
 import Link from "next/link";
-import { Layout } from "@/types/layout";
-import { getSocialIcon } from "../lib/getSocialIcon";
-import ThemeSelector from "../Layout/ThemeSelector";
+import React from "react";
+import type { Layout } from "@/types/layout";
 import { LanguageSwitcher } from "../Layout/LanguageSwitcher";
+import ThemeSelector from "../Layout/ThemeSelector";
+import { getSocialIcon } from "../lib/getSocialIcon";
 
 export function Footer({ metadata }: { metadata: Layout.LayoutMetadata }) {
   return (

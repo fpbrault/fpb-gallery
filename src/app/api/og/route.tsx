@@ -1,10 +1,9 @@
 import { ImageResponse } from "next/og";
+import type { Image } from "sanity";
 import { z } from "zod";
-
 import { getSanityClient } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
 import { OG_ALBUM_IMAGE_QUERY, OG_POST_IMAGE_QUERY } from "@/sanity/queries";
-import type { Image } from "sanity";
 
 export const runtime = "nodejs";
 

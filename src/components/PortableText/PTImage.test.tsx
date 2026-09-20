@@ -15,9 +15,9 @@ vi.mock("yet-another-react-lightbox", () => ({
     open ? <output data-index={index} data-slide-count={slides.length} /> : null
 }));
 
+import type { PortableImageRegistryEntry } from "@/features/content/portableImageRegistry";
 import ImageContext from "./ImageContext";
 import { PTImage } from "./PTImage";
-import type { PortableImageRegistryEntry } from "@/features/content/portableImageRegistry";
 
 function entry(id: string): PortableImageRegistryEntry {
   return {

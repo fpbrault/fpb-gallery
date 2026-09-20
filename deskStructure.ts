@@ -1,4 +1,4 @@
-import { FaImages, FaFile, FaUsers, FaGear, FaCircleInfo, FaHouse } from "react-icons/fa6";
+import { FaCircleInfo, FaFile, FaGear, FaHouse, FaImages, FaUsers } from "react-icons/fa6";
 import { MdOutlineArticle } from "react-icons/md";
 import type { StructureResolver } from "sanity/structure";
 

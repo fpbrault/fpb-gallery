@@ -1,7 +1,6 @@
 import { defineEnableDraftMode } from "next-sanity/draft-mode";
-
-import { getPreviewClient } from "@/sanity/lib/client";
 import { isAllowedPreviewPath } from "@/lib/preview";
+import { getPreviewClient } from "@/sanity/lib/client";
 
 export const dynamic = "force-dynamic";
 

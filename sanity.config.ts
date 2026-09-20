@@ -1,17 +1,17 @@
-import { visionTool } from "@sanity/vision";
-import { structureTool } from "sanity/structure";
-import { presentationTool } from "sanity/presentation";
-import { media } from "sanity-plugin-media";
-import { apiVersion, dataset, projectId } from "@/sanity/env";
-import { schemaTypes } from "@/sanity/schemas";
-import { presentationResolve } from "@/sanity/presentation";
 import { colorInput } from "@sanity/color-input";
 import {
   DeleteTranslationAction,
   documentInternationalization
 } from "@sanity/document-internationalization";
-import { internationalizedArray } from "sanity-plugin-internationalized-array";
+import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
+import { presentationTool } from "sanity/presentation";
+import { structureTool } from "sanity/structure";
+import { internationalizedArray } from "sanity-plugin-internationalized-array";
+import { media } from "sanity-plugin-media";
+import { apiVersion, dataset, projectId } from "@/sanity/env";
+import { presentationResolve } from "@/sanity/presentation";
+import { schemaTypes } from "@/sanity/schemas";
 
 import structure from "./deskStructure";
 

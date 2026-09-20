@@ -1,5 +1,5 @@
 import { FaImages, FaLink, FaPen } from "react-icons/fa6";
-import { defineType, defineArrayMember, defineField, type BlockStyleProps } from "sanity";
+import { type BlockStyleProps, defineArrayMember, defineField, defineType } from "sanity";
 import LinkRenderer from "@/components/PortableText/LinkRenderer";
 import RoughAnnotationRenderer from "@/components/PortableText/RoughAnnotationRenderer";
 

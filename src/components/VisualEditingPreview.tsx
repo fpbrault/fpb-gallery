@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, type ComponentProps } from "react";
 import Link from "next/link";
 import { useIsPresentationTool } from "next-sanity/hooks";
 import { VisualEditing } from "next-sanity/visual-editing";
+import { type ComponentProps, useCallback } from "react";
 
 import { refreshPreview } from "@/lib/previewRefresh";
 

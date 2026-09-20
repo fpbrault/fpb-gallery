@@ -17,8 +17,8 @@ vi.mock("next/image", () => ({
   }
 }));
 
-import { GalleryThumbnailImage } from "./GalleryThumbnailImage";
 import type { GalleryThumbnail } from "@/features/gallery/models";
+import { GalleryThumbnailImage } from "./GalleryThumbnailImage";
 
 function renderPhoto(lqip?: string) {
   const photo: GalleryThumbnail = {

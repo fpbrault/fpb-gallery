@@ -1,8 +1,8 @@
 import {
-  defineDocuments,
-  defineLocations,
   type DocumentLocationsState,
   type DocumentResolverContext,
+  defineDocuments,
+  defineLocations,
   type PresentationPluginOptions
 } from "sanity/presentation";
 

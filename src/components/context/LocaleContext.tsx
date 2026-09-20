@@ -1,10 +1,9 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-
-import { dictionaries, getAlternateLocale, localizePath } from "@/i18n/config";
+import { createContext, type ReactNode, useContext } from "react";
 import type { Locale } from "@/i18n/config";
+import { dictionaries, getAlternateLocale, localizePath } from "@/i18n/config";
 
 type TranslationKey =
   | "home.readPost"

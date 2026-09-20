@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import ThemeSelector from "./ThemeSelector";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import React from "react";
 import { FaBars } from "react-icons/fa6";
+import type { HeaderData, NavigationItem } from "@/features/site/models";
 import { localizePath } from "@/i18n/config";
 import { useLocale } from "../context/LocaleContext";
-import type { HeaderData, NavigationItem } from "@/features/site/models";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import ThemeSelector from "./ThemeSelector";
 
 type Props = {
   title: string;

@@ -1,5 +1,5 @@
-import type { BlockContent } from "@/sanity/sanity.types";
 import { RichText } from "@/components/PortableText/RichText";
+import type { BlockContent } from "@/sanity/sanity.types";
 
 export type LayoutColumnValue = Extract<BlockContent[number], { _type: "layout-col-2" }>;
 

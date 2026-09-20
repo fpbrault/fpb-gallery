@@ -1,7 +1,7 @@
 import createImageUrlBuilder from "@sanity/image-url";
 import Image from "next/image";
 import React, { useMemo } from "react";
-import { useClient, type PreviewProps } from "sanity";
+import { type PreviewProps, useClient } from "sanity";
 
 function getImageReference(media: PreviewProps["media"]): string | undefined {
   if (!media || typeof media !== "object" || !("_ref" in media)) return undefined;

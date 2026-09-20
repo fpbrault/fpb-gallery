@@ -1,5 +1,5 @@
-import { revalidateTag } from "next/cache";
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 import { tagsForDocumentType } from "@/lib/revalidation";

@@ -1,5 +1,5 @@
-import type { HeaderData, SiteMetadata } from "@/features/site/models";
 import { stegaClean } from "next-sanity";
+import type { HeaderData, SiteMetadata } from "@/features/site/models";
 import type { Locale } from "@/i18n/config";
 import type { HEADER_QUERY_RESULT, SITE_METADATA_QUERY_RESULT } from "@/sanity/sanity.types";
 import type { SanityData } from "@/sanity/types";
@@ -17,10 +17,7 @@ export function mapSiteMetadata(input: SanityData<SITE_METADATA_QUERY_RESULT>): 
   };
 }
 
-export function mapHeaderData(
-  input: SanityData<HEADER_QUERY_RESULT>,
-  locale: Locale
-): HeaderData {
+export function mapHeaderData(input: SanityData<HEADER_QUERY_RESULT>, locale: Locale): HeaderData {
   const pages = (input?.pages ?? []).flatMap((page) => {
     if (page._type === "hardcodedPage") {
       const slug = stegaClean(locale === "fr" ? (page.slug_fr ?? page.slug) : page.slug);

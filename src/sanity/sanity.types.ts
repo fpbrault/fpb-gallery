@@ -1201,6 +1201,7 @@ export type OG_ALBUM_IMAGE_QUERY_RESULT = {
 
 // Query TypeMap
 import "@sanity/client";
+
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "siteSettings"][0]{\n  siteTitle,\n  description,\n  author,\n  socialLinks[]{name, type, url}\n}': SITE_METADATA_QUERY_RESULT;

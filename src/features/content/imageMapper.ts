@@ -1,5 +1,5 @@
-import type { ContentImage, ImageDescription } from "@/features/content/models";
 import { stegaClean } from "next-sanity";
+import type { ContentImage, ImageDescription } from "@/features/content/models";
 import type { SanityImageAssetReference } from "@/sanity/sanity.types";
 
 type ImageInput = {

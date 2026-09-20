@@ -1,5 +1,5 @@
 import { FaFile } from "react-icons/fa6";
-import { SlugValidationContext, defineField } from "sanity";
+import { defineField, type SlugValidationContext } from "sanity";
 export const page = {
   name: "page",
   type: "document",

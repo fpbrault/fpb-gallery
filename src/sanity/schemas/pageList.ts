@@ -1,5 +1,5 @@
-import { defineField } from "sanity";
 import { FaFile } from "react-icons/fa6";
+import { defineField } from "sanity";
 export const pageList = {
   name: "pageList",
   type: "document",

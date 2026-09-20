@@ -1,6 +1,6 @@
-import { mapContentImage } from "@/features/content/imageMapper";
 import { stegaClean } from "next-sanity";
 import type { Post, PostPage, PostSummary } from "@/features/blog/models";
+import { mapContentImage } from "@/features/content/imageMapper";
 import type {
   LATEST_POST_QUERY_RESULT,
   POST_CURSOR_QUERY_RESULT,
@@ -33,15 +33,11 @@ export function mapPostList(input: SanityData<POST_LIST_QUERY_RESULT>) {
   };
 }
 
-export function mapPostSummaries(
-  input: SanityData<POST_CURSOR_QUERY_RESULT>
-): PostSummary[] {
+export function mapPostSummaries(input: SanityData<POST_CURSOR_QUERY_RESULT>): PostSummary[] {
   return input.map(mapPostSummary).filter((post) => post !== null);
 }
 
-export function mapLatestPost(
-  input: SanityData<LATEST_POST_QUERY_RESULT>
-): PostSummary | null {
+export function mapLatestPost(input: SanityData<LATEST_POST_QUERY_RESULT>): PostSummary | null {
   return mapPostSummary(input);
 }
 
