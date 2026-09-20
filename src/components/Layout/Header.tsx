@@ -89,7 +89,7 @@ export function HeaderSideBar({ headerData }: { headerData: HeaderData }) {
       ></label>
       <nav
         aria-label="Mobile navigation links"
-        className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100"
+        className="min-h-full font-black text-left uppercase font-display w-60 menu bg-base-100/80 backdrop-blur-xl"
       >
         <ul className="p-4 text-3xl ">
           {/* Sidebar content here */}
