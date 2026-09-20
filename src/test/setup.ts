@@ -1,9 +1,4 @@
 import "@testing-library/jest-dom/vitest";
-import { expect } from "vitest";
-import { toHaveNoViolations } from "jest-axe";
-
-expect.extend(toHaveNoViolations);
-
 if (typeof window !== "undefined") {
   const values = new Map<string, string>();
   const storage: Storage = {

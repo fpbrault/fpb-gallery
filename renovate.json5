@@ -68,7 +68,7 @@
     },
     {
       description: "Group DOM and accessibility test tooling",
-      matchPackageNames: ["@testing-library/**", "jsdom", "jest-axe", "@types/jest-axe"],
+      matchPackageNames: ["@testing-library/**", "jsdom", "axe-core"],
       groupName: "dom test tooling",
       groupSlug: "dom-test-tooling"
     },

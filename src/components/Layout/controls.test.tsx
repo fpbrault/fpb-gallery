@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { axe } from "jest-axe";
 import { describe, expect, it, vi } from "vitest";
 
 import { LocaleProvider } from "@/components/context/LocaleContext";
+import { expectNoAccessibilityViolations } from "@/test/accessibility";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import ThemeSelector from "./ThemeSelector";
 
@@ -27,7 +27,7 @@ describe("site controls", () => {
       "href",
       "/fr/gallery"
     );
-    expect(await axe(view.container)).toHaveNoViolations();
+    await expectNoAccessibilityViolations(view.container);
   });
 
   it("labels and persists the theme control", async () => {
@@ -41,6 +41,6 @@ describe("site controls", () => {
     await user.click(control);
     expect(localStorage.getItem("theme")).toBe("mytheme");
     expect(document.documentElement.dataset.theme).toBe("mytheme");
-    expect(await axe(view.container)).toHaveNoViolations();
+    await expectNoAccessibilityViolations(view.container);
   });
 });
