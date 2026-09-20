@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { stegaClean } from "next-sanity";
-import React from "react";
 import { useLocale } from "@/components/context/LocaleContext";
 import type { PostPage, PostSummary } from "@/features/blog/models";
 import { localizePath } from "@/i18n/config";
