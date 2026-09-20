@@ -1,8 +1,5 @@
-import { createRequire } from "node:module";
 import { expect, test, type Page } from "@playwright/test";
-
-const require = createRequire(import.meta.url);
-const axePath = require.resolve("axe-core/axe.min.js");
+import * as axeCore from "axe-core";
 
 type AxeViolation = {
   id: string;
@@ -15,7 +12,7 @@ type AxeViolation = {
 };
 
 async function expectNoAccessibilityViolations(page: Page) {
-  await page.addScriptTag({ path: axePath });
+  await page.addScriptTag({ content: axeCore.source });
 
   const violations = await page.evaluate(async () => {
     const axe = (
