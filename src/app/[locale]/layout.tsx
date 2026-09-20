@@ -31,6 +31,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
 
   return (
     <Layout locale={locale} headerData={shell.headerData} siteMetadata={shell.siteMetadata}>
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized from trusted structured data and escapes "<". */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
