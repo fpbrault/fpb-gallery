@@ -1,20 +1,13 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
-
-  // Keep Renovate's curated defaults, plus the low-noise/security pieces of
-  // config:best-practices that are useful for this application.
   extends: [
     "config:recommended",
     ":configMigration",
     "helpers:pinGitHubActionDigests",
     "abandonments:recommended"
   ],
-
   timezone: "America/Toronto",
   schedule: ["before 6am on monday"],
-
-  // Avoid adopting freshly-published npm versions immediately. Security fixes
-  // detected through vulnerability alerts still bypass minimumReleaseAge.
   packageRules: [
     {
       description: "Require a seven-day npm release cooldown",
@@ -29,9 +22,6 @@
       automergeType: "pr",
       automergeStrategy: "squash"
     },
-
-    // Catch-all groups come first. More specific ecosystem rules below
-    // override groupName when they also match.
     {
       description: "Group remaining non-major production updates",
       matchDepTypes: ["dependencies"],
@@ -46,7 +36,6 @@
       groupName: "development dependencies",
       groupSlug: "development-dependencies"
     },
-
     {
       description: "Keep the Next.js and React ecosystem aligned",
       matchPackageNames: [
@@ -97,10 +86,8 @@
       groupSlug: "github-actions"
     }
   ],
-
-  // The default is 10, which is exactly how many Renovate PRs are currently
-  // open. Keep the queue small; security PRs can still skip this limit.
   prConcurrentLimit: 5,
-
-  dependencyDashboard: true
+  dependencyDashboard: {
+    enabled: true
+  }
 }
